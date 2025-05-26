@@ -48,7 +48,6 @@ class ProjectManager:
                 json.dump(project_data, f, indent=2, ensure_ascii=False)
 
             return True
-
         except Exception as e:
             print(f"Error saving project: {e}")
             return False
@@ -157,7 +156,6 @@ class ProjectManager:
                 })
 
             return info
-
         except Exception as e:
             print(f"Error reading project info: {e}")
             return None

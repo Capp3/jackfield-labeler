@@ -12,28 +12,28 @@ from jackfield_labeler.models.text_format import TextFormat
 
 __all__ = [
     # Color
-    "Color",
-    "StandardColor",
     "BLACK",
-    "WHITE",
-    "RED",
-    "GREEN",
     "BLUE",
-    "YELLOW",
+    "Color",
+    "GREEN",
     "ORANGE",
     "PURPLE",
-    # Text format
-    "TextFormat",
+    "RED",
+    "StandardColor",
+    "WHITE",
+    "YELLOW",
     # Segments
-    "Segment",
-    "StartSegment",
     "ContentSegment",
     "EndSegment",
+    "Segment",
+    "StartSegment",
     "create_segment_from_dict",
-    # Settings
-    "StripSettings",
-    "PaperSize",
-    "PageMargins",
     # Label strip
     "LabelStrip",
+    # Settings
+    "PageMargins",
+    "PaperSize",
+    "StripSettings",
+    # Text format
+    "TextFormat",
 ]

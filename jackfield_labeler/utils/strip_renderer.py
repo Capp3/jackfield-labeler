@@ -198,10 +198,12 @@ class StripRenderer:
 
             painter.setFont(font)
 
-            # Draw text centered in the segment
+            # Draw text centered horizontally and vertically in the segment
             text_rect = painter.fontMetrics().boundingRect(segment.text)
             text_x = x + (width - text_rect.width()) // 2
-            text_y = y + (height + text_rect.height()) // 2 - text_rect.height() // 4
+
+            # Center the text vertically in the cell
+            text_y = y + height // 2 + text_rect.height() // 2
 
             painter.drawText(text_x, text_y, segment.text)
 

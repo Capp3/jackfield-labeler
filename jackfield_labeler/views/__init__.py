@@ -9,17 +9,18 @@ from jackfield_labeler.views.preview_tab import PreviewTab
 from jackfield_labeler.views.settings_tab import ColorButton, DefaultFormattingGroup, PageMarginsGroup, SettingsTab
 
 __all__ = [
-    # Main window
-    "MainWindow",
+    # Settings tab
+    "ColorButton",
+    "DefaultFormattingGroup",
     # Designer tab
     "DesignerTab",
-    "StripControlPanel",
-    "SegmentTable",
+    # Main window
+    "MainWindow",
+    "PageMarginsGroup",
     # Preview tab
     "PreviewTab",
+    "SegmentTable",
     # Settings tab
     "SettingsTab",
-    "ColorButton",
-    "PageMarginsGroup",
-    "DefaultFormattingGroup",
+    "StripControlPanel",
 ]

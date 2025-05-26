@@ -15,7 +15,7 @@ class PDFGenerator:
     """Generates PDF documents from label strips."""
 
     # Paper size mapping
-    PAPER_SIZES = {
+    PAPER_SIZES: ClassVar[dict] = {
         PaperSize.A4: A4,
         PaperSize.A3: A3,
         PaperSize.A2: A2,
@@ -95,8 +95,8 @@ class PDFGenerator:
 
             # Save the PDF
             c.save()
-            return True
 
+            return True
         except Exception as e:
             print(f"Error generating PDF: {e}")
             import traceback
@@ -216,10 +216,11 @@ class PDFGenerator:
 
             canvas_obj.setFont(font_name, font_size)
 
-            # Calculate text position (centered)
+            # Calculate text position (centered horizontally and vertically)
             text_width = canvas_obj.stringWidth(segment.text, font_name, font_size)
             text_x = x + (width - text_width) / 2
-            text_y = y + (height - font_size) / 2
+            # Center the text vertically in the cell
+            text_y = y + height / 2 - font_size / 2
 
             canvas_obj.drawString(text_x, text_y, segment.text)
 

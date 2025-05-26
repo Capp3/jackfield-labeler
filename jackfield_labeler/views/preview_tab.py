@@ -110,7 +110,7 @@ class StripInfoPanel(QFrame):
         # Calculate dimensions
         width_mm = strip.get_total_width()
         height_mm = strip.height
-        self.dimensions_label.setText(f"Dimensions: {width_mm:.1f}mm × {height_mm:.1f}mm")
+        self.dimensions_label.setText(f"Dimensions: {width_mm:.1f}mm x {height_mm:.1f}mm")
 
         # Count segments
         segment_count = len(strip.content_segments)

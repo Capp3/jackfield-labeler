@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import QApplication
 from jackfield_labeler.views.main_window import MainWindow
 
 
-def main(args: list[str] = None) -> int:
+def main(args: list[str] | None = None) -> int:
     """
     Main entry point for the application.
 

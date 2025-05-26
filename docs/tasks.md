@@ -2,6 +2,10 @@
 
 ## Current Tasks
 
+- [ ] Add label text tow both ends
+- [ ] Troubleshoot Preview planes
+- [ ] Automate rotation angle
+- [x] Centre the text justification for height to centre
 - [x] **High Priority** Create the main application window structure
 - [x] **High Priority** Implement the Designer Tab UI components
 - [x] **High Priority** Create label strip data model

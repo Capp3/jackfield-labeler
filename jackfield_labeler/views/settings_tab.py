@@ -30,10 +30,10 @@ class ColorButton(QPushButton):
 
     color_changed = pyqtSignal(QColor)
 
-    def __init__(self, color=QColor(0, 0, 0), parent=None):
+    def __init__(self, color=None, parent=None):
         """Initialize with the given color."""
         super().__init__(parent)
-        self._color = color
+        self._color = color if color is not None else QColor(0, 0, 0)
         self.setFixedSize(24, 24)
         self.clicked.connect(self._on_clicked)
         self._update_stylesheet()

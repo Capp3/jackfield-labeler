@@ -6,11 +6,11 @@ Test script for preview renderer and PNG export functionality.
 import sys
 from pathlib import Path
 
+from PyQt6.QtWidgets import QApplication
+
 # Add the project root to the Python path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
-
-from PyQt6.QtWidgets import QApplication
 
 from jackfield_labeler.models import Color, LabelStrip
 from jackfield_labeler.utils.strip_renderer import StripRenderer
@@ -52,7 +52,7 @@ def test_strip_renderer():
         strip.end_segment.background_color = Color(255, 255, 0)  # Yellow
         strip.end_segment.text_color = Color(0, 0, 0)  # Black
 
-    print(f"Created test strip: {strip.get_total_width()}mm × {strip.height}mm")
+    print(f"Created test strip: {strip.get_total_width()}mm x {strip.height}mm")
     print(f"Segments: {len(strip.content_segments)} content + 1 end")
 
     # Test renderer creation
@@ -62,7 +62,7 @@ def test_strip_renderer():
     # Test dimension calculations
     width_px, height_px = renderer.get_strip_dimensions_px()
     width_mm, height_mm = renderer.get_strip_dimensions_mm()
-    print(f"Dimensions: {width_mm}mm × {height_mm}mm = {width_px}px × {height_px}px")
+    print(f"Dimensions: {width_mm}mm x {height_mm}mm = {width_px}px x {height_px}px")
 
     # Test PNG export
     png_path = "test_strip_preview.png"
@@ -100,7 +100,7 @@ def test_empty_strip():
     # Test dimensions
     width_px, height_px = renderer.get_strip_dimensions_px()
     width_mm, height_mm = renderer.get_strip_dimensions_mm()
-    print(f"Empty strip dimensions: {width_mm}mm × {height_mm}mm = {width_px}px × {height_px}px")
+    print(f"Empty strip dimensions: {width_mm}mm x {height_mm}mm = {width_px}px x {height_px}px")
 
     # Test PNG export (should handle gracefully)
     success = renderer.save_to_png("test_empty_strip.png", dpi=300)
