@@ -3,8 +3,9 @@ Views package for the jackfield labeler application.
 Contains UI components built with PyQt6.
 """
 
-from jackfield_labeler.views.designer_tab import DesignerTab, SegmentTable, StripControlPanel, StripPreview
+from jackfield_labeler.views.designer_tab import DesignerTab, SegmentTable, StripControlPanel
 from jackfield_labeler.views.main_window import MainWindow
+from jackfield_labeler.views.preview_tab import PreviewTab
 from jackfield_labeler.views.settings_tab import ColorButton, DefaultFormattingGroup, PageMarginsGroup, SettingsTab
 
 __all__ = [
@@ -14,7 +15,8 @@ __all__ = [
     "DesignerTab",
     "StripControlPanel",
     "SegmentTable",
-    "StripPreview",
+    # Preview tab
+    "PreviewTab",
     # Settings tab
     "SettingsTab",
     "ColorButton",

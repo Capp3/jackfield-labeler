@@ -131,7 +131,12 @@ class LabelStrip:
 
         if width > 0:
             if self._start_segment is None:
-                self._start_segment = StartSegment(width=width, text=text)
+                self._start_segment = StartSegment(
+                    width=width,
+                    text=text,
+                    text_color=self._settings.default_text_color,
+                    background_color=self._settings.default_background_color,
+                )
             else:
                 self._start_segment.width = width
                 self._start_segment.text = text
@@ -160,7 +165,12 @@ class LabelStrip:
 
         if width > 0:
             if self._end_segment is None:
-                self._end_segment = EndSegment(width=width, text=text)
+                self._end_segment = EndSegment(
+                    width=width,
+                    text=text,
+                    text_color=self._settings.default_text_color,
+                    background_color=self._settings.default_background_color,
+                )
             else:
                 self._end_segment.width = width
                 self._end_segment.text = text
@@ -195,6 +205,8 @@ class LabelStrip:
                     ContentSegment(
                         segment_id=segment_id,
                         width=self._content_cell_width,
+                        text_color=self._settings.default_text_color,
+                        background_color=self._settings.default_background_color,
                     )
                 )
         elif count < current_count:

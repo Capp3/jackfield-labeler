@@ -6,14 +6,13 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QComboBox,
     QDoubleSpinBox,
-    QFrame,
     QGroupBox,
     QHBoxLayout,
     QHeaderView,
     QLabel,
+    QLineEdit,
     QPushButton,
     QScrollArea,
-    QSizePolicy,
     QSpinBox,
     QTableWidget,
     QTableWidgetItem,
@@ -60,17 +59,6 @@ class StripControlPanel(QGroupBox):
         cell_width_layout.addWidget(self.cell_width_spinbox)
         self.layout().addLayout(cell_width_layout)
 
-        # Start label width control
-        start_width_layout = QHBoxLayout()
-        start_width_layout.addWidget(QLabel("Start Label Width (mm):"))
-        self.start_width_spinbox = QDoubleSpinBox()
-        self.start_width_spinbox.setRange(0.0, 100.0)
-        self.start_width_spinbox.setDecimals(3)
-        self.start_width_spinbox.setValue(0.0)
-        self.start_width_spinbox.valueChanged.connect(self._emit_changed)
-        start_width_layout.addWidget(self.start_width_spinbox)
-        self.layout().addLayout(start_width_layout)
-
         # End label width control
         end_width_layout = QHBoxLayout()
         end_width_layout.addWidget(QLabel("End Label Width (mm):"))
@@ -81,6 +69,15 @@ class StripControlPanel(QGroupBox):
         self.end_width_spinbox.valueChanged.connect(self._emit_changed)
         end_width_layout.addWidget(self.end_width_spinbox)
         self.layout().addLayout(end_width_layout)
+
+        # End label text control
+        end_text_layout = QHBoxLayout()
+        end_text_layout.addWidget(QLabel("End Label Text:"))
+        self.end_text_input = QLineEdit()
+        self.end_text_input.setPlaceholderText("Enter text for end labels")
+        self.end_text_input.textChanged.connect(self._emit_changed)
+        end_text_layout.addWidget(self.end_text_input)
+        self.layout().addLayout(end_text_layout)
 
         # Strip height control
         height_layout = QHBoxLayout()
@@ -109,8 +106,8 @@ class StripControlPanel(QGroupBox):
         return {
             "content_cells": self.content_cells_spinbox.value(),
             "cell_width": self.cell_width_spinbox.value(),
-            "start_width": self.start_width_spinbox.value(),
             "end_width": self.end_width_spinbox.value(),
+            "end_text": self.end_text_input.text(),
             "height": self.height_spinbox.value(),
         }
 
@@ -118,8 +115,8 @@ class StripControlPanel(QGroupBox):
         """Set the control values from a dictionary."""
         self.content_cells_spinbox.setValue(values.get("content_cells", 0))
         self.cell_width_spinbox.setValue(values.get("cell_width", 10.0))
-        self.start_width_spinbox.setValue(values.get("start_width", 0.0))
         self.end_width_spinbox.setValue(values.get("end_width", 0.0))
+        self.end_text_input.setText(values.get("end_text", ""))
         self.height_spinbox.setValue(values.get("height", 5.0))
 
     def update_total_width(self, width):
@@ -201,21 +198,33 @@ class SegmentTable(QTableWidget):
         bg_color_combo.currentIndexChanged.connect(lambda: self.segment_changed.emit())
         self.setCellWidget(row, self.BG_COLOR_COL, bg_color_combo)
 
+        # Set default colors based on settings
+        # Default text color to black
+        text_color_combo.setCurrentText("Black")
         # Set default background color to white
         bg_color_combo.setCurrentText("White")
 
     def get_segment_data(self, row):
         """Get the data for a segment row."""
         # Get widgets and values
-        text = self.item(row, self.TEXT_COL).text()
+        text_item = self.item(row, self.TEXT_COL)
+        if text_item is None:
+            return None
+        text = text_item.text()
 
         format_combo = self.cellWidget(row, self.FORMAT_COL)
+        if format_combo is None:
+            return None
         text_format = format_combo.currentData()
 
         text_color_combo = self.cellWidget(row, self.TEXT_COLOR_COL)
+        if text_color_combo is None:
+            return None
         text_color = text_color_combo.currentData()
 
         bg_color_combo = self.cellWidget(row, self.BG_COLOR_COL)
+        if bg_color_combo is None:
+            return None
         bg_color = bg_color_combo.currentData()
 
         return {
@@ -256,21 +265,6 @@ class SegmentTable(QTableWidget):
                 break
 
 
-class StripPreview(QFrame):
-    """Preview panel for the label strip."""
-
-    def __init__(self, parent=None):
-        """Initialize the preview panel."""
-        super().__init__(parent)
-        self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.setMinimumHeight(100)
-
-        # Add a "Preview not yet implemented" label
-        layout = QVBoxLayout(self)
-        layout.addWidget(QLabel("Preview not yet implemented", alignment=Qt.AlignmentFlag.AlignCenter))
-
-
 class DesignerTab(QWidget):
     """Tab for designing label strips."""
 
@@ -303,13 +297,6 @@ class DesignerTab(QWidget):
 
         main_layout.addWidget(table_group)
 
-        # Create preview panel
-        preview_group = QGroupBox("Preview")
-        preview_layout = QVBoxLayout(preview_group)
-        self.preview = StripPreview()
-        preview_layout.addWidget(self.preview)
-        main_layout.addWidget(preview_group)
-
         # Create action buttons
         button_layout = QHBoxLayout()
 
@@ -339,13 +326,37 @@ class DesignerTab(QWidget):
         self.control_panel.set_values({
             "content_cells": 0,
             "cell_width": self.strip.content_cell_width,
-            "start_width": 0.0,
             "end_width": 0.0,
+            "end_text": "",
             "height": self.strip.height,
         })
 
         # Clear the segment table
         self.segment_table.clear_segments()
+
+        # Update total width display
+        self.control_panel.update_total_width(self.strip.get_total_width())
+
+    def load_label_strip(self, label_strip: LabelStrip):
+        """Load a label strip into the UI."""
+        self.strip = label_strip
+
+        # Calculate control values from the loaded strip
+        end_width = self.strip.end_segment.width if self.strip.end_segment else 0.0
+        end_text = self.strip.end_segment.text if self.strip.end_segment else ""
+        content_cells = len(self.strip.content_segments)
+
+        # Set control panel values
+        self.control_panel.set_values({
+            "content_cells": content_cells,
+            "cell_width": self.strip.content_cell_width,
+            "end_width": end_width,
+            "end_text": end_text,
+            "height": self.strip.height,
+        })
+
+        # Update the table to match the loaded strip
+        self.update_table_from_strip()
 
         # Update total width display
         self.control_panel.update_total_width(self.strip.get_total_width())
@@ -358,15 +369,15 @@ class DesignerTab(QWidget):
         self.strip.height = values["height"]
         self.strip.content_cell_width = values["cell_width"]
 
-        # Update start segment
-        if values["start_width"] > 0:
-            self.strip.set_start_segment(width=values["start_width"])
-        else:
-            self.strip.set_start_segment(width=0)
+        # Remove start segment (no longer used)
+        self.strip.set_start_segment(width=0)
 
         # Update end segment
         if values["end_width"] > 0:
             self.strip.set_end_segment(width=values["end_width"])
+            # Set the end segment text from the control panel
+            if self.strip.end_segment:
+                self.strip.end_segment.text = values["end_text"]
         else:
             self.strip.set_end_segment(width=0)
 
@@ -383,10 +394,11 @@ class DesignerTab(QWidget):
         if self.strip.start_segment is not None:
             row = 0
             data = self.segment_table.get_segment_data(row)
-            self.strip.start_segment.text = data["text"]
-            self.strip.start_segment.text_format = data["text_format"]
-            self.strip.start_segment.text_color = Color.from_standard(data["text_color"])
-            self.strip.start_segment.background_color = Color.from_standard(data["bg_color"])
+            if data is not None:
+                self.strip.start_segment.text = data["text"]
+                self.strip.start_segment.text_format = data["text_format"]
+                self.strip.start_segment.text_color = Color.from_standard(data["text_color"])
+                self.strip.start_segment.background_color = Color.from_standard(data["bg_color"])
 
             start_row_offset = 1
         else:
@@ -396,46 +408,135 @@ class DesignerTab(QWidget):
         for i, segment in enumerate(self.strip.content_segments):
             row = start_row_offset + i
             data = self.segment_table.get_segment_data(row)
-            segment.text = data["text"]
-            segment.text_format = data["text_format"]
-            segment.text_color = Color.from_standard(data["text_color"])
-            segment.background_color = Color.from_standard(data["bg_color"])
+            if data is not None:
+                segment.text = data["text"]
+                segment.text_format = data["text_format"]
+                segment.text_color = Color.from_standard(data["text_color"])
+                segment.background_color = Color.from_standard(data["bg_color"])
 
         # End segment
         if self.strip.end_segment is not None:
             row = start_row_offset + len(self.strip.content_segments)
             data = self.segment_table.get_segment_data(row)
-            self.strip.end_segment.text = data["text"]
-            self.strip.end_segment.text_format = data["text_format"]
-            self.strip.end_segment.text_color = Color.from_standard(data["text_color"])
-            self.strip.end_segment.background_color = Color.from_standard(data["bg_color"])
+            if data is not None:
+                self.strip.end_segment.text = data["text"]
+                self.strip.end_segment.text_format = data["text_format"]
+                self.strip.end_segment.text_color = Color.from_standard(data["text_color"])
+                self.strip.end_segment.background_color = Color.from_standard(data["bg_color"])
 
     def update_table_from_strip(self):
         """Update the segment table to match the strip model."""
-        # Clear the table first
-        self.segment_table.clear_segments()
+        # Temporarily disconnect the signal to prevent premature updates
+        self.segment_table.segment_changed.disconnect(self.update_strip_from_table)
 
-        # Add segments to table
-        if self.strip.start_segment is not None:
-            self.segment_table.add_segment("L Start", self.strip.start_segment.text)
+        try:
+            # Clear the table first
+            self.segment_table.clear_segments()
 
-        for segment in self.strip.content_segments:
-            self.segment_table.add_segment(segment.id, segment.text)
+            # Add segments to table
+            if self.strip.start_segment is not None:
+                self.segment_table.add_segment("L Start", self.strip.start_segment.text)
 
-        if self.strip.end_segment is not None:
-            self.segment_table.add_segment("L End", self.strip.end_segment.text)
+            for segment in self.strip.content_segments:
+                self.segment_table.add_segment(segment.id, segment.text)
+
+            if self.strip.end_segment is not None:
+                self.segment_table.add_segment("L End", self.strip.end_segment.text)
+        finally:
+            # Reconnect the signal
+            self.segment_table.segment_changed.connect(self.update_strip_from_table)
 
     def save_project(self):
         """Save the current project."""
-        # To be implemented
-        pass
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+
+        from jackfield_labeler.utils import ProjectManager
+
+        # Get file path to save to
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save Project", "untitled.jlp", ProjectManager.PROJECT_FILTER)
+
+        if not file_path:
+            return  # User cancelled
+
+        # Save the project
+        try:
+            success = ProjectManager.save_project(self.strip, file_path)
+
+            if success:
+                QMessageBox.information(self, "Project Saved", f"Project has been saved to:\n{file_path}")
+            else:
+                QMessageBox.critical(self, "Save Error", f"Failed to save project to:\n{file_path}")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Save Error", f"An unexpected error occurred while saving the project:\n{e!s}")
 
     def load_project(self):
         """Load a project from file."""
-        # To be implemented
-        pass
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+
+        from jackfield_labeler.utils import ProjectManager
+
+        # Get file path to load from
+        file_path, _ = QFileDialog.getOpenFileName(self, "Load Project", "", ProjectManager.PROJECT_FILTER)
+
+        if not file_path:
+            return  # User cancelled
+
+        # Load the project
+        try:
+            label_strip = ProjectManager.load_project(file_path)
+            if label_strip is None:
+                QMessageBox.critical(
+                    self,
+                    "Load Error",
+                    f"Failed to load project from:\n{file_path}\n\nThe file may be corrupted or in an unsupported format.",
+                )
+                return
+
+            # Load the label strip into the UI
+            self.load_label_strip(label_strip)
+
+            QMessageBox.information(self, "Project Loaded", f"Project has been loaded from:\n{file_path}")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Load Error", f"An unexpected error occurred while loading the project:\n{e!s}")
 
     def generate_pdf(self):
         """Generate a PDF of the current label strip."""
-        # To be implemented
-        pass
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+
+        from jackfield_labeler.utils import PDFGenerator
+
+        # Check if there are any segments to generate
+        if self.strip.get_total_width() == 0:
+            QMessageBox.warning(
+                self, "No Content", "Please add some segments to the label strip before generating a PDF."
+            )
+            return
+
+        # Get output file path
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save PDF", "label_strip.pdf", "PDF Files (*.pdf);;All Files (*)"
+        )
+
+        if not file_path:
+            return  # User cancelled
+
+        try:
+            # Create PDF generator
+            pdf_generator = PDFGenerator(self.strip)
+
+            # Generate the PDF using rotation from settings
+            success = pdf_generator.generate_pdf(file_path)
+
+            if success:
+                QMessageBox.information(self, "PDF Generated", f"PDF has been saved to:\n{file_path}")
+            else:
+                QMessageBox.critical(
+                    self,
+                    "PDF Generation Failed",
+                    "An error occurred while generating the PDF. Please check your label strip configuration.",
+                )
+
+        except Exception as e:
+            QMessageBox.critical(self, "PDF Generation Error", f"An unexpected error occurred:\n{e!s}")

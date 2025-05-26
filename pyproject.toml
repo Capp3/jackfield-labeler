@@ -2,7 +2,6 @@
 name = "jackfield-labeler"
 version = "0.0.1"
 description = "A utility to create strip labels for jackfields"
-authors = [{ name = "Dom Capparelli", email = "web@capparelli.ie" }]
 readme = "README.md"
 keywords = ['python']
 requires-python = ">=3.12,<4.0"
@@ -16,6 +15,7 @@ classifiers = [
 ]
 dependencies = [
     "pyqt6>=6.9.0",
+    "reportlab>=4.4.1",
 ]
 
 [project.urls]
@@ -28,7 +28,7 @@ dev = [
     "pytest>=8.3.5",
     "pre-commit>=4.2.0",
     "tox-uv>=1.25.0",
-    
+
     "mypy>=1.15",
     "pytest-cov>=6.1.1",
     "ruff>=0.11.11",

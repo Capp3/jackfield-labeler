@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-from jackfield_labeler.models.color import BLACK, WHITE, Color
+from jackfield_labeler.models.color import Color
 
 
 class PaperSize(Enum):
@@ -45,14 +45,15 @@ class StripSettings:
     """
 
     # Paper settings
-    paper_size: PaperSize = PaperSize.A4
+    paper_size: PaperSize = PaperSize.A3
     page_margins: PageMargins = field(default_factory=PageMargins)
+    rotation_angle: float = 60.0  # degrees (0, 90, 180, 270, or any custom angle)
 
     # Default formatting
     default_font_name: str = "Arial"
     default_font_size: float = 8.0  # pt
-    default_text_color: Color = BLACK
-    default_background_color: Color = WHITE
+    default_text_color: Color = field(default_factory=lambda: Color(0, 0, 0))
+    default_background_color: Color = field(default_factory=lambda: Color(255, 255, 255))
 
     def to_dict(self) -> dict[str, Any]:
         """
@@ -69,6 +70,7 @@ class StripSettings:
                 "bottom": self.page_margins.bottom,
                 "left": self.page_margins.left,
             },
+            "rotation_angle": self.rotation_angle,
             "default_font_name": self.default_font_name,
             "default_font_size": self.default_font_size,
             "default_text_color": self.default_text_color.to_hex(),
@@ -95,8 +97,9 @@ class StripSettings:
         )
 
         return cls(
-            paper_size=PaperSize(data.get("paper_size", "A4")),
+            paper_size=PaperSize(data.get("paper_size", "A3")),
             page_margins=margins,
+            rotation_angle=data.get("rotation_angle", 60.0),
             default_font_name=data.get("default_font_name", "Arial"),
             default_font_size=data.get("default_font_size", 8.0),
             default_text_color=Color.from_hex(data.get("default_text_color", "#000000")),

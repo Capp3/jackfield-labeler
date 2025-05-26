@@ -1,0 +1,82 @@
+{
+  "version": "1.0",
+  "application": "Jackfield Labeler",
+  "label_strip": {
+    "height": 6.0,
+    "content_cell_width": 12.0,
+    "segments": [
+      {
+        "type": "start",
+        "id": "L_START",
+        "width": 18.0,
+        "text": "INPUT",
+        "text_color": "#FFFFFF",
+        "background_color": "#0000FF",
+        "text_format": "BOLD"
+      },
+      {
+        "type": "content",
+        "id": "1",
+        "width": 12.0,
+        "text": "CH1",
+        "text_color": "#000000",
+        "background_color": "#FFFF00",
+        "text_format": "NORMAL"
+      },
+      {
+        "type": "content",
+        "id": "2",
+        "width": 12.0,
+        "text": "CH2",
+        "text_color": "#FFFFFF",
+        "background_color": "#FF0000",
+        "text_format": "NORMAL"
+      },
+      {
+        "type": "content",
+        "id": "3",
+        "width": 12.0,
+        "text": "CH3",
+        "text_color": "#000000",
+        "background_color": "#00FF00",
+        "text_format": "NORMAL"
+      },
+      {
+        "type": "content",
+        "id": "4",
+        "width": 12.0,
+        "text": "CH4",
+        "text_color": "#FFFFFF",
+        "background_color": "#800080",
+        "text_format": "ITALIC"
+      },
+      {
+        "type": "end",
+        "id": "L_END",
+        "width": 15.0,
+        "text": "OUTPUT",
+        "text_color": "#FFFFFF",
+        "background_color": "#000000",
+        "text_format": "BOLD"
+      }
+    ],
+    "settings": {
+      "paper_size": "A3",
+      "page_margins": {
+        "top": 10.0,
+        "right": 10.0,
+        "bottom": 10.0,
+        "left": 10.0
+      },
+      "rotation_angle": 60.0,
+      "default_font_name": "Arial",
+      "default_font_size": 8.0,
+      "default_text_color": "#000000",
+      "default_background_color": "#FFFFFF"
+    }
+  },
+  "metadata": {
+    "created_by": "Jackfield Labeler",
+    "file_format_version": "1.0"
+  }
+}

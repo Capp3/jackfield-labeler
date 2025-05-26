@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
 
 from jackfield_labeler import __version__
 from jackfield_labeler.views.designer_tab import DesignerTab
+from jackfield_labeler.views.preview_tab import PreviewTab
 from jackfield_labeler.views.settings_tab import SettingsTab
 
 
@@ -37,10 +38,19 @@ class MainWindow(QMainWindow):
 
         # Create tabs
         self.designer_tab = DesignerTab()
+        self.preview_tab = PreviewTab()
         self.settings_tab = SettingsTab()
+
+        # Connect settings to designer tab
+        self.settings_tab.settings_changed.connect(self._on_settings_changed)
+
+        # Connect designer changes to preview
+        self.designer_tab.control_panel.strip_changed.connect(self._update_preview)
+        self.designer_tab.segment_table.segment_changed.connect(self._update_preview)
 
         # Add tabs to tab widget
         self.tab_widget.addTab(self.designer_tab, "Designer")
+        self.tab_widget.addTab(self.preview_tab, "Preview")
         self.tab_widget.addTab(self.settings_tab, "Settings")
 
         # Create status bar
@@ -50,6 +60,30 @@ class MainWindow(QMainWindow):
 
         # Create menu bar
         self.create_menus()
+
+        # Initialize project state
+        self._current_project_path = None
+        self._project_modified = False
+
+        # Connect signals to track modifications
+        self.designer_tab.control_panel.strip_changed.connect(self._mark_project_modified)
+        self.designer_tab.segment_table.segment_changed.connect(self._mark_project_modified)
+        self.settings_tab.settings_changed.connect(self._mark_project_modified)
+
+        # Update window title
+        self._update_window_title()
+
+    def _on_settings_changed(self):
+        """Handle settings changes from the settings tab."""
+        # Update the designer tab's strip settings
+        self.designer_tab.strip.settings = self.settings_tab.settings
+        self.status_bar.showMessage("Settings updated", 2000)
+        # Update preview
+        self._update_preview()
+
+    def _update_preview(self):
+        """Update the preview tab with the current strip."""
+        self.preview_tab.update_preview(self.designer_tab.strip)
 
     def create_menus(self):
         """Create application menus."""
@@ -78,6 +112,10 @@ class MainWindow(QMainWindow):
         generate_pdf_action = file_menu.addAction("&Generate PDF...")
         generate_pdf_action.triggered.connect(self.generate_pdf)
 
+        # Export PNG action
+        export_png_action = file_menu.addAction("Export &PNG...")
+        export_png_action.triggered.connect(self.export_png)
+
         file_menu.addSeparator()
 
         # Exit action
@@ -93,28 +131,208 @@ class MainWindow(QMainWindow):
 
     def new_project(self):
         """Create a new label strip project."""
-        # To be implemented
+        from PyQt6.QtWidgets import QMessageBox
+
+        # Check if current project has unsaved changes
+        if self._has_unsaved_changes():
+            reply = QMessageBox.question(
+                self,
+                "Unsaved Changes",
+                "You have unsaved changes. Do you want to save before creating a new project?",
+                QMessageBox.StandardButton.Save
+                | QMessageBox.StandardButton.Discard
+                | QMessageBox.StandardButton.Cancel,
+            )
+
+            if reply == QMessageBox.StandardButton.Save:
+                if not self.save_project():
+                    return  # Save was cancelled or failed
+            elif reply == QMessageBox.StandardButton.Cancel:
+                return  # User cancelled
+
+        # Reset the designer tab to create a new project
+        self.designer_tab.reset_ui()
+        self.settings_tab.reset_ui()
+        self._current_project_path = None
+        self._project_modified = False
+        self._update_window_title()
         self.status_bar.showMessage("New project created", 3000)
 
     def open_project(self):
         """Open an existing label strip project."""
-        # To be implemented
-        self.status_bar.showMessage("Project opened", 3000)
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
-    def save_project(self):
+        from jackfield_labeler.utils import ProjectManager
+
+        # Check if current project has unsaved changes
+        if self._has_unsaved_changes():
+            reply = QMessageBox.question(
+                self,
+                "Unsaved Changes",
+                "You have unsaved changes. Do you want to save before opening another project?",
+                QMessageBox.StandardButton.Save
+                | QMessageBox.StandardButton.Discard
+                | QMessageBox.StandardButton.Cancel,
+            )
+
+            if reply == QMessageBox.StandardButton.Save:
+                if not self.save_project():
+                    return  # Save was cancelled or failed
+            elif reply == QMessageBox.StandardButton.Cancel:
+                return  # User cancelled
+
+        # Get file path to open
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open Project", "", ProjectManager.PROJECT_FILTER)
+
+        if not file_path:
+            return  # User cancelled
+
+        # Load the project
+        try:
+            label_strip = ProjectManager.load_project(file_path)
+            if label_strip is None:
+                QMessageBox.critical(
+                    self,
+                    "Load Error",
+                    f"Failed to load project from:\n{file_path}\n\nThe file may be corrupted or in an unsupported format.",
+                )
+                return
+
+            # Update the UI with the loaded project
+            self.designer_tab.load_label_strip(label_strip)
+            self.settings_tab.settings = label_strip.settings
+            self.settings_tab.reset_ui()
+
+            # Update project state
+            self._current_project_path = file_path
+            self._project_modified = False
+            self._update_window_title()
+
+            self.status_bar.showMessage(f"Project opened: {file_path}", 5000)
+
+        except Exception as e:
+            QMessageBox.critical(self, "Load Error", f"An unexpected error occurred while loading the project:\n{e!s}")
+
+    def save_project(self) -> bool:
         """Save the current label strip project."""
-        # To be implemented
-        self.status_bar.showMessage("Project saved", 3000)
+        if self._current_project_path is None:
+            return self.save_project_as()
+        else:
+            return self._save_to_path(self._current_project_path)
 
-    def save_project_as(self):
+    def save_project_as(self) -> bool:
         """Save the current label strip project with a new name."""
-        # To be implemented
-        self.status_bar.showMessage("Project saved as new file", 3000)
+        from PyQt6.QtWidgets import QFileDialog
+
+        from jackfield_labeler.utils import ProjectManager
+
+        # Get file path to save to
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save Project As", "untitled.jlp", ProjectManager.PROJECT_FILTER
+        )
+
+        if not file_path:
+            return False  # User cancelled
+
+        # Save to the new path
+        if self._save_to_path(file_path):
+            self._current_project_path = file_path
+            self._update_window_title()
+            return True
+        else:
+            return False
 
     def generate_pdf(self):
         """Generate a PDF from the current label strip design."""
-        # To be implemented
-        self.status_bar.showMessage("PDF generated", 3000)
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+
+        from jackfield_labeler.utils import PDFGenerator
+
+        # Get the current label strip from the designer tab
+        label_strip = self.designer_tab.strip
+
+        # Check if there are any segments to generate
+        if label_strip.get_total_width() == 0:
+            QMessageBox.warning(
+                self, "No Content", "Please add some segments to the label strip before generating a PDF."
+            )
+            return
+
+        # Get output file path
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save PDF", "label_strip.pdf", "PDF Files (*.pdf);;All Files (*)"
+        )
+
+        if not file_path:
+            return  # User cancelled
+
+        try:
+            # Create PDF generator
+            pdf_generator = PDFGenerator(label_strip)
+
+            # Generate the PDF using rotation from settings
+            success = pdf_generator.generate_pdf(file_path)
+
+            if success:
+                self.status_bar.showMessage(f"PDF generated successfully: {file_path}", 5000)
+                QMessageBox.information(self, "PDF Generated", f"PDF has been saved to:\n{file_path}")
+            else:
+                self.status_bar.showMessage("Failed to generate PDF", 3000)
+                QMessageBox.critical(
+                    self,
+                    "PDF Generation Failed",
+                    "An error occurred while generating the PDF. Please check your label strip configuration.",
+                )
+
+        except Exception as e:
+            self.status_bar.showMessage("Error generating PDF", 3000)
+            QMessageBox.critical(self, "PDF Generation Error", f"An unexpected error occurred:\n{e!s}")
+
+    def export_png(self):
+        """Export the current label strip design as a PNG file."""
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+
+        from jackfield_labeler.utils import StripRenderer
+
+        # Get the current label strip from the designer tab
+        label_strip = self.designer_tab.strip
+
+        # Check if there are any segments to export
+        if label_strip.get_total_width() == 0:
+            QMessageBox.warning(
+                self, "No Content", "Please add some segments to the label strip before exporting a PNG."
+            )
+            return
+
+        # Get output file path
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Export PNG", "label_strip.png", "PNG Files (*.png);;All Files (*)"
+        )
+
+        if not file_path:
+            return  # User cancelled
+
+        try:
+            # Create strip renderer
+            renderer = StripRenderer(label_strip)
+
+            # Export PNG at 300 DPI (no rotation - sized to strip)
+            success = renderer.save_to_png(file_path, dpi=300)
+
+            if success:
+                self.status_bar.showMessage(f"PNG exported successfully: {file_path}", 5000)
+                QMessageBox.information(self, "PNG Exported", f"PNG has been saved to:\n{file_path}")
+            else:
+                self.status_bar.showMessage("Failed to export PNG", 3000)
+                QMessageBox.critical(
+                    self,
+                    "PNG Export Failed",
+                    "An error occurred while exporting the PNG. Please check your label strip configuration.",
+                )
+
+        except Exception as e:
+            self.status_bar.showMessage("Error exporting PNG", 3000)
+            QMessageBox.critical(self, "PNG Export Error", f"An unexpected error occurred:\n{e!s}")
 
     def show_about(self):
         """Show the about dialog."""
@@ -126,3 +344,56 @@ class MainWindow(QMainWindow):
             <p>© 2023 Dom Capparelli</p>
             <p><a href="https://github.com/capp3/jackfield-labeler">https://github.com/capp3/jackfield-labeler</a></p>""",
         )
+
+    def _mark_project_modified(self):
+        """Mark the project as modified."""
+        if not self._project_modified:
+            self._project_modified = True
+            self._update_window_title()
+
+    def _has_unsaved_changes(self) -> bool:
+        """Check if the project has unsaved changes."""
+        return self._project_modified
+
+    def _update_window_title(self):
+        """Update the window title to reflect the current project state."""
+        title = f"Jackfield Labeler v{__version__}"
+
+        if self._current_project_path:
+            import os
+
+            filename = os.path.basename(self._current_project_path)
+            title += f" - {filename}"
+        else:
+            title += " - Untitled"
+
+        if self._project_modified:
+            title += " *"
+
+        self.setWindowTitle(title)
+
+    def _save_to_path(self, file_path: str) -> bool:
+        """Save the current project to the specified path."""
+        from PyQt6.QtWidgets import QMessageBox
+
+        from jackfield_labeler.utils import ProjectManager
+
+        try:
+            # Get the current label strip from the designer tab
+            label_strip = self.designer_tab.strip
+
+            # Save the project
+            success = ProjectManager.save_project(label_strip, file_path)
+
+            if success:
+                self._project_modified = False
+                self._update_window_title()
+                self.status_bar.showMessage(f"Project saved: {file_path}", 5000)
+                return True
+            else:
+                QMessageBox.critical(self, "Save Error", f"Failed to save project to:\n{file_path}")
+                return False
+
+        except Exception as e:
+            QMessageBox.critical(self, "Save Error", f"An unexpected error occurred while saving the project:\n{e!s}")
+            return False

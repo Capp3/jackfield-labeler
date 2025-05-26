@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QSpinBox,
     QVBoxLayout,
     QWidget,
 )
@@ -196,6 +197,61 @@ class DefaultFormattingGroup(QGroupBox):
         self.bg_color_button.set_color(formatting.get("bg_color", QColor(255, 255, 255)))
 
 
+class RotationGroup(QGroupBox):
+    """Group box for configuring PDF rotation."""
+
+    rotation_changed = pyqtSignal()
+
+    def __init__(self, parent=None):
+        """Initialize the rotation group."""
+        super().__init__("PDF Rotation", parent)
+        self.setLayout(QVBoxLayout())
+
+        # Rotation angle
+        rotation_layout = QHBoxLayout()
+        rotation_layout.addWidget(QLabel("Rotation Angle (degrees):"))
+        self.rotation_spinbox = QSpinBox()
+        self.rotation_spinbox.setRange(-360, 360)
+        self.rotation_spinbox.setValue(0)
+        self.rotation_spinbox.setSuffix("°")
+        self.rotation_spinbox.valueChanged.connect(self._emit_changed)
+        rotation_layout.addWidget(self.rotation_spinbox)
+        self.layout().addLayout(rotation_layout)
+
+        # Common rotation buttons
+        buttons_layout = QHBoxLayout()
+
+        self.rotate_0_btn = QPushButton("0°")
+        self.rotate_0_btn.clicked.connect(lambda: self.set_rotation(0))
+        buttons_layout.addWidget(self.rotate_0_btn)
+
+        self.rotate_90_btn = QPushButton("90°")
+        self.rotate_90_btn.clicked.connect(lambda: self.set_rotation(90))
+        buttons_layout.addWidget(self.rotate_90_btn)
+
+        self.rotate_180_btn = QPushButton("180°")
+        self.rotate_180_btn.clicked.connect(lambda: self.set_rotation(180))
+        buttons_layout.addWidget(self.rotate_180_btn)
+
+        self.rotate_270_btn = QPushButton("270°")
+        self.rotate_270_btn.clicked.connect(lambda: self.set_rotation(270))
+        buttons_layout.addWidget(self.rotate_270_btn)
+
+        self.layout().addLayout(buttons_layout)
+
+    def _emit_changed(self):
+        """Emit the rotation_changed signal."""
+        self.rotation_changed.emit()
+
+    def get_rotation(self):
+        """Get the rotation angle."""
+        return self.rotation_spinbox.value()
+
+    def set_rotation(self, angle):
+        """Set the rotation angle."""
+        self.rotation_spinbox.setValue(int(angle))
+
+
 class SettingsTab(QWidget):
     """Tab for configuring output settings."""
 
@@ -233,6 +289,11 @@ class SettingsTab(QWidget):
         self.page_margins_group.margins_changed.connect(self._on_settings_changed)
         main_layout.addWidget(self.page_margins_group)
 
+        # PDF rotation
+        self.rotation_group = RotationGroup()
+        self.rotation_group.rotation_changed.connect(self._on_settings_changed)
+        main_layout.addWidget(self.rotation_group)
+
         # Default formatting
         self.formatting_group = DefaultFormattingGroup()
         self.formatting_group.formatting_changed.connect(self._on_settings_changed)
@@ -267,6 +328,9 @@ class SettingsTab(QWidget):
             "left": self.settings.page_margins.left,
         })
 
+        # Reset rotation
+        self.rotation_group.set_rotation(self.settings.rotation_angle)
+
         # Reset formatting
         text_color = QColor(*self.settings.default_text_color.to_rgb_tuple())
         bg_color = QColor(*self.settings.default_background_color.to_rgb_tuple())
@@ -294,6 +358,9 @@ class SettingsTab(QWidget):
         self.settings.page_margins.right = margins["right"]
         self.settings.page_margins.bottom = margins["bottom"]
         self.settings.page_margins.left = margins["left"]
+
+        # Update rotation
+        self.settings.rotation_angle = float(self.rotation_group.get_rotation())
 
         # Update formatting
         formatting = self.formatting_group.get_formatting()
