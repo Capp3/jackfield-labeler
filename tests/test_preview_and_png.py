@@ -6,14 +6,15 @@ Test script for preview renderer and PNG export functionality.
 import sys
 from pathlib import Path
 
-from PyQt6.QtWidgets import QApplication
-
-# Add the project root to the Python path
-project_root = Path(__file__).parent
+# Add the project root to the Python path before any project imports
+project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from jackfield_labeler.models import Color, LabelStrip
-from jackfield_labeler.utils.strip_renderer import StripRenderer
+# Now we can import from the project
+from PyQt6.QtWidgets import QApplication  # noqa: E402
+
+from jackfield_labeler.models import Color, LabelStrip  # noqa: E402
+from jackfield_labeler.utils.strip_renderer import StripRenderer  # noqa: E402
 
 
 def test_strip_renderer():

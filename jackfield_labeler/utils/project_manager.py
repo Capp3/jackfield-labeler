@@ -46,11 +46,11 @@ class ProjectManager:
             # Write the project file
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(project_data, f, indent=2, ensure_ascii=False)
-
-            return True
         except Exception as e:
             print(f"Error saving project: {e}")
             return False
+        else:
+            return True
 
     @staticmethod
     def load_project(file_path: str) -> LabelStrip | None:
@@ -154,11 +154,11 @@ class ProjectManager:
                     "content_cell_width": label_strip_data.get("content_cell_width", 0),
                     "segment_count": len(label_strip_data.get("segments", [])),
                 })
-
-            return info
         except Exception as e:
             print(f"Error reading project info: {e}")
             return None
+        else:
+            return info
 
     @staticmethod
     def is_valid_project_file(file_path: str) -> bool:

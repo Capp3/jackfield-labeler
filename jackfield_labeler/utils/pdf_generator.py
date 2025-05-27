@@ -97,14 +97,14 @@ class PDFGenerator:
 
             # Save the PDF
             c.save()
-
-            return True
         except Exception as e:
             print(f"Error generating PDF: {e}")
             import traceback
 
             traceback.print_exc()
             return False
+        else:
+            return True
 
     def _should_rotate(
         self,

@@ -5,6 +5,12 @@ Main LabelStrip class for representing a complete label strip.
 import json
 from typing import Any
 
+from jackfield_labeler.models.exceptions import (
+    ContentCellWidthError,
+    ContentSegmentCountError,
+    EndSegmentWidthError,
+    StartSegmentWidthError,
+)
 from jackfield_labeler.models.segment import Segment
 from jackfield_labeler.models.segment_types import (
     ContentSegment,
@@ -75,10 +81,10 @@ class LabelStrip:
             value: Width in mm
 
         Raises:
-            ValueError: If the width is negative
+            ContentCellWidthError: If the width is not positive
         """
         if value <= 0:
-            raise ValueError("Content cell width must be positive")
+            raise ContentCellWidthError()
 
         # Round to 3 decimal places for practical precision
         self._content_cell_width = round(value, 3)
@@ -124,10 +130,10 @@ class LabelStrip:
             The start segment instance
 
         Raises:
-            ValueError: If the width is negative
+            StartSegmentWidthError: If the width is negative
         """
         if width < 0:
-            raise ValueError("Start segment width cannot be negative")
+            raise StartSegmentWidthError()
 
         if width > 0:
             if self._start_segment is None:
@@ -158,10 +164,10 @@ class LabelStrip:
             The end segment instance
 
         Raises:
-            ValueError: If the width is negative
+            EndSegmentWidthError: If the width is negative
         """
         if width < 0:
-            raise ValueError("End segment width cannot be negative")
+            raise EndSegmentWidthError()
 
         if width > 0:
             if self._end_segment is None:
@@ -190,10 +196,10 @@ class LabelStrip:
             count: Number of content segments
 
         Raises:
-            ValueError: If count is negative
+            ContentSegmentCountError: If count is negative
         """
         if count < 0:
-            raise ValueError("Content segment count cannot be negative")
+            raise ContentSegmentCountError()
 
         current_count = len(self._content_segments)
 

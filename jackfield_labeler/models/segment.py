@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from jackfield_labeler.models.color import BLACK, WHITE, Color
+from jackfield_labeler.models.exceptions import SegmentWidthError
 from jackfield_labeler.models.text_format import TextFormat
 
 
@@ -65,7 +66,7 @@ class Segment(ABC):
     def width(self, value: float) -> None:
         """Set the segment's width in mm."""
         if value < 0:
-            raise ValueError("Segment width cannot be negative")
+            raise SegmentWidthError()
 
         # Round to 3 decimal places for practical precision
         self._width = round(value, 3)

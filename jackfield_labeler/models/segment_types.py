@@ -5,6 +5,7 @@ Concrete segment type implementations for label strips.
 from typing import Any
 
 from jackfield_labeler.models.color import BLACK, WHITE, Color
+from jackfield_labeler.models.exceptions import UnknownSegmentTypeError
 from jackfield_labeler.models.segment import Segment
 from jackfield_labeler.models.text_format import TextFormat
 
@@ -192,7 +193,7 @@ def create_segment_from_dict(data: dict[str, Any]) -> Segment:
         A Segment instance of the appropriate subclass
 
     Raises:
-        ValueError: If the segment type is not recognized
+        UnknownSegmentTypeError: If the segment type is not recognized
     """
     segment_type = data.get("type", "").lower()
 
@@ -203,4 +204,4 @@ def create_segment_from_dict(data: dict[str, Any]) -> Segment:
     elif segment_type == "end":
         return EndSegment.from_dict(data)
     else:
-        raise ValueError(f"Unknown segment type: {segment_type}")
+        raise UnknownSegmentTypeError(segment_type)
