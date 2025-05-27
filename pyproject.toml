@@ -58,7 +58,7 @@ show_error_codes = true
 testpaths = ["tests"]
 
 [tool.ruff]
-target-version = "1.0.0"
+target-version = "py312"
 line-length = 120
 fix = true
 

@@ -9,7 +9,18 @@ copyright: Maintained by <a href="https://capp3.com">capp3</a>.
 
 nav:
   - Home: index.md
-  - Modules: modules.md
+  - User Guide: user-guide.md
+  - Technical Documentation:
+      - API Reference: api-reference.md
+      - Architecture: architecture.md
+      - Technical Details: technical.md
+  - Development:
+      - Development Guide: development.md
+      - Project Brief: projectbrief.md
+      - Status: status.md
+      - Tasks: tasks.md
+      - Active Context: activeContext.md
+
 plugins:
   - search
   - mkdocstrings:
