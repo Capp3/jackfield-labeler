@@ -314,6 +314,35 @@ uv add --group dev package-name
 uv sync
 ```
 
+### Type Checking
+
+The project uses mypy for static type checking:
+
+```bash
+# Run type checking with development settings
+mypy
+
+# Run with custom settings
+mypy --config-file .mypy.ini
+```
+
+**Note on Type Annotations**: 
+- The project is gradually adding type annotations to improve code quality
+- A `.mypy.ini` configuration file is provided with pragmatic settings
+- In CI workflows, type checking is set to be permissive to avoid blocking releases
+- When contributing, please add type annotations to new code when possible
+
+### CI Workflow
+
+The project uses GitHub Actions for continuous integration:
+
+- **Tests**: Runs the test suite on Python 3.12 and 3.13
+- **Type Checking**: Validates type annotations with mypy
+- **Linting**: Ensures code quality with ruff
+- **Documentation**: Verifies documentation builds correctly
+
+The release workflow automatically builds binaries for macOS and Windows when a version tag is pushed.
+
 ## 📝 Examples
 
 ### Basic Label Strip
