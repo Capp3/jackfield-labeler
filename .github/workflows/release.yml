@@ -38,6 +38,10 @@ jobs:
           echo "Installing PyInstaller..."
           uv pip install pyinstaller
 
+          # Install type stubs for CI
+          echo "Installing type stubs..."
+          uv pip install types-reportlab
+
       - name: Build macOS package
         run: |
           pyinstaller jackfield_labeler.spec
@@ -83,6 +87,10 @@ jobs:
           # Install PyInstaller separately
           Write-Host "Installing PyInstaller..."
           uv pip install pyinstaller
+
+          # Install type stubs for CI
+          Write-Host "Installing type stubs..."
+          uv pip install types-reportlab
 
       - name: Build Windows package
         run: |

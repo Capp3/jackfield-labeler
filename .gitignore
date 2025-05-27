@@ -164,3 +164,6 @@ cython_debug/
 
 .cursor/
 optimization-journey/
+
+# Mypy CI config
+mypy_ci.ini
