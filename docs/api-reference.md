@@ -24,7 +24,7 @@ The central data model representing a complete label strip design.
 class LabelStrip:
     """
     Represents a complete label strip with all its segments.
-    
+
     A label strip consists of:
     - An optional start segment
     - Multiple content segments (cells)
@@ -46,10 +46,10 @@ MAX_WIDTH: float = 500.0  # Maximum total width in mm
 def __init__(self, height: float = 5.0) -> None:
     """
     Initialize a new label strip.
-    
+
     Args:
         height: The height of the strip in mm (default: 5.0)
-        
+
     Raises:
         ValueError: If height is outside valid range
     """
@@ -66,9 +66,9 @@ def height(self) -> float:
 def height(self, value: float) -> None:
     """
     Set the height of the strip in mm.
-    
+
     The height is constrained to the allowed range.
-    
+
     Args:
         value: Height in mm (5.0-12.0)
     """
@@ -81,10 +81,10 @@ def content_cell_width(self) -> float:
 def content_cell_width(self, value: float) -> None:
     """
     Set the width of content cells in mm.
-    
+
     Args:
         value: Width in mm (must be positive)
-        
+
     Raises:
         ValueError: If the width is negative or zero
     """
@@ -116,14 +116,14 @@ def settings(self, value: StripSettings) -> None:
 def set_start_segment(self, width: float = 0.0, text: str = "") -> StartSegment | None:
     """
     Configure the start segment of the strip.
-    
+
     Args:
         width: Width in mm (0.0 means no start segment)
         text: Text content
-        
+
     Returns:
         The start segment instance, or None if width is 0
-        
+
     Raises:
         ValueError: If the width is negative
     """
@@ -131,14 +131,14 @@ def set_start_segment(self, width: float = 0.0, text: str = "") -> StartSegment 
 def set_end_segment(self, width: float = 0.0, text: str = "") -> EndSegment | None:
     """
     Configure the end segment of the strip.
-    
+
     Args:
         width: Width in mm (0.0 means no end segment)
         text: Text content
-        
+
     Returns:
         The end segment instance, or None if width is 0
-        
+
     Raises:
         ValueError: If the width is negative
     """
@@ -146,12 +146,12 @@ def set_end_segment(self, width: float = 0.0, text: str = "") -> EndSegment | No
 def set_content_segment_count(self, count: int) -> None:
     """
     Set the number of content segments.
-    
+
     This will add or remove segments as needed.
-    
+
     Args:
         count: Number of content segments
-        
+
     Raises:
         ValueError: If count is negative
     """
@@ -159,7 +159,7 @@ def set_content_segment_count(self, count: int) -> None:
 def get_all_segments(self) -> list[Segment]:
     """
     Get all segments in order (start, content, end).
-    
+
     Returns:
         List of all segments in display order
     """
@@ -167,7 +167,7 @@ def get_all_segments(self) -> list[Segment]:
 def get_total_width(self) -> float:
     """
     Calculate the total width of the strip.
-    
+
     Returns:
         Total width in mm (sum of all segment widths)
     """
@@ -175,10 +175,10 @@ def get_total_width(self) -> float:
 def get_segment_by_id(self, segment_id: str) -> Segment | None:
     """
     Find a segment by its ID.
-    
+
     Args:
         segment_id: The segment identifier
-        
+
     Returns:
         The segment if found, None otherwise
     """
@@ -186,7 +186,7 @@ def get_segment_by_id(self, segment_id: str) -> Segment | None:
 def validate(self) -> list[str]:
     """
     Validate the label strip configuration.
-    
+
     Returns:
         List of validation error messages (empty if valid)
     """
@@ -194,7 +194,7 @@ def validate(self) -> list[str]:
 def to_dict(self) -> dict[str, Any]:
     """
     Convert the label strip to a dictionary.
-    
+
     Returns:
         Dictionary representation suitable for JSON serialization
     """
@@ -202,7 +202,7 @@ def to_dict(self) -> dict[str, Any]:
 def to_json(self) -> str:
     """
     Convert the label strip to JSON string.
-    
+
     Returns:
         JSON string representation
     """
@@ -211,13 +211,13 @@ def to_json(self) -> str:
 def from_dict(cls, data: dict[str, Any]) -> "LabelStrip":
     """
     Create a label strip from a dictionary.
-    
+
     Args:
         data: Dictionary containing label strip data
-        
+
     Returns:
         New LabelStrip instance
-        
+
     Raises:
         ValueError: If data is invalid or missing required fields
     """
@@ -226,13 +226,13 @@ def from_dict(cls, data: dict[str, Any]) -> "LabelStrip":
 def from_json(cls, json_str: str) -> "LabelStrip":
     """
     Create a label strip from JSON string.
-    
+
     Args:
         json_str: JSON string containing label strip data
-        
+
     Returns:
         New LabelStrip instance
-        
+
     Raises:
         ValueError: If JSON is invalid or missing required fields
         json.JSONDecodeError: If JSON parsing fails
@@ -247,25 +247,25 @@ def from_json(cls, json_str: str) -> "LabelStrip":
 @dataclass
 class Segment:
     """Base class for all segment types."""
-    
+
     width: float
     text: str
     text_color: str
     background_color: str
     text_format: TextFormat
-    
+
     def validate(self) -> list[str]:
         """
         Validate segment properties.
-        
+
         Returns:
             List of validation error messages
         """
-    
+
     def to_dict(self) -> dict[str, Any]:
         """
         Convert segment to dictionary.
-        
+
         Returns:
             Dictionary representation
         """
@@ -278,10 +278,10 @@ class Segment:
 class StartSegment(Segment):
     """
     Start segment for label strips (e.g., 'INPUT').
-    
+
     Currently not used in the UI but supported in the data model.
     """
-    
+
     def __post_init__(self) -> None:
         """Validate start segment after initialization."""
 ```
@@ -293,12 +293,12 @@ class StartSegment(Segment):
 class ContentSegment(Segment):
     """
     Content segment for main label cells (e.g., 'CH1', 'CH2').
-    
+
     These are the primary segments used for channel labeling.
     """
-    
+
     id: str = field(init=False)  # Auto-generated identifier
-    
+
     def __post_init__(self) -> None:
         """Set up content segment after initialization."""
 ```
@@ -310,10 +310,10 @@ class ContentSegment(Segment):
 class EndSegment(Segment):
     """
     End segment for label strips (e.g., 'OUTPUT').
-    
+
     Configurable through the UI with independent width and text.
     """
-    
+
     def __post_init__(self) -> None:
         """Validate end segment after initialization."""
 ```
@@ -324,13 +324,13 @@ class EndSegment(Segment):
 def create_segment_from_dict(data: dict[str, Any]) -> Segment:
     """
     Create appropriate segment type from dictionary data.
-    
+
     Args:
         data: Dictionary containing segment data with 'type' field
-        
+
     Returns:
         Segment instance of appropriate type
-        
+
     Raises:
         ValueError: If segment type is unknown or data is invalid
     """
@@ -344,7 +344,7 @@ Configuration model for global settings.
 @dataclass
 class StripSettings:
     """Global settings for label strip generation."""
-    
+
     paper_size: str = "A3"
     page_margins: PageMargins = field(default_factory=PageMargins)
     rotation_angle: float = 60.0
@@ -360,7 +360,7 @@ class StripSettings:
 def validate(self) -> list[str]:
     """
     Validate settings configuration.
-    
+
     Returns:
         List of validation error messages
     """
@@ -368,7 +368,7 @@ def validate(self) -> list[str]:
 def to_dict(self) -> dict[str, Any]:
     """
     Convert settings to dictionary.
-    
+
     Returns:
         Dictionary representation
     """
@@ -377,10 +377,10 @@ def to_dict(self) -> dict[str, Any]:
 def from_dict(cls, data: dict[str, Any]) -> "StripSettings":
     """
     Create settings from dictionary.
-    
+
     Args:
         data: Dictionary containing settings data
-        
+
     Returns:
         New StripSettings instance
     """
@@ -394,12 +394,12 @@ def from_dict(cls, data: dict[str, Any]) -> "StripSettings":
 @dataclass
 class PageMargins:
     """Page margin configuration."""
-    
+
     top: float = 10.0
     right: float = 10.0
     bottom: float = 10.0
     left: float = 10.0
-    
+
     def validate(self) -> list[str]:
         """Validate margin values (0-50mm range)."""
 ```
@@ -409,27 +409,27 @@ class PageMargins:
 ```python
 class Color:
     """RGB color representation with standard color constants."""
-    
+
     def __init__(self, red: int, green: int, blue: int) -> None:
         """
         Initialize color with RGB values.
-        
+
         Args:
             red: Red component (0-255)
             green: Green component (0-255)
             blue: Blue component (0-255)
         """
-    
+
     def to_hex(self) -> str:
         """Convert to hex color string (#RRGGBB)."""
-    
+
     def to_rgb_tuple(self) -> tuple[int, int, int]:
         """Convert to RGB tuple."""
-    
+
     @classmethod
     def from_hex(cls, hex_color: str) -> "Color":
         """Create color from hex string."""
-    
+
     # Standard color constants
     BLACK: ClassVar["Color"]
     WHITE: ClassVar["Color"]
@@ -446,7 +446,7 @@ class Color:
 ```python
 class TextFormat(Enum):
     """Text formatting options."""
-    
+
     NORMAL = "NORMAL"
     BOLD = "BOLD"
     ITALIC = "ITALIC"
@@ -457,7 +457,7 @@ class TextFormat(Enum):
 ```python
 class PaperSize(Enum):
     """Standard paper sizes with dimensions in mm."""
-    
+
     A0 = "A0"      # 841 × 1189 mm
     A1 = "A1"      # 594 × 841 mm
     A2 = "A2"      # 420 × 594 mm
@@ -596,10 +596,10 @@ def update_preview(self, label_strip: LabelStrip) -> None:
 def export_png(self, filename: str) -> bool:
     """
     Export the current preview as PNG.
-    
+
     Args:
         filename: Output filename
-        
+
     Returns:
         True if export successful, False otherwise
     """
@@ -678,15 +678,15 @@ def generate_pdf(
 ) -> bool:
     """
     Generate PDF file from label strip.
-    
+
     Args:
         label_strip: The label strip to render
         filename: Output PDF filename
         settings: Optional settings override
-        
+
     Returns:
         True if generation successful, False otherwise
-        
+
     Raises:
         IOError: If file cannot be written
         ValueError: If label strip is invalid
@@ -701,13 +701,13 @@ def calculate_positioning(
 ) -> tuple[float, float]:
     """
     Calculate center positioning for strip on paper.
-    
+
     Args:
         strip_width: Width of strip in mm
         strip_height: Height of strip in mm
         paper_size: Paper size identifier
         rotation_angle: Rotation angle in degrees
-        
+
     Returns:
         Tuple of (center_x, center_y) in points
     """
@@ -715,13 +715,13 @@ def calculate_positioning(
 def get_paper_dimensions(self, paper_size: str) -> tuple[float, float]:
     """
     Get paper dimensions in points.
-    
+
     Args:
         paper_size: Paper size identifier
-        
+
     Returns:
         Tuple of (width, height) in points
-        
+
     Raises:
         ValueError: If paper size is not supported
     """
@@ -742,7 +742,7 @@ class StripRenderer:
 def __init__(self, dpi: int = 300) -> None:
     """
     Initialize the renderer.
-    
+
     Args:
         dpi: Dots per inch for output resolution
     """
@@ -758,11 +758,11 @@ def render_to_pixmap(
 ) -> QPixmap:
     """
     Render label strip to QPixmap.
-    
+
     Args:
         label_strip: The label strip to render
         scale_factor: Scale factor for output size
-        
+
     Returns:
         QPixmap containing rendered strip
     """
@@ -775,12 +775,12 @@ def render_to_file(
 ) -> bool:
     """
     Render label strip directly to PNG file.
-    
+
     Args:
         label_strip: The label strip to render
         filename: Output PNG filename
         dpi: Optional DPI override
-        
+
     Returns:
         True if rendering successful, False otherwise
     """
@@ -792,11 +792,11 @@ def calculate_dimensions(
 ) -> tuple[int, int]:
     """
     Calculate pixel dimensions for rendering.
-    
+
     Args:
         label_strip: The label strip
         scale_factor: Scale factor
-        
+
     Returns:
         Tuple of (width_px, height_px)
     """
@@ -818,14 +818,14 @@ class ProjectManager:
 def save_project(label_strip: LabelStrip, filename: str) -> bool:
     """
     Save project to .jlp file.
-    
+
     Args:
         label_strip: The label strip to save
         filename: Output filename
-        
+
     Returns:
         True if save successful, False otherwise
-        
+
     Raises:
         IOError: If file cannot be written
         ValueError: If label strip is invalid
@@ -835,13 +835,13 @@ def save_project(label_strip: LabelStrip, filename: str) -> bool:
 def load_project(filename: str) -> LabelStrip:
     """
     Load project from .jlp file.
-    
+
     Args:
         filename: Input filename
-        
+
     Returns:
         Loaded LabelStrip instance
-        
+
     Raises:
         IOError: If file cannot be read
         ValueError: If file format is invalid
@@ -852,10 +852,10 @@ def load_project(filename: str) -> LabelStrip:
 def validate_project_file(filename: str) -> bool:
     """
     Validate project file format.
-    
+
     Args:
         filename: File to validate
-        
+
     Returns:
         True if file is valid, False otherwise
     """
@@ -864,13 +864,13 @@ def validate_project_file(filename: str) -> bool:
 def get_project_metadata(filename: str) -> dict[str, Any]:
     """
     Extract metadata from project file.
-    
+
     Args:
         filename: Project file
-        
+
     Returns:
         Dictionary containing metadata
-        
+
     Raises:
         IOError: If file cannot be read
         ValueError: If file format is invalid
@@ -1166,20 +1166,20 @@ segment.background_color = yellow.to_hex()
 def validate_professional_strip(strip: LabelStrip) -> list[str]:
     """Custom validation for professional use."""
     errors = []
-    
+
     # Check minimum dimensions
     if strip.height < 6.0:
         errors.append("Professional strips should be at least 6mm high")
-    
+
     # Check segment count
     if len(strip.content_segments) < 2:
         errors.append("Professional strips should have at least 2 channels")
-    
+
     # Check text content
     for i, segment in enumerate(strip.content_segments):
         if not segment.text.strip():
             errors.append(f"Segment {i+1} has no text")
-    
+
     return errors
 
 # Use custom validation

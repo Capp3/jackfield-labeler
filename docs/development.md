@@ -241,19 +241,19 @@ def calculate_width(segments):
 Use Google-style docstrings:
 
 ```python
-def generate_pdf(self, label_strip: LabelStrip, filename: str, 
+def generate_pdf(self, label_strip: LabelStrip, filename: str,
                 rotation_angle: float | None = None) -> bool:
     """
     Generate PDF file from label strip.
-    
+
     Args:
         label_strip: The label strip to render
         filename: Output PDF filename
         rotation_angle: Optional rotation override
-        
+
     Returns:
         True if PDF was generated successfully, False otherwise
-        
+
     Raises:
         RenderingError: If PDF generation fails
         FileNotFoundError: If output directory doesn't exist
@@ -348,19 +348,19 @@ class TestLabelStrip:
         strip = LabelStrip(content_cell_width=10.0)
         strip.add_content_segment("CH1")
         strip.add_content_segment("CH2")
-        
+
         assert strip.get_total_width() == 20.0
-    
+
     def test_segment_addition(self):
         """Test adding segments to strip."""
         strip = LabelStrip()
         initial_count = len(strip.segments)
-        
+
         segment = strip.add_content_segment("Test")
-        
+
         assert len(strip.segments) == initial_count + 1
         assert segment.text == "Test"
-    
+
     @pytest.mark.parametrize("height,expected", [
         (5.0, 5.0),
         (10.5, 10.5),
@@ -381,11 +381,11 @@ def test_pdf_generation_workflow():
     strip = LabelStrip(height=6.0, content_cell_width=12.0)
     strip.add_content_segment("CH1", background_color="#FFFF00")
     strip.add_content_segment("CH2", background_color="#FF0000")
-    
+
     # Generate PDF
     generator = PDFGenerator(strip.settings)
     output_file = "test_output.pdf"
-    
+
     try:
         success = generator.generate_pdf(strip, output_file)
         assert success
@@ -719,15 +719,15 @@ We use semantic versioning (SemVer):
 
    ```markdown
    # Changelog
-   
+
    ## [1.2.0] - 2024-01-15
-   
+
    ### Added
    - New feature descriptions
-   
+
    ### Changed
    - Changed feature descriptions
-   
+
    ### Fixed
    - Bug fix descriptions
    ```
@@ -917,9 +917,9 @@ import pstats
 def profile_function():
     profiler = cProfile.Profile()
     profiler.enable()
-    
+
     # Your code here
-    
+
     profiler.disable()
     stats = pstats.Stats(profiler)
     stats.sort_stats('cumulative')

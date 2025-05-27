@@ -1,23 +1,16 @@
 {
-    "recommendations": [
-      // Python development
-      "charliermarsh.ruff",
-      "anysphere.pyright",
-      "mikoz.black-py",
-
-      // Markdown
-      "davidanson.vscode-markdownlint",
-      "yzhang.markdown-all-in-one",
-      "bierner.markdown-mermaid",
-  
-      // Productivity
-      "mrmlnc.vscode-duplicate",
-      "wholroyd.jinja",
-      "gruntfuggly.todo-tree",
-      "esbenp.prettier-vscode",
-  
-      // AI and Git
-      "github.vscode-github-actions",
-      "eamodio.gitlens",
-    ]
-  }
+  "recommendations": [
+    "charliermarsh.ruff",
+    "anysphere.pyright",
+    "mikoz.black-py",
+    "davidanson.vscode-markdownlint",
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-mermaid",
+    "mrmlnc.vscode-duplicate",
+    "wholroyd.jinja",
+    "gruntfuggly.todo-tree",
+    "esbenp.prettier-vscode",
+    "github.vscode-github-actions",
+    "eamodio.gitlens"
+  ]
+}

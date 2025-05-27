@@ -52,7 +52,7 @@ This project uses UV instead of pip for several advantages:
 # Add runtime dependency
 uv add package-name
 
-# Add development dependency  
+# Add development dependency
 uv add --group dev package-name
 
 # Install all dependencies
@@ -137,7 +137,7 @@ class LabelStrip(QObject):
     content_cell_width: float = 12.0
     segments: List[Segment] = field(default_factory=list)
     settings: StripSettings = field(default_factory=StripSettings)
-    
+
     # Signals for UI updates
     strip_changed = pyqtSignal()
     segment_added = pyqtSignal(int)
@@ -157,10 +157,10 @@ Three types of segments with polymorphic behavior:
 ```python
 class StartSegment(Segment):
     """Optional start label (e.g., 'INPUT')"""
-    
+
 class ContentSegment(Segment):
     """Main content cells (e.g., 'CH1', 'CH2')"""
-    
+
 class EndSegment(Segment):
     """Optional end label (e.g., 'OUTPUT')"""
 ```
@@ -199,7 +199,7 @@ class MainWindow(QMainWindow):
         self.designer_tab = DesignerTab()
         self.preview_tab = PreviewTab()
         self.settings_tab = SettingsTab()
-        
+
         # Signal routing
         self.designer_tab.strip_changed.connect(self.preview_tab.update_preview)
         self.settings_tab.settings_changed.connect(self.designer_tab.apply_settings)
@@ -221,7 +221,7 @@ class DesignerTab(QWidget):
         self.control_panel = self._create_control_panel()
         self.segment_table = self._create_segment_table()
         self.action_buttons = self._create_action_buttons()
-        
+
     def _create_segment_table(self):
         """Creates table with custom delegates for colors and formatting"""
         table = QTableWidget()
@@ -245,7 +245,7 @@ class PreviewTab(QWidget):
         self.preview_widget = StripPreviewWidget()
         self.info_panel = StripInfoPanel()
         self.export_controls = self._create_export_controls()
-        
+
     def update_preview(self, label_strip: LabelStrip):
         """Updates preview with auto-scaling"""
         pixmap = self.renderer.render_to_pixmap(label_strip, self.scale_factor)
@@ -273,20 +273,20 @@ Professional PDF generation with ReportLab:
 
 ```python
 class PDFGenerator:
-    def generate_pdf(self, label_strip: LabelStrip, filename: str, 
+    def generate_pdf(self, label_strip: LabelStrip, filename: str,
                     rotation_angle: float | None = None) -> bool:
         """Generates high-quality PDF with precise positioning"""
         c = canvas.Canvas(filename, pagesize=self.paper_size)
-        
+
         # Apply rotation and positioning
         c.saveState()
         c.translate(center_x, center_y)
         c.rotate(rotation_angle)
-        
+
         # Render segments with exact dimensions
         for segment in label_strip.segments:
             self._draw_segment(c, segment, x_offset)
-            
+
         c.restoreState()
         c.save()
 ```
@@ -304,16 +304,16 @@ High-quality PNG rendering with Qt:
 
 ```python
 class StripRenderer:
-    def render_to_pixmap(self, label_strip: LabelStrip, 
+    def render_to_pixmap(self, label_strip: LabelStrip,
                         scale_factor: float = 1.0) -> QPixmap:
         """Renders strip to QPixmap for preview or export"""
         width_px = int(total_width_mm * self.pixels_per_mm * scale_factor)
         height_px = int(label_strip.height * self.pixels_per_mm * scale_factor)
-        
+
         pixmap = QPixmap(width_px, height_px)
         painter = QPainter(pixmap)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        
+
         # Render each segment
         for segment in label_strip.segments:
             self._draw_segment(painter, segment, x_offset, scale_factor)
@@ -343,7 +343,7 @@ class ProjectManager:
                 "file_format_version": "1.0"
             }
         }
-        
+
         with open(filename, 'w') as f:
             json.dump(project_data, f, indent=2)
 ```
@@ -359,7 +359,7 @@ class ProjectManager:
 ### 1. PyQt6 vs Other GUI Frameworks
 
 **Chosen**: PyQt6
-**Rationale**: 
+**Rationale**:
 - Mature, stable framework with excellent documentation
 - Native look and feel on all platforms
 - Powerful signal-slot mechanism for loose coupling
@@ -417,7 +417,7 @@ class PreviewTab:
         self._update_timer = QTimer()
         self._update_timer.setSingleShot(True)
         self._update_timer.timeout.connect(self._do_update_preview)
-    
+
     def update_preview(self):
         """Debounced preview updates to avoid excessive rendering"""
         self._update_timer.start(100)  # 100ms delay
@@ -446,7 +446,7 @@ def test_label_strip_width_calculation():
     strip = LabelStrip(content_cell_width=10.0)
     strip.add_content_segment("CH1")
     strip.add_content_segment("CH2")
-    
+
     assert strip.get_total_width() == 20.0
 ```
 
@@ -463,7 +463,7 @@ def test_pdf_generation_integration():
     """Test complete PDF generation workflow"""
     strip = create_test_strip()
     generator = PDFGenerator()
-    
+
     success = generator.generate_pdf(strip, "test.pdf")
     assert success
     assert os.path.exists("test.pdf")
@@ -542,7 +542,7 @@ def validate_project_file(filename: str) -> bool:
     """Validates project file before loading"""
     if not filename.endswith('.jlp'):
         return False
-    
+
     try:
         with open(filename, 'r') as f:
             data = json.load(f)
@@ -577,7 +577,7 @@ def validate_project_file(filename: str) -> bool:
 ### 2. Distribution Methods
 
 **Current**: Source distribution with UV
-**Future**: 
+**Future**:
 - PyInstaller executables
 - Platform-specific packages (MSI, DMG, DEB)
 - Snap/Flatpak packages
@@ -604,7 +604,7 @@ def validate_project_file(filename: str) -> bool:
 class PluginInterface:
     def get_segment_types(self) -> List[Type[Segment]]:
         """Return custom segment types"""
-        
+
     def get_export_formats(self) -> List[ExportFormat]:
         """Return custom export formats"""
 ```
@@ -665,9 +665,9 @@ import pstats
 def profile_pdf_generation():
     profiler = cProfile.Profile()
     profiler.enable()
-    
+
     # PDF generation code
-    
+
     profiler.disable()
     stats = pstats.Stats(profiler)
     stats.sort_stats('cumulative')

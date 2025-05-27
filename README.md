@@ -74,7 +74,7 @@ A professional desktop application for creating custom label strips for 19" equi
    ```bash
    # Install UV if you don't have it
    curl -LsSf https://astral.sh/uv/install.sh | sh
-   
+
    # Install dependencies
    uv sync
    ```
@@ -163,7 +163,7 @@ Configure global settings for your labels:
 The application follows a clean Model-View-Controller (MVC) architecture:
 
 - **Models** (`jackfield_labeler/models/`): Data structures and business logic
-- **Views** (`jackfield_labeler/views/`): PyQt6-based user interface components  
+- **Views** (`jackfield_labeler/views/`): PyQt6-based user interface components
 - **Utils** (`jackfield_labeler/utils/`): PDF generation, rendering, and project management
 - **Controllers** (`jackfield_labeler/controllers/`): Application logic and coordination
 
