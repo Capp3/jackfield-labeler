@@ -15,7 +15,7 @@ The Jackfield Labeler application is built using a clean Model-View-Controller (
 
 ### 2. Data Flow
 
-```
+```bash
 User Input → View → Model Update → Signal Emission → View Update → Preview/Export
 ```
 
@@ -306,7 +306,7 @@ Project file management with `.jlp` format support.
 
 ### 1. User Interaction Flow
 
-```
+```bash
 User Input (Designer Tab)
     ↓
 Control Panel / Segment Table
@@ -322,7 +322,7 @@ Visual Feedback
 
 ### 2. Settings Flow
 
-```
+```bash
 Settings Tab Input
     ↓
 StripSettings Model Update
@@ -338,7 +338,7 @@ Preview Refresh
 
 ### 3. Export Flow
 
-```
+```bash
 Export Request (Menu/Button)
     ↓
 Current Model State
@@ -352,7 +352,7 @@ User Feedback
 
 ### 4. Project Management Flow
 
-```
+```bash
 Save: Model → Serialization → JSON → File
 Load: File → JSON → Validation → Model → UI Update
 ```
@@ -525,7 +525,7 @@ def _validate_input(self, value: str) -> bool:
 
 ### 4. Test Organization
 
-```
+```bash
 tests/
 ├── test_models/           # Model unit tests
 ├── test_utils/            # Utility unit tests
