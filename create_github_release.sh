@@ -20,11 +20,23 @@ git pull
 # Update version in files if needed
 echo "Updating version to $VERSION in files..."
 
-# Update version in pyproject.toml
-sed -i "" "s/version = \".*\"/version = \"$VERSION\"/" pyproject.toml
+# Update version in pyproject.toml (works on both macOS and Linux)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS version
+  sed -i "" "s/version = \".*\"/version = \"$VERSION\"/" pyproject.toml
+else
+  # Linux version
+  sed -i "s/version = \".*\"/version = \"$VERSION\"/" pyproject.toml
+fi
 
-# Update version in the spec file
-sed -i "" "s/'CFBundleShortVersionString': '.*'/'CFBundleShortVersionString': '$VERSION'/" jackfield_labeler.spec
+# Update version in the spec file (works on both macOS and Linux)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS version
+  sed -i "" "s/'CFBundleShortVersionString': '.*'/'CFBundleShortVersionString': '$VERSION'/" jackfield_labeler.spec
+else
+  # Linux version
+  sed -i "s/'CFBundleShortVersionString': '.*'/'CFBundleShortVersionString': '$VERSION'/" jackfield_labeler.spec
+fi
 
 # Commit the version changes
 git add .
