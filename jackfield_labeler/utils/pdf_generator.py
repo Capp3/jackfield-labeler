@@ -2,6 +2,8 @@
 PDF generation utilities for label strips.
 """
 
+from typing import ClassVar
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A0, A1, A2, A3, A4, LEGAL, LETTER, TABLOID
 from reportlab.lib.units import mm

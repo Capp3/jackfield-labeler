@@ -61,7 +61,7 @@ class StripControlPanel(QGroupBox):
 
         # End label width control
         end_width_layout = QHBoxLayout()
-        end_width_layout.addWidget(QLabel("End Label Width (mm):"))
+        end_width_layout.addWidget(QLabel("End Label Width (both ends, mm):"))
         self.end_width_spinbox = QDoubleSpinBox()
         self.end_width_spinbox.setRange(0.0, 100.0)
         self.end_width_spinbox.setDecimals(3)
@@ -72,9 +72,9 @@ class StripControlPanel(QGroupBox):
 
         # End label text control
         end_text_layout = QHBoxLayout()
-        end_text_layout.addWidget(QLabel("End Label Text:"))
+        end_text_layout.addWidget(QLabel("End Label Text (both ends):"))
         self.end_text_input = QLineEdit()
-        self.end_text_input.setPlaceholderText("Enter text for end labels")
+        self.end_text_input.setPlaceholderText("Enter text for both end labels")
         self.end_text_input.textChanged.connect(self._emit_changed)
         end_text_layout.addWidget(self.end_text_input)
         self.layout().addLayout(end_text_layout)
@@ -369,17 +369,23 @@ class DesignerTab(QWidget):
         self.strip.height = values["height"]
         self.strip.content_cell_width = values["cell_width"]
 
-        # Remove start segment (no longer used)
-        self.strip.set_start_segment(width=0)
-
         # Update end segment
         if values["end_width"] > 0:
+            # Set both end and start segments with the same properties
             self.strip.set_end_segment(width=values["end_width"])
+            self.strip.set_start_segment(width=values["end_width"])
+
             # Set the end segment text from the control panel
             if self.strip.end_segment:
                 self.strip.end_segment.text = values["end_text"]
+
+            # Set the start segment text to be the same as the end segment
+            if self.strip.start_segment:
+                self.strip.start_segment.text = values["end_text"]
         else:
+            # If no end segment, remove both start and end segments
             self.strip.set_end_segment(width=0)
+            self.strip.set_start_segment(width=0)
 
         # Update content segments
         self.strip.set_content_segment_count(values["content_cells"])
@@ -423,6 +429,13 @@ class DesignerTab(QWidget):
                 self.strip.end_segment.text_format = data["text_format"]
                 self.strip.end_segment.text_color = Color.from_standard(data["text_color"])
                 self.strip.end_segment.background_color = Color.from_standard(data["bg_color"])
+
+                # Synchronize start segment with end segment if both exist
+                if self.strip.start_segment is not None:
+                    self.strip.start_segment.text = self.strip.end_segment.text
+                    self.strip.start_segment.text_format = self.strip.end_segment.text_format
+                    self.strip.start_segment.text_color = self.strip.end_segment.text_color
+                    self.strip.start_segment.background_color = self.strip.end_segment.background_color
 
     def update_table_from_strip(self):
         """Update the segment table to match the strip model."""

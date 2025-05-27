@@ -2,7 +2,7 @@
 
 ## Current Tasks
 
-- [ ] Add label text tow both ends
+- [x] Add label text tow both ends
 - [ ] Troubleshoot Preview planes
 - [ ] Automate rotation angle
 - [x] Centre the text justification for height to centre
