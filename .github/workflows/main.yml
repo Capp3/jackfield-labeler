@@ -54,6 +54,9 @@ jobs:
         run: |
           # Run with Xvfb for GUI tests
           xvfb-run -a uv run python -m pytest tests --cov --cov-config=pyproject.toml --cov-report=xml
+        env:
+          QT_QPA_PLATFORM: offscreen
+          CI: true
 
       - name: Check typing
         run: uv run mypy
