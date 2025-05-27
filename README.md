@@ -187,8 +187,7 @@ The application follows a clean Model-View-Controller (MVC) architecture:
 
 - **UV**: Modern Python package manager
 - **pytest**: Testing framework
-- **mypy**: Static type checking
-- **ruff**: Fast Python linter and formatter
+- **ruff**: Fast Python linter and formatter (replaces multiple tools including Black)
 - **pre-commit**: Git hooks for code quality
 
 ### File Format
@@ -221,7 +220,7 @@ Projects are saved in `.jlp` (Jackfield Labeler Project) format:
 
 ## 📁 Project Structure
 
-```
+```bash
 jackfield-labeler/
 ├── jackfield_labeler/          # Main application package (~3,300 lines)
 │   ├── models/                 # Data models and business logic
@@ -290,10 +289,6 @@ uv run ruff check
 make format
 uv run ruff format
 
-# Type checking
-make typecheck
-uv run mypy
-
 # Build documentation
 make docs
 uv run mkdocs serve
@@ -314,31 +309,31 @@ uv add --group dev package-name
 uv sync
 ```
 
-### Type Checking
+### Code Quality
 
-The project uses mypy for static type checking:
+The project uses Ruff for both linting and formatting:
 
 ```bash
-# Run type checking with development settings
-mypy
+# Check code with linter
+uv run ruff check
 
-# Run with custom settings
-mypy --config-file .mypy.ini
+# Format code
+uv run ruff format
 ```
 
-**Note on Type Annotations**: 
-- The project is gradually adding type annotations to improve code quality
-- A `.mypy.ini` configuration file is provided with pragmatic settings
-- In CI workflows, type checking is set to be permissive to avoid blocking releases
-- When contributing, please add type annotations to new code when possible
+**Code Standards**:
+
+- Follow PEP 8 style guidelines enforced by Ruff
+- Use descriptive variable and function names
+- Write tests for new functionality
+- Update documentation as needed
 
 ### CI Workflow
 
 The project uses GitHub Actions for continuous integration:
 
 - **Tests**: Runs the test suite on Python 3.12 and 3.13
-- **Type Checking**: Validates type annotations with mypy
-- **Linting**: Ensures code quality with ruff
+- **Linting**: Ensures code quality with Ruff
 - **Documentation**: Verifies documentation builds correctly
 
 The release workflow automatically builds binaries for macOS and Windows when a version tag is pushed.

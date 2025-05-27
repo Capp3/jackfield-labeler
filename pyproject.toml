@@ -29,7 +29,6 @@ dev = [
     "pre-commit>=4.2.0",
     "tox-uv>=1.25.0",
 
-    "mypy>=1.15",
     "pytest-cov>=6.1.1",
     "ruff>=0.11.11",
     "mkdocs>=1.6.1",

@@ -58,22 +58,6 @@ jobs:
           QT_QPA_PLATFORM: offscreen
           CI: true
 
-      - name: Install type stubs
-        run: |
-          # Install missing type stubs
-          uv pip install types-reportlab
-
-      - name: Check typing
-        run: |
-          # Create a temporary mypy.ini that ignores all errors
-          echo "[mypy]" > mypy_ci.ini
-          echo "ignore_errors = true" >> mypy_ci.ini
-          echo "follow_imports = silent" >> mypy_ci.ini
-          echo "show_error_codes = true" >> mypy_ci.ini
-
-          # Run mypy with CI config
-          uv run mypy --config-file mypy_ci.ini
-
       - name: Upload coverage reports to Codecov with GitHub Action on Python 3.11
         uses: codecov/codecov-action@v4
         if: ${{ matrix.python-version == '3.11' }}
