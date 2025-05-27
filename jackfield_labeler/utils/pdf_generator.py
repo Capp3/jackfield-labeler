@@ -9,7 +9,7 @@ from reportlab.lib.pagesizes import A0, A1, A2, A3, A4, LEGAL, LETTER, TABLOID
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 
-from jackfield_labeler.models.label_strip import LabelStrip
+from jackfield_labeler.models.label_strip import LabelStrip, Segment
 from jackfield_labeler.models.strip_settings import PaperSize
 
 
@@ -168,7 +168,7 @@ class PDFGenerator:
             self._draw_segment(canvas_obj, current_x, y, segment_width, height, self.label_strip.end_segment)
 
     def _draw_segment(
-        self, canvas_obj: canvas.Canvas, x: float, y: float, width: float, height: float, segment
+        self, canvas_obj: canvas.Canvas, x: float, y: float, width: float, height: float, segment: Segment
     ) -> None:
         """
         Draw a single segment.
