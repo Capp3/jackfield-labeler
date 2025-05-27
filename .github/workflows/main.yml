@@ -53,7 +53,7 @@ jobs:
       - name: Run tests
         run: |
           # Run with Xvfb for GUI tests
-          xvfb-run -a uv run python -m pytest tests --cov --cov-config=pyproject.toml --cov-report=xml
+          xvfb-run -a uv run python -m pytest tests --cov --cov-config=pyproject.toml --cov-report=xml -v
         env:
           QT_QPA_PLATFORM: offscreen
           CI: true
