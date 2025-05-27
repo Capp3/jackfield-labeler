@@ -167,3 +167,5 @@ optimization-journey/
 
 # Mypy CI config
 mypy_ci.ini
+
+.DS_Store
