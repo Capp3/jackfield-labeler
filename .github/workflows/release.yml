@@ -91,7 +91,10 @@ jobs:
           uv run pyinstaller jackfield_labeler.spec
           mkdir -p dist/release
           cd dist
-          powershell Compress-Archive -Path "Jackfield Labeler" -DestinationPath "release/Jackfield-Labeler-windows.zip"
+          dir
+          # Rename the directory to remove spaces using Windows commands
+          ren "Jackfield Labeler" JackfieldLabeler
+          powershell Compress-Archive -Path JackfieldLabeler -DestinationPath release/Jackfield-Labeler-windows.zip
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
