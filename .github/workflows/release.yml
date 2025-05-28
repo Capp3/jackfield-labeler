@@ -40,7 +40,8 @@ jobs:
 
       - name: Build macOS package
         run: |
-          pyinstaller jackfield_labeler.spec
+          # Run PyInstaller with uv to ensure it's in the environment
+          uv run pyinstaller jackfield_labeler.spec
           mkdir -p dist/release
           cd dist
           zip -r "release/Jackfield-Labeler-mac.zip" "Jackfield Labeler.app"
@@ -86,7 +87,8 @@ jobs:
 
       - name: Build Windows package
         run: |
-          pyinstaller jackfield_labeler.spec
+          # Run PyInstaller with uv to ensure it's in the environment
+          uv run pyinstaller jackfield_labeler.spec
           mkdir -p dist/release
           cd dist
           powershell Compress-Archive -Path "Jackfield Labeler" -DestinationPath "release/Jackfield-Labeler-windows.zip"
