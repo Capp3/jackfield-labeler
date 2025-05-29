@@ -2,11 +2,15 @@
 Main application window for the Jackfield Labeler.
 """
 
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
+    QDialog,
+    QDialogButtonBox,
     QMainWindow,
     QMessageBox,
     QStatusBar,
     QTabWidget,
+    QTextBrowser,
     QVBoxLayout,
     QWidget,
 )
@@ -92,38 +96,62 @@ class MainWindow(QMainWindow):
 
         # New action
         new_action = file_menu.addAction("&New")
+        new_action.setShortcut("Ctrl+N")
         new_action.triggered.connect(self.new_project)
 
         # Open action
         open_action = file_menu.addAction("&Open...")
+        open_action.setShortcut("Ctrl+O")
         open_action.triggered.connect(self.open_project)
 
         # Save action
         save_action = file_menu.addAction("&Save")
+        save_action.setShortcut("Ctrl+S")
         save_action.triggered.connect(self.save_project)
 
         # Save As action
         save_as_action = file_menu.addAction("Save &As...")
+        save_as_action.setShortcut("Ctrl+Shift+S")
         save_as_action.triggered.connect(self.save_project_as)
 
         file_menu.addSeparator()
 
         # Generate PDF action
         generate_pdf_action = file_menu.addAction("&Generate PDF...")
+        generate_pdf_action.setShortcut("Ctrl+P")
         generate_pdf_action.triggered.connect(self.generate_pdf)
 
         # Export PNG action
         export_png_action = file_menu.addAction("Export &PNG...")
+        export_png_action.setShortcut("Ctrl+E")
         export_png_action.triggered.connect(self.export_png)
 
         file_menu.addSeparator()
 
         # Exit action
         exit_action = file_menu.addAction("E&xit")
+        exit_action.setShortcut("Ctrl+Q")
         exit_action.triggered.connect(self.close)
 
         # Help menu
         help_menu = self.menuBar().addMenu("&Help")
+
+        # User Guide action
+        user_guide_action = help_menu.addAction("User &Guide")
+        user_guide_action.setShortcut("F1")
+        user_guide_action.triggered.connect(self.show_user_guide)
+
+        # Keyboard Shortcuts action
+        shortcuts_action = help_menu.addAction("&Keyboard Shortcuts")
+        shortcuts_action.setShortcut("Ctrl+K")
+        shortcuts_action.triggered.connect(self.show_keyboard_shortcuts)
+
+        # Technical Documentation action
+        technical_action = help_menu.addAction("&Technical Documentation")
+        technical_action.setShortcut("Ctrl+T")
+        technical_action.triggered.connect(self.show_technical_docs)
+
+        help_menu.addSeparator()
 
         # About action
         about_action = help_menu.addAction("&About")
@@ -333,6 +361,111 @@ class MainWindow(QMainWindow):
         except Exception as e:
             self.status_bar.showMessage("Error exporting PNG", 3000)
             QMessageBox.critical(self, "PNG Export Error", f"An unexpected error occurred:\n{e!s}")
+
+    def show_user_guide(self):
+        """Show the user guide."""
+        self._show_documentation("User Guide", "docs/user-guide.md")
+
+    def show_keyboard_shortcuts(self):
+        """Show keyboard shortcuts."""
+        shortcuts_html = """
+        <h2>Keyboard Shortcuts</h2>
+        <table border="1" cellspacing="0" cellpadding="3">
+            <tr><th>Shortcut</th><th>Action</th></tr>
+            <tr><td>Ctrl+N</td><td>New Project</td></tr>
+            <tr><td>Ctrl+O</td><td>Open Project</td></tr>
+            <tr><td>Ctrl+S</td><td>Save Project</td></tr>
+            <tr><td>Ctrl+Shift+S</td><td>Save Project As</td></tr>
+            <tr><td>Ctrl+P</td><td>Generate PDF</td></tr>
+            <tr><td>Ctrl+E</td><td>Export PNG</td></tr>
+            <tr><td>Ctrl+Q</td><td>Exit</td></tr>
+            <tr><td>F1</td><td>Show Help</td></tr>
+        </table>
+        """
+        self._show_html_documentation("Keyboard Shortcuts", shortcuts_html)
+
+    def show_technical_docs(self):
+        """Show technical documentation."""
+        self._show_documentation("Technical Documentation", "docs/technical.md")
+
+    def _show_documentation(self, title: str, md_file_path: str):
+        """
+        Show documentation from a markdown file.
+
+        Args:
+            title: The title for the dialog window
+            md_file_path: Path to the markdown file
+        """
+        try:
+            import os
+
+            # Get the absolute path to the documentation file
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            file_path = os.path.join(base_dir, md_file_path)
+
+            # Check if file exists
+            if not os.path.exists(file_path):
+                QMessageBox.warning(
+                    self, "Documentation Not Found", f"The documentation file '{md_file_path}' could not be found."
+                )
+                return
+
+            # Read the markdown file
+            with open(file_path, encoding="utf-8") as f:
+                markdown_content = f.read()
+
+            # Convert markdown to HTML (basic conversion)
+            try:
+                import markdown
+
+                html_content = markdown.markdown(markdown_content, extensions=["tables", "fenced_code"])
+            except ImportError:
+                # Basic fallback if markdown module is not available
+                html_content = f"<pre>{markdown_content}</pre>"
+
+            # Show the documentation in a dialog
+            self._show_html_documentation(title, html_content)
+
+        except Exception as e:
+            QMessageBox.critical(
+                self, "Documentation Error", f"An error occurred while loading the documentation:\n{e!s}"
+            )
+
+    def _show_html_documentation(self, title: str, html_content: str):
+        """
+        Show HTML content in a dialog window.
+
+        Args:
+            title: The title for the dialog window
+            html_content: HTML content to display
+        """
+        # Create dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle(title)
+        dialog.setMinimumSize(700, 500)
+
+        # Create layout
+        layout = QVBoxLayout(dialog)
+
+        # Create text browser
+        text_browser = QTextBrowser(dialog)
+        text_browser.setHtml(html_content)
+        text_browser.setOpenExternalLinks(True)
+
+        # Set font
+        font = QFont("Arial", 10)
+        text_browser.setFont(font)
+
+        # Add to layout
+        layout.addWidget(text_browser)
+
+        # Add buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+
+        # Show dialog
+        dialog.exec()
 
     def show_about(self):
         """Show the about dialog."""

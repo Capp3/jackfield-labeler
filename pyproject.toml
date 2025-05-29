@@ -16,6 +16,7 @@ classifiers = [
 dependencies = [
     "pyqt6>=6.9.0",
     "reportlab>=4.4.1",
+    "markdown>=3.5.2",
 ]
 
 [project.urls]
