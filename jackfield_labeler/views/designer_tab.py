@@ -12,7 +12,6 @@ from PyQt6.QtWidgets import (
     QLabel,
     QLineEdit,
     QPushButton,
-    QScrollArea,
     QSpinBox,
     QTableWidget,
     QTableWidgetItem,
@@ -35,44 +34,64 @@ class StripControlPanel(QGroupBox):
 
     def __init__(self, parent=None):
         """Initialize the strip control panel."""
-        super().__init__("Strip Controls", parent)
+        super().__init__("🎛️ Strip Controls", parent)
         self.setLayout(QVBoxLayout())
+        self.layout().setSpacing(12)
+        self.layout().setContentsMargins(16, 20, 16, 16)
 
         # Content cells control
         cells_layout = QHBoxLayout()
-        cells_layout.addWidget(QLabel("Number of Content Cells:"))
+        cells_layout.setSpacing(8)
+        cells_label = QLabel("Number of Content Cells:")
+        cells_label.setMinimumWidth(180)
+        cells_layout.addWidget(cells_label)
         self.content_cells_spinbox = QSpinBox()
         self.content_cells_spinbox.setRange(0, 100)
         self.content_cells_spinbox.setValue(0)
+        self.content_cells_spinbox.setMinimumWidth(100)
         self.content_cells_spinbox.valueChanged.connect(self._emit_changed)
         cells_layout.addWidget(self.content_cells_spinbox)
+        cells_layout.addStretch()
         self.layout().addLayout(cells_layout)
 
         # Cell width control
         cell_width_layout = QHBoxLayout()
-        cell_width_layout.addWidget(QLabel("Content Cell Width (mm):"))
+        cell_width_layout.setSpacing(8)
+        cell_width_label = QLabel("Content Cell Width (mm):")
+        cell_width_label.setMinimumWidth(180)
+        cell_width_layout.addWidget(cell_width_label)
         self.cell_width_spinbox = QDoubleSpinBox()
         self.cell_width_spinbox.setRange(0.001, 100.0)
         self.cell_width_spinbox.setDecimals(3)
         self.cell_width_spinbox.setValue(10.0)
+        self.cell_width_spinbox.setMinimumWidth(100)
         self.cell_width_spinbox.valueChanged.connect(self._emit_changed)
         cell_width_layout.addWidget(self.cell_width_spinbox)
+        cell_width_layout.addStretch()
         self.layout().addLayout(cell_width_layout)
 
         # End label width control
         end_width_layout = QHBoxLayout()
-        end_width_layout.addWidget(QLabel("End Label Width (both ends, mm):"))
+        end_width_layout.setSpacing(8)
+        end_width_label = QLabel("End Label Width (both ends, mm):")
+        end_width_label.setMinimumWidth(180)
+        end_width_layout.addWidget(end_width_label)
         self.end_width_spinbox = QDoubleSpinBox()
         self.end_width_spinbox.setRange(0.0, 100.0)
         self.end_width_spinbox.setDecimals(3)
         self.end_width_spinbox.setValue(0.0)
+        self.end_width_spinbox.setMinimumWidth(100)
         self.end_width_spinbox.valueChanged.connect(self._emit_changed)
         end_width_layout.addWidget(self.end_width_spinbox)
+        end_width_layout.addStretch()
         self.layout().addLayout(end_width_layout)
 
         # End label text control
         end_text_layout = QHBoxLayout()
-        end_text_layout.addWidget(QLabel("End Label Text (both ends):"))
+        end_text_layout.setSpacing(8)
+        end_text_label = QLabel("End Label Text (both ends):")
+        end_text_label.setMinimumWidth(180)
+        end_text_layout.addWidget(end_text_label)
         self.end_text_input = QLineEdit()
         self.end_text_input.setPlaceholderText("Enter text for both end labels")
         self.end_text_input.textChanged.connect(self._emit_changed)
@@ -81,20 +100,41 @@ class StripControlPanel(QGroupBox):
 
         # Strip height control
         height_layout = QHBoxLayout()
-        height_layout.addWidget(QLabel("Strip Height (mm):"))
+        height_layout.setSpacing(8)
+        height_label = QLabel("Strip Height (mm):")
+        height_label.setMinimumWidth(180)
+        height_layout.addWidget(height_label)
         self.height_spinbox = QDoubleSpinBox()
         self.height_spinbox.setRange(LabelStrip.MIN_HEIGHT, LabelStrip.MAX_HEIGHT)
         self.height_spinbox.setDecimals(1)
         self.height_spinbox.setValue(5.0)
+        self.height_spinbox.setMinimumWidth(100)
         self.height_spinbox.valueChanged.connect(self._emit_changed)
         height_layout.addWidget(self.height_spinbox)
+        height_layout.addStretch()
         self.layout().addLayout(height_layout)
 
         # Total width display
         total_width_layout = QHBoxLayout()
-        total_width_layout.addWidget(QLabel("Total Strip Width (mm):"))
+        total_width_layout.setSpacing(8)
+        total_width_label = QLabel("Total Strip Width (mm):")
+        total_width_label.setMinimumWidth(180)
+        total_width_label.setStyleSheet("font-weight: 600; color: #495057;")
+        total_width_layout.addWidget(total_width_label)
         self.total_width_label = QLabel("0.0")
+        self.total_width_label.setStyleSheet("""
+            QLabel {
+                font-weight: 600;
+                color: #007bff;
+                background-color: #e7f3ff;
+                border: 1px solid #b3d9ff;
+                border-radius: 4px;
+                padding: 4px 8px;
+                min-width: 60px;
+            }
+        """)
         total_width_layout.addWidget(self.total_width_label)
+        total_width_layout.addStretch()
         self.layout().addLayout(total_width_layout)
 
     def _emit_changed(self):
@@ -135,28 +175,81 @@ class SegmentTable(QTableWidget):
     FORMAT_COL = 2
     TEXT_COLOR_COL = 3
     BG_COLOR_COL = 4
+    WIDTH_COL = 5
 
     def __init__(self, parent=None):
         """Initialize the segment table."""
-        super().__init__(0, 5, parent)
+        super().__init__(parent)
 
-        # Set headers
-        self.setHorizontalHeaderLabels(["ID", "Text", "Format", "Text Color", "Background Color"])
+        # Set up table properties
+        self.setColumnCount(6)
+        self.setHorizontalHeaderLabels(["ID", "Text", "Format", "Text Color", "Background", "Width (mm)"])
 
-        # Set column properties
+        # Configure table appearance
+        self.setAlternatingRowColors(True)
+        self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
+        self.verticalHeader().setVisible(False)
+        self.setShowGrid(True)
+
+        # Set column widths
         header = self.horizontalHeader()
-        header.setSectionResizeMode(self.ID_COL, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(self.ID_COL, QHeaderView.ResizeMode.Fixed)
         header.setSectionResizeMode(self.TEXT_COL, QHeaderView.ResizeMode.Stretch)
-        header.setSectionResizeMode(self.FORMAT_COL, QHeaderView.ResizeMode.ResizeToContents)
-        header.setSectionResizeMode(self.TEXT_COLOR_COL, QHeaderView.ResizeMode.ResizeToContents)
-        header.setSectionResizeMode(self.BG_COLOR_COL, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(self.FORMAT_COL, QHeaderView.ResizeMode.Fixed)
+        header.setSectionResizeMode(self.TEXT_COLOR_COL, QHeaderView.ResizeMode.Fixed)
+        header.setSectionResizeMode(self.BG_COLOR_COL, QHeaderView.ResizeMode.Fixed)
+        header.setSectionResizeMode(self.WIDTH_COL, QHeaderView.ResizeMode.Fixed)
+
+        self.setColumnWidth(self.ID_COL, 60)
+        self.setColumnWidth(self.FORMAT_COL, 80)
+        self.setColumnWidth(self.TEXT_COLOR_COL, 100)
+        self.setColumnWidth(self.BG_COLOR_COL, 100)
+        self.setColumnWidth(self.WIDTH_COL, 100)
 
         # Connect signals
-        self.cellChanged.connect(self._on_cell_changed)
+        self.itemChanged.connect(self._on_cell_changed)
 
-    def _on_cell_changed(self, row, col):
+        # Apply custom styling
+        self.setStyleSheet("""
+            QTableWidget {
+                gridline-color: #dee2e6;
+                background-color: #ffffff;
+                alternate-background-color: #f8f9fa;
+                selection-background-color: #007bff;
+                selection-color: #ffffff;
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+            }
+
+            QTableWidget::item {
+                padding: 8px 12px;
+                border: none;
+            }
+
+            QTableWidget::item:selected {
+                background-color: #007bff;
+                color: #ffffff;
+            }
+
+            QHeaderView::section {
+                background-color: #f8f9fa;
+                border: none;
+                border-bottom: 2px solid #dee2e6;
+                padding: 12px 8px;
+                font-weight: 600;
+                color: #495057;
+                font-size: 11px;
+            }
+
+            QHeaderView::section:hover {
+                background-color: #e9ecef;
+            }
+        """)
+
+    def _on_cell_changed(self, item):
         """Handle cell content changes."""
-        if col == self.TEXT_COL:
+        if item.column() == self.TEXT_COL:
             self.segment_changed.emit()
 
     def clear_segments(self):
@@ -198,6 +291,14 @@ class SegmentTable(QTableWidget):
         bg_color_combo.currentIndexChanged.connect(lambda: self.segment_changed.emit())
         self.setCellWidget(row, self.BG_COLOR_COL, bg_color_combo)
 
+        # Create width spinbox
+        width_spinbox = QDoubleSpinBox()
+        width_spinbox.setRange(0.001, 100.0)
+        width_spinbox.setDecimals(3)
+        width_spinbox.setValue(10.0)
+        width_spinbox.valueChanged.connect(lambda: self.segment_changed.emit())
+        self.setCellWidget(row, self.WIDTH_COL, width_spinbox)
+
         # Set default colors based on settings
         # Default text color to black
         text_color_combo.setCurrentText("Black")
@@ -227,11 +328,17 @@ class SegmentTable(QTableWidget):
             return None
         bg_color = bg_color_combo.currentData()
 
+        width_spinbox = self.cellWidget(row, self.WIDTH_COL)
+        if width_spinbox is None:
+            return None
+        width = width_spinbox.value()
+
         return {
             "text": text,
             "text_format": text_format,
             "text_color": text_color,
             "bg_color": bg_color,
+            "width": width,
         }
 
     def set_segment_data(self, row, data):
@@ -264,6 +371,11 @@ class SegmentTable(QTableWidget):
                 bg_color_combo.setCurrentIndex(i)
                 break
 
+        # Set width
+        width_spinbox = self.cellWidget(row, self.WIDTH_COL)
+        width = data.get("width", 10.0)
+        width_spinbox.setValue(width)
+
 
 class DesignerTab(QWidget):
     """Tab for designing label strips."""
@@ -272,49 +384,96 @@ class DesignerTab(QWidget):
         """Initialize the designer tab."""
         super().__init__(parent)
 
+        # Create main layout with improved spacing
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(16, 16, 16, 16)
+        main_layout.setSpacing(16)
+
+        # Create horizontal split layout
+        split_layout = QHBoxLayout()
+        split_layout.setSpacing(16)
+
+        # Left panel - Controls
+        left_panel = QVBoxLayout()
+        left_panel.setSpacing(16)
+
+        # Add control panel
+        self.control_panel = StripControlPanel()
+        left_panel.addWidget(self.control_panel)
+
+        # Add action buttons
+        action_group = QGroupBox("🚀 Actions")
+        action_group.setLayout(QVBoxLayout())
+        action_group.layout().setSpacing(8)
+        action_group.layout().setContentsMargins(16, 20, 16, 16)
+
+        # Create button layout
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(8)
+
+        self.add_row_button = QPushButton("+ Add Row")
+        self.add_row_button.clicked.connect(self._add_row)
+        button_layout.addWidget(self.add_row_button)
+
+        self.remove_row_button = QPushButton("- Remove Row")
+        self.remove_row_button.clicked.connect(self._remove_row)
+        button_layout.addWidget(self.remove_row_button)
+
+        action_group.layout().addLayout(button_layout)
+
+        # Add export buttons
+        export_layout = QHBoxLayout()
+        export_layout.setSpacing(8)
+
+        self.generate_pdf_button = QPushButton("📄 Generate PDF")
+        self.generate_pdf_button.clicked.connect(self.generate_pdf)
+        export_layout.addWidget(self.generate_pdf_button)
+
+        self.export_png_button = QPushButton("🖼️ Export PNG")
+        self.export_png_button.clicked.connect(self.export_png)
+        export_layout.addWidget(self.export_png_button)
+
+        action_group.layout().addLayout(export_layout)
+        left_panel.addWidget(action_group)
+
+        # Add stretch to push controls to top
+        left_panel.addStretch()
+
+        # Right panel - Segment table
+        right_panel = QVBoxLayout()
+        right_panel.setSpacing(8)
+
+        # Add table header
+        table_header = QLabel("📋 Segment Properties")
+        table_header.setStyleSheet("""
+            QLabel {
+                font-weight: 600;
+                font-size: 14px;
+                color: #495057;
+                padding: 8px 0;
+            }
+        """)
+        right_panel.addWidget(table_header)
+
+        # Add segment table
+        self.segment_table = SegmentTable()
+        right_panel.addWidget(self.segment_table)
+
+        # Add panels to split layout
+        split_layout.addLayout(left_panel, 1)  # 1 part width
+        split_layout.addLayout(right_panel, 2)  # 2 parts width
+
+        # Add split layout to main layout
+        main_layout.addLayout(split_layout)
+
+        # Initialize strip
         self.strip = LabelStrip()
 
-        # Create main layout
-        main_layout = QVBoxLayout(self)
-
-        # Create strip control panel
-        self.control_panel = StripControlPanel()
+        # Connect signals
         self.control_panel.strip_changed.connect(self.update_strip_from_controls)
-        main_layout.addWidget(self.control_panel)
-
-        # Create segment table
-        table_group = QGroupBox("Label Segments")
-        table_layout = QVBoxLayout(table_group)
-
-        self.segment_table = SegmentTable()
         self.segment_table.segment_changed.connect(self.update_strip_from_table)
 
-        # Wrap the table in a scroll area
-        scroll_area = QScrollArea()
-        scroll_area.setWidget(self.segment_table)
-        scroll_area.setWidgetResizable(True)
-        table_layout.addWidget(scroll_area)
-
-        main_layout.addWidget(table_group)
-
-        # Create action buttons
-        button_layout = QHBoxLayout()
-
-        self.generate_pdf_button = QPushButton("Generate PDF")
-        self.generate_pdf_button.clicked.connect(self.generate_pdf)
-        button_layout.addWidget(self.generate_pdf_button)
-
-        self.save_button = QPushButton("Save Project")
-        self.save_button.clicked.connect(self.save_project)
-        button_layout.addWidget(self.save_button)
-
-        self.load_button = QPushButton("Load Project")
-        self.load_button.clicked.connect(self.load_project)
-        button_layout.addWidget(self.load_button)
-
-        main_layout.addLayout(button_layout)
-
-        # Initialize UI state
+        # Initialize UI
         self.reset_ui()
 
     def reset_ui(self):
@@ -405,6 +564,7 @@ class DesignerTab(QWidget):
                 self.strip.start_segment.text_format = data["text_format"]
                 self.strip.start_segment.text_color = Color.from_standard(data["text_color"])
                 self.strip.start_segment.background_color = Color.from_standard(data["bg_color"])
+                self.strip.start_segment.width = data["width"]
 
             start_row_offset = 1
         else:
@@ -419,6 +579,7 @@ class DesignerTab(QWidget):
                 segment.text_format = data["text_format"]
                 segment.text_color = Color.from_standard(data["text_color"])
                 segment.background_color = Color.from_standard(data["bg_color"])
+                segment.width = data["width"]
 
         # End segment
         if self.strip.end_segment is not None:
@@ -429,6 +590,7 @@ class DesignerTab(QWidget):
                 self.strip.end_segment.text_format = data["text_format"]
                 self.strip.end_segment.text_color = Color.from_standard(data["text_color"])
                 self.strip.end_segment.background_color = Color.from_standard(data["bg_color"])
+                self.strip.end_segment.width = data["width"]
 
                 # Synchronize start segment with end segment if both exist
                 if self.strip.start_segment is not None:

@@ -2,7 +2,7 @@
 Settings tab for configuring label strip output preferences.
 """
 
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QFont
 from PyQt6.QtWidgets import (
     QColorDialog,
@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QScrollArea,
     QSpinBox,
     QVBoxLayout,
     QWidget,
@@ -261,67 +262,85 @@ class SettingsTab(QWidget):
         """Initialize the settings tab."""
         super().__init__(parent)
 
-        self.settings = StripSettings()
-
-        # Create main layout
+        # Create main layout with improved spacing
         main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(16, 16, 16, 16)
+        main_layout.setSpacing(20)
+
+        # Create scroll area for settings
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+
+        # Create scroll content widget
+        scroll_content = QWidget()
+        scroll_layout = QVBoxLayout(scroll_content)
+        scroll_layout.setContentsMargins(8, 8, 8, 8)
+        scroll_layout.setSpacing(20)
+
+        # Paper size group
+        paper_group = QGroupBox("📄 Paper Settings")
+        paper_group.setLayout(QVBoxLayout())
+        paper_group.layout().setSpacing(12)
+        paper_group.layout().setContentsMargins(16, 20, 16, 16)
 
         # Paper size selection
-        paper_group = QGroupBox("Paper Size")
-        paper_layout = QVBoxLayout(paper_group)
+        paper_size_layout = QHBoxLayout()
+        paper_size_layout.setSpacing(8)
+        paper_size_label = QLabel("Paper Size:")
+        paper_size_label.setMinimumWidth(120)
+        paper_size_layout.addWidget(paper_size_label)
 
-        paper_combo_layout = QHBoxLayout()
-        paper_combo_layout.addWidget(QLabel("Paper Size:"))
         self.paper_size_combo = QComboBox()
+        self.paper_size_combo.addItems([size.value for size in PaperSize])
+        self.paper_size_combo.setCurrentText(PaperSize.A3.value)
+        self.paper_size_combo.currentTextChanged.connect(self._on_settings_changed)
+        paper_size_layout.addWidget(self.paper_size_combo)
+        paper_size_layout.addStretch()
+        paper_group.layout().addLayout(paper_size_layout)
 
-        # Add paper sizes to combo box
-        for paper_size in PaperSize:
-            self.paper_size_combo.addItem(str(paper_size), paper_size)
+        scroll_layout.addWidget(paper_group)
 
-        self.paper_size_combo.currentIndexChanged.connect(self._on_settings_changed)
-        paper_combo_layout.addWidget(self.paper_size_combo)
-        paper_layout.addLayout(paper_combo_layout)
+        # Page margins group
+        self.margins_group = PageMarginsGroup()
+        scroll_layout.addWidget(self.margins_group)
 
-        main_layout.addWidget(paper_group)
-
-        # Page margins
-        self.page_margins_group = PageMarginsGroup()
-        self.page_margins_group.margins_changed.connect(self._on_settings_changed)
-        main_layout.addWidget(self.page_margins_group)
-
-        # PDF rotation
-        self.rotation_group = RotationGroup()
-        self.rotation_group.rotation_changed.connect(self._on_settings_changed)
-        main_layout.addWidget(self.rotation_group)
-
-        # Default formatting
+        # Default formatting group
         self.formatting_group = DefaultFormattingGroup()
+        scroll_layout.addWidget(self.formatting_group)
+
+        # Rotation group
+        self.rotation_group = RotationGroup()
+        scroll_layout.addWidget(self.rotation_group)
+
+        # Add stretch to push all groups to top
+        scroll_layout.addStretch()
+
+        # Set scroll area widget
+        scroll_area.setWidget(scroll_content)
+        main_layout.addWidget(scroll_area)
+
+        # Initialize settings
+        self.settings = StripSettings()
+
+        # Connect signals
+        self.margins_group.margins_changed.connect(self._on_settings_changed)
         self.formatting_group.formatting_changed.connect(self._on_settings_changed)
-        main_layout.addWidget(self.formatting_group)
+        self.rotation_group.rotation_changed.connect(self._on_settings_changed)
 
-        # Add a spacer to push everything to the top
-        main_layout.addStretch()
-
-        # Apply button
-        apply_layout = QHBoxLayout()
-        apply_layout.addStretch()
-        self.apply_button = QPushButton("Apply Settings")
-        self.apply_button.clicked.connect(self._apply_settings)
-        apply_layout.addWidget(self.apply_button)
-        main_layout.addLayout(apply_layout)
-
-        # Initialize UI state
+        # Initialize UI
         self.reset_ui()
 
     def reset_ui(self):
         """Reset the UI to match the current settings model."""
         # Reset paper size
-        index = self.paper_size_combo.findData(self.settings.paper_size)
+        index = self.paper_size_combo.findText(self.settings.paper_size.value)
         if index >= 0:
             self.paper_size_combo.setCurrentIndex(index)
 
         # Reset margins
-        self.page_margins_group.set_margins({
+        self.margins_group.set_margins({
             "top": self.settings.page_margins.top,
             "right": self.settings.page_margins.right,
             "bottom": self.settings.page_margins.bottom,
@@ -350,10 +369,10 @@ class SettingsTab(QWidget):
     def _apply_settings(self):
         """Apply the current settings to the model."""
         # Update paper size
-        self.settings.paper_size = self.paper_size_combo.currentData()
+        self.settings.paper_size = PaperSize(self.paper_size_combo.currentText)
 
         # Update margins
-        margins = self.page_margins_group.get_margins()
+        margins = self.margins_group.get_margins()
         self.settings.page_margins.top = margins["top"]
         self.settings.page_margins.right = margins["right"]
         self.settings.page_margins.bottom = margins["bottom"]

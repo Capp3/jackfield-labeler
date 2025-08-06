@@ -3,6 +3,7 @@ Preview tab for viewing label strips.
 """
 
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import (
     QFrame,
     QGraphicsPixmapItem,
@@ -29,9 +30,17 @@ class StripPreviewWidget(QGraphicsView):
         super().__init__(parent)
         self.scene = QGraphicsScene(self)
         self.setScene(self.scene)
-        self.setMinimumSize(400, 300)
-        self.setStyleSheet("background-color: lightgray;")
+        self.setMinimumSize(500, 400)
+        self.setStyleSheet("""
+            QGraphicsView {
+                background-color: #f8f9fa;
+                border: 2px solid #dee2e6;
+                border-radius: 8px;
+            }
+        """)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
+        self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
 
         self.strip = None
         self.pixmap_item = None
@@ -79,19 +88,56 @@ class StripInfoPanel(QFrame):
         """Initialize the info panel."""
         super().__init__(parent)
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
-        self.setMaximumHeight(120)
+        self.setMaximumHeight(140)
+        self.setStyleSheet("""
+            QFrame {
+                background-color: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+                padding: 8px;
+            }
+        """)
 
         layout = QVBoxLayout(self)
+        layout.setSpacing(8)
+        layout.setContentsMargins(16, 16, 16, 16)
 
         # Title
-        title_label = QLabel("Strip Information")
-        title_label.setStyleSheet("font-weight: bold; font-size: 12px;")
+        title_label = QLabel("📊 Strip Information")
+        title_label.setStyleSheet("""
+            QLabel {
+                font-weight: 600;
+                font-size: 14px;
+                color: #495057;
+                padding: 4px 0;
+            }
+        """)
         layout.addWidget(title_label)
 
-        # Info labels
+        # Info labels with improved styling
         self.dimensions_label = QLabel("Dimensions: -")
+        self.dimensions_label.setStyleSheet("""
+            QLabel {
+                color: #495057;
+                padding: 2px 0;
+            }
+        """)
+
         self.segments_label = QLabel("Segments: -")
+        self.segments_label.setStyleSheet("""
+            QLabel {
+                color: #495057;
+                padding: 2px 0;
+            }
+        """)
+
         self.end_text_label = QLabel("End Text: -")
+        self.end_text_label.setStyleSheet("""
+            QLabel {
+                color: #495057;
+                padding: 2px 0;
+            }
+        """)
 
         layout.addWidget(self.dimensions_label)
         layout.addWidget(self.segments_label)
@@ -133,8 +179,10 @@ class PreviewTab(QWidget):
         """Initialize the preview tab."""
         super().__init__(parent)
 
-        # Create main layout
+        # Create main layout with improved spacing
         main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(16, 16, 16, 16)
+        main_layout.setSpacing(16)
 
         # Create info panel
         self.info_panel = StripInfoPanel()
@@ -144,11 +192,36 @@ class PreviewTab(QWidget):
         self.preview_widget = StripPreviewWidget()
         main_layout.addWidget(self.preview_widget, 1)
 
-        # Create export buttons
+        # Create export buttons with improved styling
         button_layout = QHBoxLayout()
+        button_layout.setSpacing(8)
 
-        self.export_png_button = QPushButton("Export PNG")
+        self.export_png_button = QPushButton("🖼️ Export PNG")
         self.export_png_button.clicked.connect(self.export_png)
+        self.export_png_button.setStyleSheet("""
+            QPushButton {
+                background-color: #28a745;
+                color: #ffffff;
+                border: none;
+                border-radius: 6px;
+                padding: 10px 20px;
+                font-weight: 500;
+                min-height: 24px;
+            }
+
+            QPushButton:hover {
+                background-color: #218838;
+            }
+
+            QPushButton:pressed {
+                background-color: #1e7e34;
+            }
+
+            QPushButton:disabled {
+                background-color: #6c757d;
+                color: #adb5bd;
+            }
+        """)
         button_layout.addWidget(self.export_png_button)
 
         button_layout.addStretch()

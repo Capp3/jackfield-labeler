@@ -31,15 +31,21 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle(f"Jackfield Labeler v{__version__}")
-        self.setMinimumSize(800, 600)
+        self.setMinimumSize(1000, 700)
+
+        # Apply modern styling
+        self._apply_styling()
 
         # Create central widget and layout
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
         self.layout = QVBoxLayout(self.central_widget)
+        self.layout.setContentsMargins(8, 8, 8, 8)
+        self.layout.setSpacing(8)
 
-        # Create tab widget
+        # Create tab widget with improved styling
         self.tab_widget = QTabWidget()
+        self.tab_widget.setTabPosition(QTabWidget.TabPosition.North)
         self.layout.addWidget(self.tab_widget)
 
         # Create tabs
@@ -55,14 +61,22 @@ class MainWindow(QMainWindow):
         self.designer_tab.segment_table.segment_changed.connect(self._update_preview)
 
         # Add tabs to tab widget
-        self.tab_widget.addTab(self.designer_tab, "Designer")
-        self.tab_widget.addTab(self.preview_tab, "Preview")
-        self.tab_widget.addTab(self.settings_tab, "Settings")
+        self.tab_widget.addTab(self.designer_tab, "🎨 Designer")
+        self.tab_widget.addTab(self.preview_tab, "👁️ Preview")
+        self.tab_widget.addTab(self.settings_tab, "⚙️ Settings")
 
-        # Create status bar
+        # Create status bar with improved styling
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage("Ready")
+        self.status_bar.setStyleSheet("""
+            QStatusBar {
+                background-color: #f8f9fa;
+                border-top: 1px solid #dee2e6;
+                padding: 4px;
+                font-size: 11px;
+            }
+        """)
 
         # Create menu bar
         self.create_menus()
@@ -78,6 +92,199 @@ class MainWindow(QMainWindow):
 
         # Update window title
         self._update_window_title()
+
+    def _apply_styling(self):
+        """Apply modern, cross-platform styling to the application."""
+        # Set application-wide font
+        app_font = QFont("Segoe UI", 9)  # Windows
+        if os.name == "posix":  # Linux/macOS
+            app_font = QFont("SF Pro Display", 9)  # macOS
+            if not app_font.exactMatch():
+                app_font = QFont("Ubuntu", 9)  # Linux fallback
+        self.setFont(app_font)
+
+        # Apply modern styling
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #ffffff;
+            }
+
+            QTabWidget::pane {
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+                background-color: #ffffff;
+                margin-top: -1px;
+            }
+
+            QTabWidget::tab-bar {
+                alignment: left;
+            }
+
+            QTabBar::tab {
+                background-color: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-bottom: none;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+                padding: 8px 16px;
+                margin-right: 2px;
+                font-weight: 500;
+                color: #6c757d;
+            }
+
+            QTabBar::tab:selected {
+                background-color: #ffffff;
+                color: #495057;
+                border-bottom: 2px solid #007bff;
+            }
+
+            QTabBar::tab:hover:!selected {
+                background-color: #e9ecef;
+                color: #495057;
+            }
+
+            QMenuBar {
+                background-color: #f8f9fa;
+                border-bottom: 1px solid #dee2e6;
+                padding: 4px;
+            }
+
+            QMenuBar::item {
+                background-color: transparent;
+                padding: 6px 12px;
+                border-radius: 4px;
+            }
+
+            QMenuBar::item:selected {
+                background-color: #e9ecef;
+            }
+
+            QMenu {
+                background-color: #ffffff;
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+                padding: 4px;
+            }
+
+            QMenu::item {
+                padding: 8px 16px;
+                border-radius: 4px;
+            }
+
+            QMenu::item:selected {
+                background-color: #007bff;
+                color: #ffffff;
+            }
+
+            QGroupBox {
+                font-weight: 600;
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+                margin-top: 12px;
+                padding-top: 8px;
+                background-color: #f8f9fa;
+            }
+
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 12px;
+                padding: 0 8px 0 8px;
+                color: #495057;
+            }
+
+            QPushButton {
+                background-color: #007bff;
+                color: #ffffff;
+                border: none;
+                border-radius: 6px;
+                padding: 8px 16px;
+                font-weight: 500;
+                min-height: 20px;
+            }
+
+            QPushButton:hover {
+                background-color: #0056b3;
+            }
+
+            QPushButton:pressed {
+                background-color: #004085;
+            }
+
+            QPushButton:disabled {
+                background-color: #6c757d;
+                color: #adb5bd;
+            }
+
+            QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                padding: 6px 8px;
+                background-color: #ffffff;
+                selection-background-color: #007bff;
+            }
+
+            QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+
+            QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover, QComboBox:hover {
+                border-color: #adb5bd;
+            }
+
+            QTableWidget {
+                gridline-color: #dee2e6;
+                background-color: #ffffff;
+                alternate-background-color: #f8f9fa;
+                selection-background-color: #007bff;
+                selection-color: #ffffff;
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+            }
+
+            QTableWidget::item {
+                padding: 4px 8px;
+                border: none;
+            }
+
+            QTableWidget::item:selected {
+                background-color: #007bff;
+                color: #ffffff;
+            }
+
+            QHeaderView::section {
+                background-color: #f8f9fa;
+                border: none;
+                border-bottom: 1px solid #dee2e6;
+                padding: 8px;
+                font-weight: 600;
+                color: #495057;
+            }
+
+            QScrollBar:vertical {
+                background-color: #f8f9fa;
+                width: 12px;
+                border-radius: 6px;
+            }
+
+            QScrollBar::handle:vertical {
+                background-color: #adb5bd;
+                border-radius: 6px;
+                min-height: 20px;
+            }
+
+            QScrollBar::handle:vertical:hover {
+                background-color: #6c757d;
+            }
+
+            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+                height: 0px;
+            }
+
+            QLabel {
+                color: #495057;
+            }
+        """)
 
     def _on_settings_changed(self):
         """Handle settings changes from the settings tab."""
