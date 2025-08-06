@@ -164,6 +164,7 @@ cython_debug/
 
 .cursor/
 optimization-journey/
+memory-bank/
 
 # Mypy CI config
 mypy_ci.ini

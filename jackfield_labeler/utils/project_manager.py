@@ -6,6 +6,8 @@ import json
 import os
 from typing import Any
 
+from PyQt6.QtCore import QSettings
+
 from jackfield_labeler.models.label_strip import LabelStrip
 
 
@@ -14,6 +16,18 @@ class ProjectManager:
 
     PROJECT_EXTENSION = ".jlp"  # Jackfield Labeler Project
     PROJECT_FILTER = "Jackfield Labeler Projects (*.jlp);;All Files (*)"
+
+    @staticmethod
+    def get_last_directory() -> str:
+        """Get the last used directory from settings."""
+        settings = QSettings("capp3", "Jackfield Labeler")
+        return settings.value("last_directory", os.path.expanduser("~"), type=str)
+
+    @staticmethod
+    def set_last_directory(path: str) -> None:
+        """Set the last used directory in settings."""
+        settings = QSettings("capp3", "Jackfield Labeler")
+        settings.setValue("last_directory", os.path.dirname(path))
 
     @staticmethod
     def save_project(label_strip: LabelStrip, file_path: str) -> bool:
@@ -46,6 +60,10 @@ class ProjectManager:
             # Write the project file
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(project_data, f, indent=2, ensure_ascii=False)
+
+            # Save the directory
+            ProjectManager.set_last_directory(file_path)
+
         except Exception as e:
             print(f"Error saving project: {e}")
             return False
@@ -80,7 +98,14 @@ class ProjectManager:
             label_strip_data = project_data.get("label_strip", {})
 
             # Create and return the label strip
-            return LabelStrip.from_dict(label_strip_data)
+            label_strip = LabelStrip.from_dict(label_strip_data)
+
+            # Save the directory
+            if label_strip:
+                ProjectManager.set_last_directory(file_path)
+                return label_strip
+            else:
+                return None
 
         except json.JSONDecodeError as e:
             print(f"Error parsing project file: {e}")

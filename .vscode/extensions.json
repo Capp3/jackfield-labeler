@@ -1,16 +1,12 @@
 {
   "recommendations": [
-    "charliermarsh.ruff",
     "anysphere.pyright",
-    "mikoz.black-py",
+    "charliermarsh.ruff",
+    "editorconfig.editorconfig",
+    "gruntfuggly.todo-tree",
+    "github.vscode-github-actions",
     "davidanson.vscode-markdownlint",
     "yzhang.markdown-all-in-one",
-    "bierner.markdown-mermaid",
-    "mrmlnc.vscode-duplicate",
-    "wholroyd.jinja",
-    "gruntfuggly.todo-tree",
-    "esbenp.prettier-vscode",
-    "github.vscode-github-actions",
-    "eamodio.gitlens"
+    "bierner.markdown-mermaid"
   ]
 }

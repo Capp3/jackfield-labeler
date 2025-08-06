@@ -1,7 +1,7 @@
-site_name: jackfield-labeler
+site_name: Jackfield Labeler
 repo_url: https://github.com/capp3/jackfield-labeler
 site_url: https://capp3.github.io/jackfield-labeler
-site_description: A utility to create strip labels for jackfields
+site_description: A professional desktop application for creating custom label strips for audio/video equipment racks
 site_author: Dom Capparelli
 edit_uri: edit/main/docs/
 repo_name: capp3/jackfield-labeler
@@ -18,7 +18,6 @@ nav:
       - Development Guide: development.md
       - Project Brief: projectbrief.md
       - Status: status.md
-      - Tasks: tasks.md
       - Active Context: activeContext.md
 
 plugins:

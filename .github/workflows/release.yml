@@ -1,155 +1,38 @@
-name: Build and Release
+name: Create Release
 
 on:
   push:
     tags:
-      - "v*"
-
-# Add permissions needed for release creation
-permissions:
-  contents: write
+      - "v*.*.*"
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
+  build:
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.12"
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v2
-        with:
-          version: "0.6.14"
-          enable-cache: "true"
+        run: pip install uv
 
       - name: Install dependencies
-        run: |
-          # Verify pyproject.toml exists
-          if [ ! -f "pyproject.toml" ]; then
-            echo "Error: pyproject.toml not found. Cannot install dependencies."
-            exit 1
-          fi
+        run: uv sync
 
-          # Install dependencies using UV
-          echo "Installing dependencies from pyproject.toml..."
-          uv sync
+      - name: Build with PyInstaller
+        run: uv run pyinstaller jackfield_labeler.spec --noconfirm
 
-          # Install PyInstaller separately
-          echo "Installing PyInstaller..."
-          uv pip install pyinstaller
-
-      - name: Build macOS package
-        run: |
-          # Run PyInstaller with uv to ensure it's in the environment
-          uv run pyinstaller jackfield_labeler.spec
-          mkdir -p dist/release
-          cd dist
-          zip -r "release/Jackfield-Labeler-mac.zip" "Jackfield Labeler.app"
-          cd ..
-
-      - name: Upload macOS build
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-build
-          path: dist/release/Jackfield-Labeler-mac.zip
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v2
-        with:
-          version: "0.6.14"
-          enable-cache: "true"
-
-      - name: Install dependencies
-        run: |
-          # Check if pyproject.toml exists
-          if (-not (Test-Path "pyproject.toml")) {
-            Write-Error "pyproject.toml not found. Cannot install dependencies."
-            exit 1
-          }
-
-          # Install dependencies using UV
-          Write-Host "Installing dependencies from pyproject.toml..."
-          uv sync
-
-          # Install PyInstaller separately
-          Write-Host "Installing PyInstaller..."
-          uv pip install pyinstaller
-
-      - name: Build Windows package
-        run: |
-          # Run PyInstaller with uv to ensure it's in the environment
-          uv run pyinstaller jackfield_labeler.spec
-          mkdir -p dist/release
-          cd dist
-          dir
-          # Rename the directory to remove spaces using Windows commands
-          ren "Jackfield Labeler" JackfieldLabeler
-          powershell Compress-Archive -Path JackfieldLabeler -DestinationPath release/Jackfield-Labeler-windows.zip
-
-      - name: Upload Windows build
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-build
-          path: dist/release/Jackfield-Labeler-windows.zip
-
-  create-release:
-    needs: [build-macos, build-windows]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v2
-        with:
-          version: "0.6.14"
-          enable-cache: "true"
-
-      - name: Install Qt dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1 libegl1 libxkbcommon-x11-0 libxcb-icccm4 \
-            libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
-            libxcb-xinerama0 libxcb-xkb1 xvfb
-
-      - name: Download macOS build
-        uses: actions/download-artifact@v4
-        with:
-          name: macos-build
-          path: ./artifacts/macos
-
-      - name: Download Windows build
-        uses: actions/download-artifact@v4
-        with:
-          name: windows-build
-          path: ./artifacts/windows
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            ./artifacts/macos/Jackfield-Labeler-mac.zip
-            ./artifacts/windows/Jackfield-Labeler-windows.zip
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: jackfield-labeler-${{ matrix.os }}
+          path: dist/jackfield_labeler*

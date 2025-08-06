@@ -1,47 +1,92 @@
-.PHONY: install
-install: ## Install the virtual environment and install the pre-commit hooks
-	@echo "🚀 Creating virtual environment using uv"
+# Jackfield Labeler - Lean Makefile
+# Single source of truth for development commands
+
+.PHONY: help install check test run build clean docs release
+
+# Default target
+.DEFAULT_GOAL := help
+
+# Variables
+PYTHON := uv run python
+PACKAGE := jackfield_labeler
+DIST_DIR := dist
+SITE_DIR := site
+
+help: ## Show this help message
+	@echo "🚀 Jackfield Labeler - Development Commands"
+	@echo ""
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+install: ## Install dependencies and pre-commit hooks
+	@echo "📦 Installing dependencies..."
 	@uv sync
+	@echo "🔧 Installing pre-commit hooks..."
 	@uv run pre-commit install
 
-.PHONY: check
-check: ## Run code quality tools.
-	@echo "🚀 Checking lock file consistency with 'pyproject.toml'"
+check: ## Run all quality checks (linting, formatting, type checking)
+	@echo "🔍 Running quality checks..."
 	@uv lock --locked
-	@echo "🚀 Linting code: Running pre-commit"
 	@uv run pre-commit run -a
 
-.PHONY: test
-test: ## Test the code with pytest
-	@echo "🚀 Testing code: Running pytest"
-	@uv run python -m pytest --cov --cov-config=pyproject.toml --cov-report=xml
+test: ## Run tests with coverage
+	@echo "🧪 Running tests..."
+	@QT_QPA_PLATFORM=offscreen xvfb-run -a uv run python -m pytest --cov --cov-config=pyproject.toml --cov-report=xml -v
 
-.PHONY: run
-run: ## Run the application using UV
-	@echo "🚀 Starting Jackfield Labeler application"
-	@uv run -m jackfield_labeler
+test-watch: ## Run tests in watch mode
+	@echo "👀 Running tests in watch mode..."
+	@QT_QPA_PLATFORM=offscreen xvfb-run -a uv run python -m pytest --cov --cov-config=pyproject.toml -f
 
-.PHONY: build
-build: clean-build ## Build wheel file
-	@echo "🚀 Creating wheel file"
+run: ## Run the application
+	@echo "🎯 Starting Jackfield Labeler..."
+	@uv run -m $(PACKAGE)
+
+build: clean ## Build wheel distribution
+	@echo "📦 Building wheel..."
 	@uvx --from build pyproject-build --installer uv
 
-.PHONY: clean-build
-clean-build: ## Clean build artifacts
-	@echo "🚀 Removing build artifacts"
-	@uv run python -c "import shutil; import os; shutil.rmtree('dist') if os.path.exists('dist') else None"
+build-exe: ## Build executable (requires PyInstaller)
+	@echo "🔨 Building executable..."
+	@uv run pyinstaller jackfield_labeler.spec --noconfirm
 
-.PHONY: docs-test
-docs-test: ## Test if documentation can be built without warnings or errors
-	@uv run mkdocs build -s
+clean: ## Clean build artifacts
+	@echo "🧹 Cleaning build artifacts..."
+	@rm -rf $(DIST_DIR) build *.egg-info .pytest_cache .coverage
+	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
 
-.PHONY: docs
-docs: ## Build and serve the documentation
+docs-build: ## Build documentation
+	@echo "📚 Building documentation..."
+	@uv run mkdocs build
+
+docs-serve: ## Serve documentation locally
+	@echo "🌐 Serving documentation at http://127.0.0.1:8000"
 	@uv run mkdocs serve
 
-.PHONY: help
-help:
-	@uv run python -c "import re; \
-	[[print(f'\033[36m{m[0]:<20}\033[0m {m[1]}') for m in re.findall(r'^([a-zA-Z_-]+):.*?## (.*)$$', open(makefile).read(), re.M)] for makefile in ('$(MAKEFILE_LIST)').strip().split()]"
+docs-check: ## Check documentation build
+	@echo "✅ Checking documentation..."
+	@uv run mkdocs build -s
 
-.DEFAULT_GOAL := help
+release: ## Create a new release (usage: make release VERSION=1.0.0)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "❌ Error: VERSION is required. Usage: make release VERSION=1.0.0"; \
+		exit 1; \
+	fi
+	@echo "🚀 Creating release $(VERSION)..."
+	@git checkout main
+	@git pull
+	@sed -i "s/version = \".*\"/version = \"$(VERSION)\"/" pyproject.toml
+	@git add pyproject.toml
+	@git commit -m "Bump version to $(VERSION)"
+	@git tag -a "v$(VERSION)" -m "Release version $(VERSION)"
+	@git push origin main
+	@git push origin "v$(VERSION)"
+	@echo "✅ Release $(VERSION) created and pushed!"
+
+dev: install ## Set up development environment
+	@echo "🎉 Development environment ready!"
+
+ci: check test docs-check ## Run CI checks locally
+	@echo "✅ All CI checks passed!"
+
+all: clean install ci build ## Run full development cycle
+	@echo "🎯 Full development cycle complete!"

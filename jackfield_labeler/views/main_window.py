@@ -2,6 +2,8 @@
 Main application window for the Jackfield Labeler.
 """
 
+import os
+
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QDialog,
@@ -210,7 +212,9 @@ class MainWindow(QMainWindow):
                 return  # User cancelled
 
         # Get file path to open
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open Project", "", ProjectManager.PROJECT_FILTER)
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Open Project", ProjectManager.get_last_directory(), ProjectManager.PROJECT_FILTER
+        )
 
         if not file_path:
             return  # User cancelled
@@ -255,9 +259,8 @@ class MainWindow(QMainWindow):
         from jackfield_labeler.utils import ProjectManager
 
         # Get file path to save to
-        file_path, _ = QFileDialog.getSaveFileName(
-            self, "Save Project As", "untitled.jlp", ProjectManager.PROJECT_FILTER
-        )
+        default_path = os.path.join(ProjectManager.get_last_directory(), "untitled.jlp")
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save Project As", default_path, ProjectManager.PROJECT_FILTER)
 
         if not file_path:
             return False  # User cancelled
@@ -274,7 +277,7 @@ class MainWindow(QMainWindow):
         """Generate a PDF from the current label strip design."""
         from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
-        from jackfield_labeler.utils import PDFGenerator
+        from jackfield_labeler.utils import PDFGenerator, ProjectManager
 
         # Get the current label strip from the designer tab
         label_strip = self.designer_tab.strip
@@ -287,9 +290,8 @@ class MainWindow(QMainWindow):
             return
 
         # Get output file path
-        file_path, _ = QFileDialog.getSaveFileName(
-            self, "Save PDF", "label_strip.pdf", "PDF Files (*.pdf);;All Files (*)"
-        )
+        default_path = os.path.join(ProjectManager.get_last_directory(), "label_strip.pdf")
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF", default_path, "PDF Files (*.pdf);;All Files (*)")
 
         if not file_path:
             return  # User cancelled
@@ -320,7 +322,7 @@ class MainWindow(QMainWindow):
         """Export the current label strip design as a PNG file."""
         from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
-        from jackfield_labeler.utils import StripRenderer
+        from jackfield_labeler.utils import ProjectManager, StripRenderer
 
         # Get the current label strip from the designer tab
         label_strip = self.designer_tab.strip
@@ -333,9 +335,8 @@ class MainWindow(QMainWindow):
             return
 
         # Get output file path
-        file_path, _ = QFileDialog.getSaveFileName(
-            self, "Export PNG", "label_strip.png", "PNG Files (*.png);;All Files (*)"
-        )
+        default_path = os.path.join(ProjectManager.get_last_directory(), "label_strip.png")
+        file_path, _ = QFileDialog.getSaveFileName(self, "Export PNG", default_path, "PNG Files (*.png);;All Files (*)")
 
         if not file_path:
             return  # User cancelled
@@ -397,8 +398,6 @@ class MainWindow(QMainWindow):
             md_file_path: Path to the markdown file
         """
         try:
-            import os
-
             # Get the absolute path to the documentation file
             base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             file_path = os.path.join(base_dir, md_file_path)
@@ -493,8 +492,6 @@ class MainWindow(QMainWindow):
         title = f"Jackfield Labeler v{__version__}"
 
         if self._current_project_path:
-            import os
-
             filename = os.path.basename(self._current_project_path)
             title += f" - {filename}"
         else:
@@ -522,6 +519,7 @@ class MainWindow(QMainWindow):
                 self._project_modified = False
                 self._update_window_title()
                 self.status_bar.showMessage(f"Project saved: {file_path}", 5000)
+                ProjectManager.set_last_directory(file_path)  # Update last directory
                 return True
             else:
                 QMessageBox.critical(self, "Save Error", f"Failed to save project to:\n{file_path}")

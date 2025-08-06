@@ -24,6 +24,42 @@ class StripRenderer:
         self.label_strip = label_strip
         self.scale_factor = scale_factor
 
+    def render_to_pixmap_on_page(self, page_width_px: int, page_height_px: int) -> QPixmap:
+        """
+        Render the strip onto a pixmap representing the page, including rotation.
+
+        Args:
+            page_width_px: The width of the page in pixels
+            page_height_px: The height of the page in pixels
+
+        Returns:
+            A QPixmap with the strip rendered on a page representation.
+        """
+        pixmap = QPixmap(page_width_px, page_height_px)
+        pixmap.fill(QColor("lightgray"))
+
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        # Draw a white rectangle for the paper
+        painter.fillRect(0, 0, page_width_px, page_height_px, Qt.GlobalColor.white)
+        painter.setPen(QPen(Qt.GlobalColor.black, 1))
+        painter.drawRect(0, 0, page_width_px - 1, page_height_px - 1)
+
+        # Get strip dimensions in pixels
+        strip_width_px, strip_height_px = self.get_strip_dimensions_px()
+
+        # Center and rotate
+        painter.translate(page_width_px / 2, page_height_px / 2)
+        painter.rotate(self.label_strip.settings.rotation_angle)
+        painter.translate(-strip_width_px / 2, -strip_height_px / 2)
+
+        # Draw the strip
+        self._draw_strip(painter, 0, 0, strip_width_px, strip_height_px)
+
+        painter.end()
+        return pixmap
+
     def render_to_pixmap(self) -> QPixmap:
         """
         Render the strip to a QPixmap.

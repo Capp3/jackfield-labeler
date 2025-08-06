@@ -57,10 +57,16 @@ class StartSegment(Segment):
         Returns:
             A new StartSegment instance
         """
+        text_format_str = data.get("text_format", "NORMAL").upper()
+        try:
+            text_format = TextFormat[text_format_str]
+        except KeyError:
+            text_format = TextFormat.NORMAL
+
         return cls(
             width=data.get("width", 0.0),
             text=data.get("text", ""),
-            text_format=TextFormat[data.get("text_format", "NORMAL")],
+            text_format=text_format,
             text_color=Color.from_hex(data.get("text_color", "#000000")),
             background_color=Color.from_hex(data.get("background_color", "#FFFFFF")),
         )
@@ -115,11 +121,17 @@ class ContentSegment(Segment):
         Returns:
             A new ContentSegment instance
         """
+        text_format_str = data.get("text_format", "NORMAL").upper()
+        try:
+            text_format = TextFormat[text_format_str]
+        except KeyError:
+            text_format = TextFormat.NORMAL
+
         return cls(
             segment_id=data.get("id", "0"),
             width=data.get("width", 10.0),
             text=data.get("text", ""),
-            text_format=TextFormat[data.get("text_format", "NORMAL")],
+            text_format=text_format,
             text_color=Color.from_hex(data.get("text_color", "#000000")),
             background_color=Color.from_hex(data.get("background_color", "#FFFFFF")),
         )
@@ -172,10 +184,16 @@ class EndSegment(Segment):
         Returns:
             A new EndSegment instance
         """
+        text_format_str = data.get("text_format", "NORMAL").upper()
+        try:
+            text_format = TextFormat[text_format_str]
+        except KeyError:
+            text_format = TextFormat.NORMAL
+
         return cls(
             width=data.get("width", 0.0),
             text=data.get("text", ""),
-            text_format=TextFormat[data.get("text_format", "NORMAL")],
+            text_format=text_format,
             text_color=Color.from_hex(data.get("text_color", "#000000")),
             background_color=Color.from_hex(data.get("background_color", "#FFFFFF")),
         )

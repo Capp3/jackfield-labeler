@@ -1,5 +1,8 @@
-"""
-Jackfield Labeler - A utility to create strip labels for jackfields.
-"""
+"""Jackfield Labeler - A professional desktop application for creating custom label strips."""
 
-__version__ = "0.0.1"
+try:
+    from importlib import metadata
+
+    __version__ = metadata.version("jackfield-labeler")
+except ImportError:
+    __version__ = "0.0.0"

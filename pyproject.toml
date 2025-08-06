@@ -1,6 +1,6 @@
 [project]
 name = "jackfield-labeler"
-version = "1.0.0"
+version = "0.1.0"
 description = "A utility to create strip labels for jackfields"
 readme = "README.md"
 keywords = ['python']

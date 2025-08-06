@@ -5,70 +5,70 @@ Preview tab for viewing label strips.
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QFrame,
+    QGraphicsPixmapItem,
+    QGraphicsScene,
+    QGraphicsView,
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QScrollArea,
     QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
 
 from jackfield_labeler.models import LabelStrip
+from jackfield_labeler.utils.pdf_generator import PDFGenerator
 from jackfield_labeler.utils.strip_renderer import StripRenderer
 
 
-class StripPreviewWidget(QLabel):
-    """Widget that displays a visual preview of the label strip."""
+class StripPreviewWidget(QGraphicsView):
+    """Widget that displays a visual preview of the label strip on a page."""
 
     def __init__(self, parent=None):
         """Initialize the preview widget."""
         super().__init__(parent)
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setMinimumSize(400, 100)
-        self.setStyleSheet("border: 1px solid gray; background-color: white;")
+        self.scene = QGraphicsScene(self)
+        self.setScene(self.scene)
+        self.setMinimumSize(400, 300)
+        self.setStyleSheet("background-color: lightgray;")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.strip = None
-        self.renderer = None
-        self.setText("No strip to preview")
+        self.pixmap_item = None
 
     def update_preview(self, strip: LabelStrip):
         """Update the preview with a new label strip."""
         self.strip = strip
+        self.scene.clear()
 
         if not strip or strip.get_total_width() == 0:
-            self.setText("No strip to preview")
-            self.renderer = None
+            self.pixmap_item = None
             return
 
-        # Create renderer with appropriate scale
-        # Calculate scale to fit the widget nicely
-        widget_width = self.width() - 20  # Leave some margin
-        widget_height = self.height() - 20
+        # Get paper dimensions in points
+        paper_size_pts = PDFGenerator.PAPER_SIZES.get(strip.settings.paper_size)
+        page_width_pts, page_height_pts = paper_size_pts
 
-        strip_width_mm = strip.get_total_width()
-        strip_height_mm = strip.height
+        # Determine the scale to fit the view
+        view_rect = self.viewport().rect()
+        scale_x = view_rect.width() / page_width_pts if page_width_pts > 0 else 1
+        scale_y = view_rect.height() / page_height_pts if page_height_pts > 0 else 1
+        scale = min(scale_x, scale_y) * 0.95  # 95% to leave a margin
 
-        # Calculate scale factors to fit in widget
-        scale_x = widget_width / strip_width_mm if strip_width_mm > 0 else 1
-        scale_y = widget_height / strip_height_mm if strip_height_mm > 0 else 1
+        # Create renderer with the calculated scale
+        renderer = StripRenderer(strip, scale_factor=scale)
 
-        # Use the smaller scale to ensure it fits
-        scale = min(scale_x, scale_y, 20.0)  # Cap at 20px per mm for readability
-        scale = max(scale, 2.0)  # Minimum 2px per mm
+        # Render the strip on a page
+        pixmap = renderer.render_to_pixmap_on_page(int(page_width_pts * scale), int(page_height_pts * scale))
 
-        self.renderer = StripRenderer(strip, scale)
-
-        # Render to pixmap and display
-        pixmap = self.renderer.render_to_pixmap()
-        self.setPixmap(pixmap)
+        self.pixmap_item = QGraphicsPixmapItem(pixmap)
+        self.scene.addItem(self.pixmap_item)
+        self.fitInView(self.scene.itemsBoundingRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
     def resizeEvent(self, event):
         """Handle resize events to update the preview scale."""
         super().resizeEvent(event)
         if self.strip:
-            # Re-render with new scale when widget is resized
             self.update_preview(self.strip)
 
 
@@ -140,16 +140,9 @@ class PreviewTab(QWidget):
         self.info_panel = StripInfoPanel()
         main_layout.addWidget(self.info_panel)
 
-        # Create preview area with scroll
-        preview_scroll = QScrollArea()
-        preview_scroll.setWidgetResizable(True)
-        preview_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        preview_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-
+        # Create preview area
         self.preview_widget = StripPreviewWidget()
-        preview_scroll.setWidget(self.preview_widget)
-
-        main_layout.addWidget(preview_scroll, 1)  # Give it most of the space
+        main_layout.addWidget(self.preview_widget, 1)
 
         # Create export buttons
         button_layout = QHBoxLayout()
@@ -158,7 +151,7 @@ class PreviewTab(QWidget):
         self.export_png_button.clicked.connect(self.export_png)
         button_layout.addWidget(self.export_png_button)
 
-        button_layout.addStretch()  # Push buttons to the left
+        button_layout.addStretch()
 
         main_layout.addLayout(button_layout)
 
