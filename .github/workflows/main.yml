@@ -7,6 +7,12 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
+# Add permissions for the workflow
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -74,6 +80,11 @@ jobs:
     needs: [quality, tests-and-type-check, check-docs]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    # Add specific permissions for this job
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

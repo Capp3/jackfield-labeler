@@ -16,6 +16,7 @@ nav:
       - Technical Details: technical.md
   - Development:
       - Development Guide: development.md
+      - Contributing: CONTRIBUTING.md
       - Project Brief: projectbrief.md
       - Status: status.md
       - Active Context: activeContext.md
