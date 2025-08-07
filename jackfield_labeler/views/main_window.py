@@ -99,9 +99,9 @@ class MainWindow(QMainWindow):
         # Set application-wide font
         app_font = QFont("Segoe UI", 9)  # Windows
         if os.name == "posix":  # Linux/macOS
-            app_font = QFont("SF Pro Display", 9)  # macOS
+            app_font = QFont("Helvetica", 9)  # macOS - use system font
             if not app_font.exactMatch():
-                app_font = QFont("Ubuntu", 9)  # Linux fallback
+                app_font = QFont("Arial", 9)  # Fallback
         self.setFont(app_font)
 
         # Apply professional technical styling
@@ -228,10 +228,11 @@ class MainWindow(QMainWindow):
             QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
                 border: 1px solid #555555;
                 border-radius: 3px;
-                padding: 6px 8px;
+                padding: 8px 12px;
                 background-color: #3c3c3c;
                 color: #e6e6e6;
                 selection-background-color: #ff6b35;
+                min-height: 24px;
             }
 
             QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
@@ -241,6 +242,47 @@ class MainWindow(QMainWindow):
 
             QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover, QComboBox:hover {
                 border-color: #666666;
+            }
+
+            /* Simplified spinbox styling */
+            QSpinBox, QDoubleSpinBox {
+                padding-right: 20px;
+            }
+
+            QSpinBox::up-button, QDoubleSpinBox::up-button {
+                background-color: #4c4c4c;
+                border: 1px solid #555555;
+                border-radius: 2px;
+                width: 16px;
+                height: 12px;
+            }
+
+            QSpinBox::down-button, QDoubleSpinBox::down-button {
+                background-color: #4c4c4c;
+                border: 1px solid #555555;
+                border-radius: 2px;
+                width: 16px;
+                height: 12px;
+            }
+
+            QSpinBox::up-arrow, QDoubleSpinBox::up-arrow {
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-bottom: 4px solid #e6e6e6;
+            }
+
+            QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-top: 4px solid #e6e6e6;
+            }
+
+            QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover {
+                background-color: #5c5c5c;
+            }
+
+            QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {
+                background-color: #5c5c5c;
             }
 
             QComboBox::drop-down {

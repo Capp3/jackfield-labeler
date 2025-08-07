@@ -249,6 +249,51 @@ class SegmentTable(QTableWidget):
             }
         """)
 
+        # Set row height to accommodate larger dropdowns
+        self.verticalHeader().setDefaultSectionSize(40)
+
+        # Additional styling for table cell widgets
+        self.setStyleSheet(self.styleSheet() + """
+            QTableWidget QComboBox {
+                border: 1px solid #555555;
+                border-radius: 3px;
+                padding: 4px 8px;
+                background-color: #3c3c3c;
+                color: #e6e6e6;
+                min-height: 20px;
+            }
+
+            QTableWidget QComboBox:focus {
+                border-color: #ff6b35;
+            }
+
+            QTableWidget QComboBox::drop-down {
+                border: none;
+                width: 16px;
+            }
+
+            QTableWidget QComboBox::down-arrow {
+                image: none;
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-top: 4px solid #e6e6e6;
+                margin-right: 4px;
+            }
+
+            QTableWidget QDoubleSpinBox {
+                border: 1px solid #555555;
+                border-radius: 3px;
+                padding: 4px 8px;
+                background-color: #3c3c3c;
+                color: #e6e6e6;
+                min-height: 20px;
+            }
+
+            QTableWidget QDoubleSpinBox:focus {
+                border-color: #ff6b35;
+            }
+        """)
+
     def _on_cell_changed(self, item):
         """Handle cell content changes."""
         if item.column() == self.TEXT_COL:
