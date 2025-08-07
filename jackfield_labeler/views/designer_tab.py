@@ -2,6 +2,7 @@
 Designer tab for creating and editing label strips.
 """
 
+import os
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QComboBox,
@@ -433,6 +434,9 @@ class DesignerTab(QWidget):
     def __init__(self, parent=None):
         """Initialize the designer tab."""
         super().__init__(parent)
+        
+        # Track current project path for export filenames
+        self._current_project_path = None
 
         # Create main layout with improved spacing
         main_layout = QVBoxLayout(self)
@@ -545,6 +549,20 @@ class DesignerTab(QWidget):
 
         # Update total width display
         self.control_panel.update_total_width(self.strip.get_total_width())
+
+    def set_project_path(self, project_path: str | None):
+        """Set the current project path for export filename generation."""
+        self._current_project_path = project_path
+
+    def _get_default_export_filename(self, extension: str) -> str:
+        """Generate default export filename based on current project name."""
+        if self._current_project_path:
+            # Extract project name without extension
+            project_name = os.path.splitext(os.path.basename(self._current_project_path))[0]
+            return f"{project_name}.{extension}"
+        else:
+            # Fallback for unsaved projects
+            return f"label_strip.{extension}"
 
     def load_label_strip(self, label_strip: LabelStrip):
         """Load a label strip into the UI."""
@@ -782,8 +800,9 @@ class DesignerTab(QWidget):
             return
 
         # Get output file path
+        default_filename = self._get_default_export_filename("pdf")
         file_path, _ = QFileDialog.getSaveFileName(
-            self, "Save PDF", "label_strip.pdf", "PDF Files (*.pdf);;All Files (*)"
+            self, "Save PDF", default_filename, "PDF Files (*.pdf);;All Files (*)"
         )
 
         if not file_path:
@@ -822,8 +841,9 @@ class DesignerTab(QWidget):
             return
 
         # Get output file path
+        default_filename = self._get_default_export_filename("png")
         file_path, _ = QFileDialog.getSaveFileName(
-            self, "Export PNG", "label_strip.png", "PNG Files (*.png);;All Files (*)"
+            self, "Export PNG", default_filename, "PNG Files (*.png);;All Files (*)"
         )
 
         if not file_path:

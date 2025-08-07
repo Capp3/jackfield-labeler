@@ -492,6 +492,7 @@ class MainWindow(QMainWindow):
         self.designer_tab.reset_ui()
         self.settings_tab.reset_ui()
         self._current_project_path = None
+        self.designer_tab.set_project_path(None)
         self._project_modified = False
         self._update_window_title()
         self.status_bar.showMessage("New project created", 3000)
@@ -545,6 +546,7 @@ class MainWindow(QMainWindow):
 
             # Update project state
             self._current_project_path = file_path
+            self.designer_tab.set_project_path(file_path)
             self._project_modified = False
             self._update_window_title()
 
@@ -576,6 +578,7 @@ class MainWindow(QMainWindow):
         # Save to the new path
         if self._save_to_path(file_path):
             self._current_project_path = file_path
+            self.designer_tab.set_project_path(file_path)
             self._update_window_title()
             return True
         else:
@@ -598,7 +601,8 @@ class MainWindow(QMainWindow):
             return
 
         # Get output file path
-        default_path = os.path.join(ProjectManager.get_last_directory(), "label_strip.pdf")
+        default_filename = self._get_default_export_filename("pdf")
+        default_path = os.path.join(ProjectManager.get_last_directory(), default_filename)
         file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF", default_path, "PDF Files (*.pdf);;All Files (*)")
 
         if not file_path:
@@ -643,7 +647,8 @@ class MainWindow(QMainWindow):
             return
 
         # Get output file path
-        default_path = os.path.join(ProjectManager.get_last_directory(), "label_strip.png")
+        default_filename = self._get_default_export_filename("png")
+        default_path = os.path.join(ProjectManager.get_last_directory(), default_filename)
         file_path, _ = QFileDialog.getSaveFileName(self, "Export PNG", default_path, "PNG Files (*.png);;All Files (*)")
 
         if not file_path:
@@ -809,6 +814,16 @@ class MainWindow(QMainWindow):
             title += " *"
 
         self.setWindowTitle(title)
+
+    def _get_default_export_filename(self, extension: str) -> str:
+        """Generate default export filename based on current project name."""
+        if self._current_project_path:
+            # Extract project name without extension
+            project_name = os.path.splitext(os.path.basename(self._current_project_path))[0]
+            return f"{project_name}.{extension}"
+        else:
+            # Fallback for unsaved projects
+            return f"label_strip.{extension}"
 
     def _save_to_path(self, file_path: str) -> bool:
         """Save the current project to the specified path."""
