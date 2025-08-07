@@ -363,13 +363,13 @@ class SettingsTab(QWidget):
 
     def _on_settings_changed(self):
         """Handle settings changes."""
-        # Update the apply button
-        self.apply_button.setEnabled(True)
+        # Apply settings automatically
+        self._apply_settings()
 
     def _apply_settings(self):
         """Apply the current settings to the model."""
         # Update paper size
-        self.settings.paper_size = PaperSize(self.paper_size_combo.currentText)
+        self.settings.paper_size = PaperSize(self.paper_size_combo.currentText())
 
         # Update margins
         margins = self.margins_group.get_margins()
@@ -392,9 +392,6 @@ class SettingsTab(QWidget):
 
         bg_color = formatting["bg_color"]
         self.settings.default_background_color = Color(bg_color.red(), bg_color.green(), bg_color.blue())
-
-        # Disable the apply button
-        self.apply_button.setEnabled(False)
 
         # Emit the settings_changed signal
         self.settings_changed.emit()

@@ -621,6 +621,48 @@ class DesignerTab(QWidget):
             # Reconnect the signal
             self.segment_table.segment_changed.connect(self.update_strip_from_table)
 
+    def _add_row(self):
+        """Add a new content segment to the strip."""
+        # Get current content cell count
+        current_count = len(self.strip.content_segments)
+
+        # Add one more content segment
+        self.strip.set_content_segment_count(current_count + 1)
+
+        # Update the control panel to reflect the new count
+        values = self.control_panel.get_values()
+        values["content_cells"] = current_count + 1
+        self.control_panel.set_values(values)
+
+        # Update the table to show the new segment
+        self.update_table_from_strip()
+
+        # Update total width display
+        self.control_panel.update_total_width(self.strip.get_total_width())
+
+    def _remove_row(self):
+        """Remove the last content segment from the strip."""
+        # Get current content cell count
+        current_count = len(self.strip.content_segments)
+
+        # Don't allow removing if there are no content segments
+        if current_count <= 0:
+            return
+
+        # Remove one content segment
+        self.strip.set_content_segment_count(current_count - 1)
+
+        # Update the control panel to reflect the new count
+        values = self.control_panel.get_values()
+        values["content_cells"] = current_count - 1
+        self.control_panel.set_values(values)
+
+        # Update the table to show the removed segment
+        self.update_table_from_strip()
+
+        # Update total width display
+        self.control_panel.update_total_width(self.strip.get_total_width())
+
     def save_project(self):
         """Save the current project."""
         from PyQt6.QtWidgets import QFileDialog, QMessageBox
@@ -715,3 +757,43 @@ class DesignerTab(QWidget):
 
         except Exception as e:
             QMessageBox.critical(self, "PDF Generation Error", f"An unexpected error occurred:\n{e!s}")
+
+    def export_png(self):
+        """Export the current strip as a PNG file."""
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
+
+        from jackfield_labeler.utils import StripRenderer
+
+        # Check if there are any segments to generate
+        if self.strip.get_total_width() == 0:
+            QMessageBox.warning(
+                self, "No Content", "Please add some segments to the label strip before exporting a PNG."
+            )
+            return
+
+        # Get output file path
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Export PNG", "label_strip.png", "PNG Files (*.png);;All Files (*)"
+        )
+
+        if not file_path:
+            return  # User cancelled
+
+        try:
+            # Create high-resolution renderer for PNG export
+            renderer = StripRenderer(self.strip)
+
+            # Save PNG at 300 DPI
+            success = renderer.save_to_png(file_path, dpi=300)
+
+            if success:
+                QMessageBox.information(self, "PNG Exported", f"PNG has been saved to:\n{file_path}")
+            else:
+                QMessageBox.critical(
+                    self,
+                    "PNG Export Failed",
+                    "An error occurred while exporting the PNG. Please check your label strip configuration.",
+                )
+
+        except Exception as e:
+            QMessageBox.critical(self, "PNG Export Error", f"An unexpected error occurred:\n{e!s}")
