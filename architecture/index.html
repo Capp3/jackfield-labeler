@@ -1,0 +1,2542 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A professional desktop application for creating custom label strips for audio/video equipment racks">
+      
+      
+        <meta name="author" content="Dom Capparelli">
+      
+      
+        <link rel="canonical" href="https://capp3.github.io/jackfield-labeler/architecture/">
+      
+      
+        <link rel="prev" href="../api-reference/">
+      
+      
+        <link rel="next" href="../technical/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Architecture - Jackfield Labeler</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Jackfield Labeler" class="md-header__button md-logo" aria-label="Jackfield Labeler" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jackfield Labeler
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="deep-orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/capp3/jackfield-labeler" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    capp3/jackfield-labeler
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Jackfield Labeler" class="md-nav__button md-logo" aria-label="Jackfield Labeler" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Jackfield Labeler
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/capp3/jackfield-labeler" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    capp3/jackfield-labeler
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Technical Documentation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Technical Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Principles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Principles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-separation-of-concerns" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Separation of Concerns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Data Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-signal-driven-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Signal-Driven Architecture
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#models-jackfield_labelermodels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Models (jackfield_labeler/models/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models (jackfield_labeler/models/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#labelstrip-label_strippy" class="md-nav__link">
+    <span class="md-ellipsis">
+      LabelStrip (label_strip.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segments-segment_typespy-segmentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Segments (segment_types.py, segment.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stripsettings-strip_settingspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      StripSettings (strip_settings.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supporting-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supporting Models
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#views-jackfield_labelerviews" class="md-nav__link">
+    <span class="md-ellipsis">
+      Views (jackfield_labeler/views/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Views (jackfield_labeler/views/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mainwindow-main_windowpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      MainWindow (main_window.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#designertab-designer_tabpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      DesignerTab (designer_tab.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#previewtab-preview_tabpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      PreviewTab (preview_tab.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settingstab-settings_tabpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      SettingsTab (settings_tab.py)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utils-jackfield_labelerutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      Utils (jackfield_labeler/utils/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Utils (jackfield_labeler/utils/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pdfgenerator-pdf_generatorpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDFGenerator (pdf_generator.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#striprenderer-strip_rendererpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      StripRenderer (strip_renderer.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projectmanager-project_managerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      ProjectManager (project_manager.py)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-flow-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Flow Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Flow Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-user-interaction-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. User Interaction Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-settings-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Settings Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-export-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Export Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-project-management-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Project Management Flow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-model-view-controller-mvc" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Model-View-Controller (MVC)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-observer-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Observer Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-strategy-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Strategy Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-builder-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Builder Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-factory-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Factory Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-command-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Command Pattern
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-validation-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Validation Layers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-error-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Error Recovery
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Exception Handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-validation-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Validation Examples
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-lazy-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Lazy Loading
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-signal-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Signal Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-memory-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Memory Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensibility-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extensibility Points
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensibility Points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-new-segment-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. New Segment Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-export-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Export Formats
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-paper-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Paper Sizes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-color-palettes" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Color Palettes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Unit Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ui-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. UI Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-test-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Test Organization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-file-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. File Handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-pdf-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. PDF Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-user-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. User Input
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-architecture-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Architecture Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Architecture Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-plugin-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Plugin System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-multi-document-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Multi-Document Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cloud-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Cloud Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-advanced-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Advanced Rendering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-performance-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Performance Enhancements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../technical/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Technical Details
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projectbrief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project Brief
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Status
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../activeContext/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Active Context
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Principles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Principles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-separation-of-concerns" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Separation of Concerns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Data Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-signal-driven-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Signal-Driven Architecture
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#models-jackfield_labelermodels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Models (jackfield_labeler/models/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models (jackfield_labeler/models/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#labelstrip-label_strippy" class="md-nav__link">
+    <span class="md-ellipsis">
+      LabelStrip (label_strip.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segments-segment_typespy-segmentpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Segments (segment_types.py, segment.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stripsettings-strip_settingspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      StripSettings (strip_settings.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supporting-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supporting Models
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#views-jackfield_labelerviews" class="md-nav__link">
+    <span class="md-ellipsis">
+      Views (jackfield_labeler/views/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Views (jackfield_labeler/views/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mainwindow-main_windowpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      MainWindow (main_window.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#designertab-designer_tabpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      DesignerTab (designer_tab.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#previewtab-preview_tabpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      PreviewTab (preview_tab.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settingstab-settings_tabpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      SettingsTab (settings_tab.py)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utils-jackfield_labelerutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      Utils (jackfield_labeler/utils/)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Utils (jackfield_labeler/utils/)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pdfgenerator-pdf_generatorpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDFGenerator (pdf_generator.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#striprenderer-strip_rendererpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      StripRenderer (strip_renderer.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projectmanager-project_managerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      ProjectManager (project_manager.py)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-flow-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Flow Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Flow Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-user-interaction-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. User Interaction Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-settings-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Settings Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-export-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Export Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-project-management-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Project Management Flow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-model-view-controller-mvc" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Model-View-Controller (MVC)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-observer-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Observer Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-strategy-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Strategy Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-builder-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Builder Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-factory-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Factory Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-command-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Command Pattern
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-validation-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Validation Layers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-error-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Error Recovery
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Exception Handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-validation-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Validation Examples
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-lazy-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Lazy Loading
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-signal-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Signal Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-memory-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Memory Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensibility-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extensibility Points
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Extensibility Points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-new-segment-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. New Segment Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-export-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Export Formats
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-paper-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Paper Sizes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-color-palettes" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Color Palettes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Unit Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ui-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. UI Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-test-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Test Organization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-file-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. File Handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-pdf-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. PDF Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-user-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. User Input
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-architecture-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Architecture Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Architecture Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-plugin-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Plugin System
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-multi-document-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Multi-Document Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cloud-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Cloud Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-advanced-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Advanced Rendering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-performance-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Performance Enhancements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="architecture-documentation">Architecture Documentation<a class="headerlink" href="#architecture-documentation" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The Jackfield Labeler application is built using a clean Model-View-Controller (MVC) architecture with PyQt6 for the user interface and ReportLab for PDF generation. The application is designed to be maintainable, extensible, and user-friendly, with approximately 3,300 lines of application code and comprehensive test coverage.</p>
+<h2 id="architecture-principles">Architecture Principles<a class="headerlink" href="#architecture-principles" title="Permanent link">&para;</a></h2>
+<h3 id="1-separation-of-concerns">1. Separation of Concerns<a class="headerlink" href="#1-separation-of-concerns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Models</strong>: Pure data structures and business logic, independent of UI</li>
+<li><strong>Views</strong>: PyQt6 widgets responsible only for presentation and user interaction</li>
+<li><strong>Utils</strong>: Specialized utilities for PDF generation, rendering, and file management</li>
+<li><strong>Controllers</strong>: Coordination between models and views (minimal in this Qt-based architecture)</li>
+</ul>
+<h3 id="2-data-flow">2. Data Flow<a class="headerlink" href="#2-data-flow" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">User Input → View → Model Update → Signal Emission → View Update → Preview/Export
+</code></pre>
+<h3 id="3-signal-driven-architecture">3. Signal-Driven Architecture<a class="headerlink" href="#3-signal-driven-architecture" title="Permanent link">&para;</a></h3>
+<p>The application uses PyQt6's signal-slot mechanism for loose coupling between components:</p>
+<ul>
+<li>Models emit signals when data changes</li>
+<li>Views listen to model signals and update accordingly</li>
+<li>Cross-tab communication through main window signal routing</li>
+</ul>
+<h2 id="core-components">Core Components<a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
+<h3 id="models-jackfield_labelermodels">Models (<code>jackfield_labeler/models/</code>)<a class="headerlink" href="#models-jackfield_labelermodels" title="Permanent link">&para;</a></h3>
+<h4 id="labelstrip-label_strippy">LabelStrip (<code>label_strip.py</code>)<a class="headerlink" href="#labelstrip-label_strippy" title="Permanent link">&para;</a></h4>
+<p>The central data model representing a complete label strip design.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Manages collections of segments (start, content, end)</li>
+<li>Calculates total width and validates dimensions</li>
+<li>Provides serialization/deserialization for project files</li>
+<li>Maintains strip settings and configuration</li>
+</ul>
+<p><strong>Key Methods:</strong></p>
+<ul>
+<li><code>get_total_width()</code>: Calculates total strip width</li>
+<li><code>set_content_segment_count()</code>: Manages content segment collection</li>
+<li><code>set_start_segment()</code> / <code>set_end_segment()</code>: Configure optional segments</li>
+<li><code>to_dict()</code> / <code>from_dict()</code>: Serialization support</li>
+<li><code>validate()</code>: Comprehensive validation with error reporting</li>
+</ul>
+<p><strong>Validation Rules:</strong></p>
+<ul>
+<li>Height constraints: 5.0mm - 12.0mm</li>
+<li>Maximum total width: 500.0mm</li>
+<li>Positive segment widths</li>
+<li>Content cell width precision to 3 decimal places</li>
+</ul>
+<h4 id="segments-segment_typespy-segmentpy">Segments (<code>segment_types.py</code>, <code>segment.py</code>)<a class="headerlink" href="#segments-segment_typespy-segmentpy" title="Permanent link">&para;</a></h4>
+<p>Individual label segments with different types and properties.</p>
+<p><strong>Segment Types:</strong></p>
+<ul>
+<li><strong>StartSegment</strong>: Optional start label (e.g., "INPUT")</li>
+<li><strong>ContentSegment</strong>: Main content cells (e.g., "CH1", "CH2")</li>
+<li><strong>EndSegment</strong>: Optional end label (e.g., "OUTPUT")</li>
+</ul>
+<p><strong>Properties:</strong></p>
+<ul>
+<li>Width (mm), Text, Text Color, Background Color, Text Format</li>
+<li>Type-specific validation and behavior</li>
+<li>Immutable design with builder pattern</li>
+</ul>
+<p><strong>Factory Pattern:</strong></p>
+<pre><code class="language-python">def create_segment_from_dict(data: Dict[str, Any]) -&gt; Segment:
+    &quot;&quot;&quot;Creates appropriate segment type from dictionary data&quot;&quot;&quot;
+</code></pre>
+<h4 id="stripsettings-strip_settingspy">StripSettings (<code>strip_settings.py</code>)<a class="headerlink" href="#stripsettings-strip_settingspy" title="Permanent link">&para;</a></h4>
+<p>Configuration model for paper size, margins, rotation, and defaults.</p>
+<p><strong>Settings Categories:</strong></p>
+<ul>
+<li><strong>Paper Settings</strong>: Size (A0-A4, Letter, Legal, Tabloid), margins</li>
+<li><strong>Rotation Settings</strong>: Angle (0°-360°), with 60° default</li>
+<li><strong>Font Settings</strong>: Default font family and size</li>
+<li><strong>Color Settings</strong>: Default text and background colors</li>
+</ul>
+<p><strong>Default Values:</strong></p>
+<ul>
+<li>Paper Size: A3 (297 × 420 mm)</li>
+<li>Rotation: 60° (optimized for long strips)</li>
+<li>Margins: 10mm on all sides</li>
+<li>Font: Arial, 8pt</li>
+<li>Colors: Black text on white background</li>
+</ul>
+<h4 id="supporting-models">Supporting Models<a class="headerlink" href="#supporting-models" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Color</strong> (<code>color.py</code>): RGB color model with standard color constants</li>
+<li><strong>TextFormat</strong> (<code>text_format.py</code>): Enumeration for text formatting options</li>
+<li><strong>PageMargins</strong>: Dataclass for page margin configuration</li>
+<li><strong>PaperSize</strong>: Enumeration for standard paper sizes</li>
+</ul>
+<h3 id="views-jackfield_labelerviews">Views (<code>jackfield_labeler/views/</code>)<a class="headerlink" href="#views-jackfield_labelerviews" title="Permanent link">&para;</a></h3>
+<h4 id="mainwindow-main_windowpy">MainWindow (<code>main_window.py</code>)<a class="headerlink" href="#mainwindow-main_windowpy" title="Permanent link">&para;</a></h4>
+<p>The primary application window that coordinates all tabs and provides global functionality.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul>
+<li>Tab management (Designer, Preview, Settings)</li>
+<li>Menu bar and file operations (New, Open, Save, Export)</li>
+<li>Project state tracking (unsaved changes, window title)</li>
+<li>Signal routing between tabs</li>
+<li>Global error handling and user feedback</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Project lifecycle management</li>
+<li>Cross-tab communication via signal routing</li>
+<li>Status bar updates and user feedback</li>
+<li>File dialog management with proper filtering</li>
+<li>Window title updates showing project state</li>
+</ul>
+<p><strong>Signal Routing:</strong></p>
+<pre><code class="language-python"># Example signal connections
+self.designer_tab.strip_changed.connect(self.preview_tab.update_preview)
+self.settings_tab.settings_changed.connect(self.designer_tab.apply_settings)
+</code></pre>
+<h4 id="designertab-designer_tabpy">DesignerTab (<code>designer_tab.py</code>)<a class="headerlink" href="#designertab-designer_tabpy" title="Permanent link">&para;</a></h4>
+<p>The main workspace for creating and editing label strips.</p>
+<p><strong>Components:</strong></p>
+<ul>
+<li><strong>ControlPanel</strong>: Strip dimensions and global settings</li>
+<li><strong>SegmentTable</strong>: Spreadsheet-like interface for segment editing</li>
+<li><strong>ActionButtons</strong>: Add/remove segments, generate PDF, save/load</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Real-time validation and feedback</li>
+<li>Dynamic table management with custom delegates</li>
+<li>Color picker integration</li>
+<li>Signal emission for all changes</li>
+<li>Automatic UI updates when model changes</li>
+</ul>
+<p><strong>Table Management:</strong></p>
+<ul>
+<li>Custom delegates for color buttons and format selection</li>
+<li>Dynamic row addition/removal</li>
+<li>Cell-level validation and feedback</li>
+<li>Tab navigation and keyboard shortcuts</li>
+</ul>
+<h4 id="previewtab-preview_tabpy">PreviewTab (<code>preview_tab.py</code>)<a class="headerlink" href="#previewtab-preview_tabpy" title="Permanent link">&para;</a></h4>
+<p>Real-time visual preview and PNG export functionality.</p>
+<p><strong>Components:</strong></p>
+<ul>
+<li><strong>StripPreviewWidget</strong>: Scalable visual representation</li>
+<li><strong>StripInfoPanel</strong>: Dimensions and metadata display</li>
+<li><strong>Export Controls</strong>: PNG export with quality settings</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Auto-scaling preview with scroll support</li>
+<li>High-resolution rendering (300 DPI)</li>
+<li>Direct PNG export capability</li>
+<li>Responsive design that adapts to window size</li>
+<li>Real-time updates when strip changes</li>
+</ul>
+<p><strong>Rendering Pipeline:</strong></p>
+<pre><code class="language-python"># Preview update flow
+strip_changed → calculate_scale_factor → render_to_pixmap → update_display
+</code></pre>
+<h4 id="settingstab-settings_tabpy">SettingsTab (<code>settings_tab.py</code>)<a class="headerlink" href="#settingstab-settings_tabpy" title="Permanent link">&para;</a></h4>
+<p>Global configuration interface for paper, rotation, and default settings.</p>
+<p><strong>Setting Groups:</strong></p>
+<ul>
+<li><strong>PaperGroup</strong>: Paper size and margin controls</li>
+<li><strong>RotationGroup</strong>: Rotation angle with preset buttons</li>
+<li><strong>FontGroup</strong>: Font family and size selection</li>
+<li><strong>ColorGroup</strong>: Default color selection</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Immediate setting application</li>
+<li>Preset rotation buttons (0°, 90°, 180°, 270°)</li>
+<li>Font dialog integration</li>
+<li>Color picker widgets</li>
+<li>Settings persistence with project files</li>
+</ul>
+<h3 id="utils-jackfield_labelerutils">Utils (<code>jackfield_labeler/utils/</code>)<a class="headerlink" href="#utils-jackfield_labelerutils" title="Permanent link">&para;</a></h3>
+<h4 id="pdfgenerator-pdf_generatorpy">PDFGenerator (<code>pdf_generator.py</code>)<a class="headerlink" href="#pdfgenerator-pdf_generatorpy" title="Permanent link">&para;</a></h4>
+<p>High-quality PDF generation with rotation and positioning.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Support for all standard paper sizes</li>
+<li>Configurable rotation (0°-360°)</li>
+<li>Center-to-center positioning algorithm</li>
+<li>No automatic scaling (preserves exact dimensions)</li>
+<li>Color conversion and font handling</li>
+<li>Professional output quality</li>
+</ul>
+<p><strong>Technical Implementation:</strong></p>
+<ul>
+<li>Uses ReportLab Canvas for precise control</li>
+<li>Graphics state management for rotation</li>
+<li>Millimeter-to-point conversion (1mm = 2.834645669 points)</li>
+<li>Text centering and formatting</li>
+<li>Error handling and validation</li>
+</ul>
+<p><strong>Positioning Algorithm:</strong></p>
+<pre><code class="language-python"># Center-to-center positioning
+center_x = (paper_width - total_width) / 2
+center_y = (paper_height - strip_height) / 2
+
+# Apply rotation around center point
+canvas.translate(center_x, center_y)
+canvas.rotate(rotation_angle)
+</code></pre>
+<h4 id="striprenderer-strip_rendererpy">StripRenderer (<code>strip_renderer.py</code>)<a class="headerlink" href="#striprenderer-strip_rendererpy" title="Permanent link">&para;</a></h4>
+<p>PNG rendering and preview generation engine.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Configurable DPI (default 300)</li>
+<li>Scalable preview rendering</li>
+<li>Anti-aliased output</li>
+<li>Qt-based rendering pipeline</li>
+</ul>
+<p><strong>Use Cases:</strong></p>
+<ul>
+<li>Preview tab visualization</li>
+<li>PNG export functionality</li>
+<li>Print preview generation</li>
+<li>High-resolution output for documentation</li>
+</ul>
+<p><strong>Rendering Process:</strong></p>
+<pre><code class="language-python"># High-level rendering flow
+calculate_dimensions → create_pixmap → setup_painter → render_segments → return_pixmap
+</code></pre>
+<h4 id="projectmanager-project_managerpy">ProjectManager (<code>project_manager.py</code>)<a class="headerlink" href="#projectmanager-project_managerpy" title="Permanent link">&para;</a></h4>
+<p>Project file management with <code>.jlp</code> format support.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>JSON-based file format</li>
+<li>Version control and validation</li>
+<li>Comprehensive error handling</li>
+<li>Metadata management</li>
+</ul>
+<p><strong>File Format Structure:</strong></p>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;application&quot;: &quot;Jackfield Labeler&quot;,
+  &quot;label_strip&quot;: {
+    &quot;height&quot;: 6.0,
+    &quot;content_cell_width&quot;: 12.0,
+    &quot;segments&quot;: [...],
+    &quot;settings&quot;: {...}
+  },
+  &quot;metadata&quot;: {
+    &quot;created_by&quot;: &quot;Jackfield Labeler&quot;,
+    &quot;file_format_version&quot;: &quot;1.0&quot;
+  }
+}
+</code></pre>
+<p><strong>Validation Features:</strong></p>
+<ul>
+<li>JSON schema validation</li>
+<li>Version compatibility checking</li>
+<li>Data integrity verification</li>
+<li>Graceful error handling and recovery</li>
+</ul>
+<h2 id="data-flow-architecture">Data Flow Architecture<a class="headerlink" href="#data-flow-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="1-user-interaction-flow">1. User Interaction Flow<a class="headerlink" href="#1-user-interaction-flow" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">User Input (Designer Tab)
+    ↓
+Control Panel / Segment Table
+    ↓
+Model Update (LabelStrip)
+    ↓
+Signal Emission (strip_changed)
+    ↓
+Preview Update (Preview Tab)
+    ↓
+Visual Feedback
+</code></pre>
+<h3 id="2-settings-flow">2. Settings Flow<a class="headerlink" href="#2-settings-flow" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">Settings Tab Input
+    ↓
+StripSettings Model Update
+    ↓
+Signal Emission (settings_changed)
+    ↓
+Designer Tab Update
+    ↓
+Model Application
+    ↓
+Preview Refresh
+</code></pre>
+<h3 id="3-export-flow">3. Export Flow<a class="headerlink" href="#3-export-flow" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">Export Request (Menu/Button)
+    ↓
+Current Model State
+    ↓
+Generator (PDF/PNG)
+    ↓
+File Output
+    ↓
+User Feedback
+</code></pre>
+<h3 id="4-project-management-flow">4. Project Management Flow<a class="headerlink" href="#4-project-management-flow" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">Save: Model → Serialization → JSON → File
+Load: File → JSON → Validation → Model → UI Update
+</code></pre>
+<h2 id="design-patterns">Design Patterns<a class="headerlink" href="#design-patterns" title="Permanent link">&para;</a></h2>
+<h3 id="1-model-view-controller-mvc">1. Model-View-Controller (MVC)<a class="headerlink" href="#1-model-view-controller-mvc" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Clear separation between data, presentation, and logic</li>
+<li>Models are UI-independent and testable</li>
+<li>Views handle only presentation concerns</li>
+<li>Controllers coordinate interactions (minimal due to Qt's architecture)</li>
+</ul>
+<h3 id="2-observer-pattern">2. Observer Pattern<a class="headerlink" href="#2-observer-pattern" title="Permanent link">&para;</a></h3>
+<ul>
+<li>PyQt6 signals and slots for loose coupling</li>
+<li>Models notify views of changes automatically</li>
+<li>Views update reactively to model changes</li>
+<li>Extensible for future features</li>
+</ul>
+<h3 id="3-strategy-pattern">3. Strategy Pattern<a class="headerlink" href="#3-strategy-pattern" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Different segment types with common interface</li>
+<li>Pluggable PDF generation strategies</li>
+<li>Configurable rendering approaches</li>
+<li>Extensible for new segment types</li>
+</ul>
+<h3 id="4-builder-pattern">4. Builder Pattern<a class="headerlink" href="#4-builder-pattern" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Segment creation with fluent interface</li>
+<li>Complex object construction with validation</li>
+<li>Step-by-step object building</li>
+<li>Validation during construction process</li>
+</ul>
+<h3 id="5-factory-pattern">5. Factory Pattern<a class="headerlink" href="#5-factory-pattern" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Segment creation from dictionaries</li>
+<li>Type-specific instantiation based on data</li>
+<li>Extensible for new segment types</li>
+<li>Centralized object creation logic</li>
+</ul>
+<h3 id="6-command-pattern">6. Command Pattern<a class="headerlink" href="#6-command-pattern" title="Permanent link">&para;</a></h3>
+<ul>
+<li>File operations (save, load, export)</li>
+<li>Undo/redo capability (future enhancement)</li>
+<li>Operation encapsulation</li>
+<li>Error handling and rollback</li>
+</ul>
+<h2 id="error-handling-strategy">Error Handling Strategy<a class="headerlink" href="#error-handling-strategy" title="Permanent link">&para;</a></h2>
+<h3 id="1-validation-layers">1. Validation Layers<a class="headerlink" href="#1-validation-layers" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input Validation</strong>: UI-level validation with immediate feedback</li>
+<li><strong>Model Validation</strong>: Business logic validation in models</li>
+<li><strong>Output Validation</strong>: Generation-time validation</li>
+</ul>
+<h3 id="2-error-recovery">2. Error Recovery<a class="headerlink" href="#2-error-recovery" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Graceful degradation for invalid inputs</li>
+<li>Default value fallbacks</li>
+<li>User-friendly error messages</li>
+<li>Automatic correction where possible</li>
+</ul>
+<h3 id="3-exception-handling">3. Exception Handling<a class="headerlink" href="#3-exception-handling" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Try-catch blocks around critical operations</li>
+<li>Logging for debugging and diagnostics</li>
+<li>User notification for errors</li>
+<li>Resource cleanup in finally blocks</li>
+</ul>
+<h3 id="4-validation-examples">4. Validation Examples<a class="headerlink" href="#4-validation-examples" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python"># Model validation
+def validate(self) -&gt; list[str]:
+    &quot;&quot;&quot;Returns list of validation errors&quot;&quot;&quot;
+    errors = []
+    if self.height &lt; self.MIN_HEIGHT:
+        errors.append(f&quot;Height {self.height}mm is below minimum {self.MIN_HEIGHT}mm&quot;)
+    return errors
+
+# UI validation
+def _validate_input(self, value: str) -&gt; bool:
+    &quot;&quot;&quot;Validates user input with immediate feedback&quot;&quot;&quot;
+    try:
+        float_value = float(value)
+        return float_value &gt; 0
+    except ValueError:
+        return False
+</code></pre>
+<h2 id="performance-considerations">Performance Considerations<a class="headerlink" href="#performance-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="1-lazy-loading">1. Lazy Loading<a class="headerlink" href="#1-lazy-loading" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Preview updates only when visible</li>
+<li>Deferred PDF generation until requested</li>
+<li>On-demand rendering for large strips</li>
+</ul>
+<h3 id="2-caching">2. Caching<a class="headerlink" href="#2-caching" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Rendered preview caching for unchanged strips</li>
+<li>Font metrics caching for text rendering</li>
+<li>Color conversion caching for repeated colors</li>
+</ul>
+<h3 id="3-signal-optimization">3. Signal Optimization<a class="headerlink" href="#3-signal-optimization" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Batched updates for multiple changes</li>
+<li>Debounced preview updates to avoid excessive rendering</li>
+<li>Efficient signal routing to minimize overhead</li>
+</ul>
+<h3 id="4-memory-management">4. Memory Management<a class="headerlink" href="#4-memory-management" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Automatic cleanup of temporary objects</li>
+<li>Efficient pixmap handling</li>
+<li>Resource management for file operations</li>
+</ul>
+<h2 id="extensibility-points">Extensibility Points<a class="headerlink" href="#extensibility-points" title="Permanent link">&para;</a></h2>
+<h3 id="1-new-segment-types">1. New Segment Types<a class="headerlink" href="#1-new-segment-types" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Implement Segment base class</li>
+<li>Add to factory method in <code>create_segment_from_dict</code></li>
+<li>Update UI components for new properties</li>
+<li>Add validation rules</li>
+</ul>
+<h3 id="2-export-formats">2. Export Formats<a class="headerlink" href="#2-export-formats" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Implement generator interface</li>
+<li>Add to export menu and file dialogs</li>
+<li>Integrate with existing error handling</li>
+<li>Add format-specific settings</li>
+</ul>
+<h3 id="3-paper-sizes">3. Paper Sizes<a class="headerlink" href="#3-paper-sizes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add to PaperSize enumeration</li>
+<li>Update size mapping in PDFGenerator</li>
+<li>Test with rotation logic</li>
+<li>Validate with margin calculations</li>
+</ul>
+<h3 id="4-color-palettes">4. Color Palettes<a class="headerlink" href="#4-color-palettes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Extend StandardColor enumeration</li>
+<li>Add to color picker widgets</li>
+<li>Update serialization format</li>
+<li>Maintain backward compatibility</li>
+</ul>
+<h2 id="testing-strategy">Testing Strategy<a class="headerlink" href="#testing-strategy" title="Permanent link">&para;</a></h2>
+<h3 id="1-unit-tests">1. Unit Tests<a class="headerlink" href="#1-unit-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Model logic testing with comprehensive coverage</li>
+<li>Utility function testing with edge cases</li>
+<li>Validation testing with invalid inputs</li>
+<li>Serialization testing with various formats</li>
+</ul>
+<h3 id="2-integration-tests">2. Integration Tests<a class="headerlink" href="#2-integration-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Component interaction testing</li>
+<li>Signal/slot communication testing</li>
+<li>File format compatibility testing</li>
+<li>End-to-end workflow testing</li>
+</ul>
+<h3 id="3-ui-tests">3. UI Tests<a class="headerlink" href="#3-ui-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Widget behavior testing</li>
+<li>User interaction simulation</li>
+<li>Visual regression testing (future)</li>
+<li>Accessibility testing (future)</li>
+</ul>
+<h3 id="4-test-organization">4. Test Organization<a class="headerlink" href="#4-test-organization" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">tests/
+├── test_models/           # Model unit tests
+├── test_utils/            # Utility unit tests
+├── test_integration/      # Integration tests
+└── conftest.py           # Shared fixtures
+</code></pre>
+<h2 id="security-considerations">Security Considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="1-file-handling">1. File Handling<a class="headerlink" href="#1-file-handling" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Path validation for project files</li>
+<li>Safe deserialization with validation</li>
+<li>Input sanitization for all user data</li>
+<li>Protection against path traversal</li>
+</ul>
+<h3 id="2-pdf-generation">2. PDF Generation<a class="headerlink" href="#2-pdf-generation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Safe text rendering without code execution</li>
+<li>Resource limits for large documents</li>
+<li>Error containment and recovery</li>
+<li>Temporary file cleanup</li>
+</ul>
+<h3 id="3-user-input">3. User Input<a class="headerlink" href="#3-user-input" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Validation of all numeric inputs</li>
+<li>Range checking for dimensions</li>
+<li>Type safety with proper conversion</li>
+<li>Sanitization of text content</li>
+</ul>
+<h2 id="future-architecture-considerations">Future Architecture Considerations<a class="headerlink" href="#future-architecture-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="1-plugin-system">1. Plugin System<a class="headerlink" href="#1-plugin-system" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Extensible segment types through plugins</li>
+<li>Custom export formats via plugins</li>
+<li>Third-party integrations</li>
+<li>Plugin discovery and loading</li>
+</ul>
+<h3 id="2-multi-document-support">2. Multi-Document Support<a class="headerlink" href="#2-multi-document-support" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Multiple label strips in single project</li>
+<li>Batch processing capabilities</li>
+<li>Template management system</li>
+<li>Project organization features</li>
+</ul>
+<h3 id="3-cloud-integration">3. Cloud Integration<a class="headerlink" href="#3-cloud-integration" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Project synchronization across devices</li>
+<li>Collaborative editing capabilities</li>
+<li>Online template sharing</li>
+<li>Backup and versioning</li>
+</ul>
+<h3 id="4-advanced-rendering">4. Advanced Rendering<a class="headerlink" href="#4-advanced-rendering" title="Permanent link">&para;</a></h3>
+<ul>
+<li>3D preview capabilities</li>
+<li>Print simulation with color management</li>
+<li>Advanced typography features</li>
+<li>Custom font embedding</li>
+</ul>
+<h3 id="5-performance-enhancements">5. Performance Enhancements<a class="headerlink" href="#5-performance-enhancements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Multi-threaded rendering for large projects</li>
+<li>GPU acceleration for preview rendering</li>
+<li>Incremental updates for better responsiveness</li>
+<li>Background processing for exports</li>
+</ul>
+<p>This architecture provides a solid foundation for the current application while maintaining flexibility for future enhancements. The clean separation of concerns, comprehensive error handling, and extensible design patterns ensure the application can evolve to meet changing requirements while maintaining code quality and user experience.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Maintained by <a href="https://capp3.com">capp3</a>.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/capp3/jackfield-labeler" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://pypi.org/project/jackfield-labeler" target="_blank" rel="noopener" title="pypi.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

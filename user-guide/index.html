@@ -1,0 +1,3884 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A professional desktop application for creating custom label strips for audio/video equipment racks">
+      
+      
+        <meta name="author" content="Dom Capparelli">
+      
+      
+        <link rel="canonical" href="https://capp3.github.io/jackfield-labeler/user-guide/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../api-reference/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>User Guide - Jackfield Labeler</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#user-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Jackfield Labeler" class="md-header__button md-logo" aria-label="Jackfield Labeler" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jackfield Labeler
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              User Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="deep-orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/capp3/jackfield-labeler" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    capp3/jackfield-labeler
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Jackfield Labeler" class="md-nav__button md-logo" aria-label="Jackfield Labeler" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Jackfield Labeler
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/capp3/jackfield-labeler" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    capp3/jackfield-labeler
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Started
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      First Launch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-start-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Start Tutorial
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Application Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-window-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Window Components
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyboard-shortcuts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Keyboard Shortcuts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-state-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project State Tracking
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#designer-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Designer Tab
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Designer Tab">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Panel
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Control Panel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strip-dimensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strip Dimensions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Content Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#display-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display Information
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Segment Table
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Segment Table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Behavior
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Action Buttons
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preview-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Tab
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Preview Tab">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strip-information-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strip Information Panel
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visual Preview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Visual Preview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preview-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Rendering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Controls
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Export Controls
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Export Controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#png-export-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Export Features
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Settings Tab
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Settings Tab">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paper-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paper Settings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paper Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paper-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paper Size
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-margins" class="md-nav__link">
+    <span class="md-ellipsis">
+      Page Margins
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rotation-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rotation Settings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rotation Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rotation-angle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rotation Angle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preset-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preset Buttons
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#font-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Font Settings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Font Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-font" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Font
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#font-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Font Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-colors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Colors
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Default Colors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-text-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Text Color
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-background-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Background Color
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Settings Application
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Operations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      New Project
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open Project
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Save Project
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-project-as" class="md-nav__link">
+    <span class="md-ellipsis">
+      Save Project As
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-file-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project File Format
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project File Format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-state-tracking_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project State Tracking
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project State Tracking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#window-title" class="md-nav__link">
+    <span class="md-ellipsis">
+      Window Title
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status Messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Export Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Export Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pdf-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Generation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PDF Generation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#access-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-technical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Technical Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Export
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PNG Export">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#access-methods_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-technical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Technical Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Output Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-pdf-vs-png" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing PDF vs PNG
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quality-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quality Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Sizes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips-and-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tips and Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tips and Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Guidelines
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-readability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Text Readability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color Selection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimensions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Optimization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Organization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#efficient-design-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Efficient Design Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Creation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#printing-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      Printing Tips
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Printing Tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paper-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paper Selection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#print-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Print Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cutting-and-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cutting and Application
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Color Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#color-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color Consistency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessibility
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#application-wont-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application Won't Start
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-generation-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Generation Fails
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-not-updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Not Updating
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colors-look-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      Colors Look Wrong
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-wont-open" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Won't Open
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#slow-preview-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Slow Preview Updates
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#large-file-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Large File Sizes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-line-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Line Debugging
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Log Files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reset Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reinstallation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reinstallation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Help
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting Help">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Community Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reporting-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reporting Issues
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Technical Documentation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Technical Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../technical/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Technical Details
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Development Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projectbrief/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Project Brief
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Status
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../activeContext/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Active Context
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Started
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      First Launch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-start-tutorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Start Tutorial
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Application Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-window-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Window Components
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyboard-shortcuts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Keyboard Shortcuts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-state-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project State Tracking
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#designer-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Designer Tab
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Designer Tab">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Panel
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Control Panel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strip-dimensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strip Dimensions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Content Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#display-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display Information
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Segment Table
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Segment Table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table-columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Columns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Behavior
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Action Buttons
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preview-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Tab
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Preview Tab">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strip-information-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strip Information Panel
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visual Preview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Visual Preview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preview-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Rendering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Controls
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Export Controls
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Export Controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#png-export-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Export Features
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Settings Tab
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Settings Tab">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paper-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paper Settings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paper Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paper-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paper Size
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-margins" class="md-nav__link">
+    <span class="md-ellipsis">
+      Page Margins
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rotation-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rotation Settings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rotation Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rotation-angle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rotation Angle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preset-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preset Buttons
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#font-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Font Settings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Font Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-font" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Font
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#font-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Font Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-colors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Colors
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Default Colors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-text-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Text Color
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-background-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Background Color
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Settings Application
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Operations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      New Project
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open Project
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Save Project
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-project-as" class="md-nav__link">
+    <span class="md-ellipsis">
+      Save Project As
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-file-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project File Format
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project File Format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-state-tracking_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project State Tracking
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project State Tracking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#window-title" class="md-nav__link">
+    <span class="md-ellipsis">
+      Window Title
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status Messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Export Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Export Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pdf-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Generation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PDF Generation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#access-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-technical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Technical Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Export
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PNG Export">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#access-methods_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#png-technical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      PNG Technical Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Output Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-pdf-vs-png" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing PDF vs PNG
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quality-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quality Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Sizes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips-and-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tips and Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tips and Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Guidelines
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-readability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Text Readability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color Selection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimensions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Optimization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Organization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#efficient-design-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Efficient Design Process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Creation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#printing-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      Printing Tips
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Printing Tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paper-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paper Selection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#print-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Print Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cutting-and-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cutting and Application
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Color Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#color-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color Consistency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessibility
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#application-wont-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application Won't Start
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pdf-generation-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      PDF Generation Fails
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-not-updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Not Updating
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colors-look-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      Colors Look Wrong
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-wont-open" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Won't Open
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#slow-preview-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Slow Preview Updates
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#large-file-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Large File Sizes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-line-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Line Debugging
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Log Files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reset-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reset Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reinstallation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reinstallation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Help
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting Help">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Community Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reporting-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reporting Issues
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="user-guide">User Guide<a class="headerlink" href="#user-guide" title="Permanent link">&para;</a></h1>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#application-overview">Application Overview</a></li>
+<li><a href="#designer-tab">Designer Tab</a></li>
+<li><a href="#preview-tab">Preview Tab</a></li>
+<li><a href="#settings-tab">Settings Tab</a></li>
+<li><a href="#file-operations">File Operations</a></li>
+<li><a href="#export-options">Export Options</a></li>
+<li><a href="#tips-and-best-practices">Tips and Best Practices</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
+<h3 id="first-launch">First Launch<a class="headerlink" href="#first-launch" title="Permanent link">&para;</a></h3>
+<p>When you first launch Jackfield Labeler, you'll see the main window with three tabs:</p>
+<ul>
+<li><strong>Designer</strong>: Where you create your label strips</li>
+<li><strong>Preview</strong>: Where you see a visual representation of your label</li>
+<li><strong>Settings</strong>: Where you configure global settings</li>
+</ul>
+<p>The application starts with a default label strip configuration that you can immediately modify.</p>
+<h3 id="quick-start-tutorial">Quick Start Tutorial<a class="headerlink" href="#quick-start-tutorial" title="Permanent link">&para;</a></h3>
+<p>Let's create your first label strip:</p>
+<ol>
+<li><strong>Set Strip Dimensions</strong></li>
+<li>In the Designer tab, set "Strip Height" to <code>6.0</code> mm</li>
+<li>Set "Content Cell Width" to <code>12.0</code> mm</li>
+<li>
+<p>Set "Number of Content Cells" to <code>4</code></p>
+</li>
+<li>
+<p><strong>Add Content</strong></p>
+</li>
+<li>In the segment table, enter text for each cell: "CH1", "CH2", "CH3", "CH4"</li>
+<li>Choose different background colors for each channel</li>
+<li>
+<p>Keep text color as black for readability</p>
+</li>
+<li>
+<p><strong>Preview Your Design</strong></p>
+</li>
+<li>Click the "Preview" tab to see your label</li>
+<li>
+<p>The preview updates automatically as you make changes</p>
+</li>
+<li>
+<p><strong>Generate PDF</strong></p>
+</li>
+<li>Go to File → Generate PDF or click the "Generate PDF" button</li>
+<li>Choose a location to save your PDF</li>
+<li>Your label will be generated with the current settings</li>
+</ol>
+<h2 id="application-overview">Application Overview<a class="headerlink" href="#application-overview" title="Permanent link">&para;</a></h2>
+<h3 id="main-window-components">Main Window Components<a class="headerlink" href="#main-window-components" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Menu Bar</strong>: File operations, export options, and help</li>
+<li><strong>Tab Widget</strong>: Three main tabs for different functions</li>
+<li><strong>Status Bar</strong>: Shows current operation status and feedback</li>
+<li><strong>Window Title</strong>: Displays current project name and modification status</li>
+</ul>
+<h3 id="keyboard-shortcuts">Keyboard Shortcuts<a class="headerlink" href="#keyboard-shortcuts" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Ctrl+N</strong>: New project</li>
+<li><strong>Ctrl+O</strong>: Open project</li>
+<li><strong>Ctrl+S</strong>: Save project</li>
+<li><strong>Ctrl+Shift+S</strong>: Save project as</li>
+<li><strong>F5</strong>: Generate PDF</li>
+<li><strong>F6</strong>: Export PNG</li>
+</ul>
+<h3 id="project-state-tracking">Project State Tracking<a class="headerlink" href="#project-state-tracking" title="Permanent link">&para;</a></h3>
+<p>The application tracks your project state:</p>
+<ul>
+<li><strong>Window Title</strong>: Shows project name with "*" for unsaved changes</li>
+<li><strong>Status Messages</strong>: Confirmation and error messages</li>
+<li><strong>Auto-Save Prompts</strong>: Warns before losing unsaved work</li>
+</ul>
+<h2 id="designer-tab">Designer Tab<a class="headerlink" href="#designer-tab" title="Permanent link">&para;</a></h2>
+<p>The Designer tab is your main workspace for creating label strips.</p>
+<h3 id="control-panel">Control Panel<a class="headerlink" href="#control-panel" title="Permanent link">&para;</a></h3>
+<p>Located at the top of the Designer tab, the control panel contains global settings for your label strip:</p>
+<h4 id="strip-dimensions">Strip Dimensions<a class="headerlink" href="#strip-dimensions" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Strip Height (mm)</strong>: The overall height of your label strip</li>
+<li>Typical values: 5-12mm for jackfield labels</li>
+<li>Supports one decimal place (e.g., 6.5mm)</li>
+<li>Range: 5.0mm to 12.0mm (enforced by validation)</li>
+<li>
+<p>Default: 5.0mm</p>
+</li>
+<li>
+<p><strong>Content Cell Width (mm)</strong>: Uniform width for all content segments</p>
+</li>
+<li>Typical values: 8-15mm depending on text length</li>
+<li>Supports three decimal places for precision</li>
+<li>Range: Must be positive (no upper limit)</li>
+<li>
+<p>Default: 10.0mm</p>
+</li>
+<li>
+<p><strong>End Label Width (mm)</strong>: Width of the optional end label</p>
+</li>
+<li>Set to 0 to disable the end label</li>
+<li>Supports three decimal places</li>
+<li>Range: 0.0mm or positive values</li>
+<li>Default: 0.0mm (disabled)</li>
+</ul>
+<h4 id="content-management">Content Management<a class="headerlink" href="#content-management" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Number of Content Cells</strong>: How many main content segments to create</li>
+<li>Range: 0 to unlimited (practical limit ~50 for usability)</li>
+<li>Use spin box controls or type directly</li>
+<li>Changes are applied immediately</li>
+<li>
+<p>Default: 0 (empty strip)</p>
+</li>
+<li>
+<p><strong>End Label Text</strong>: Text for the end label segment</p>
+</li>
+<li>Only visible when End Label Width &gt; 0</li>
+<li>Supports all text formatting options</li>
+<li>Updates the end segment automatically</li>
+<li>Default: Empty string</li>
+</ul>
+<h4 id="display-information">Display Information<a class="headerlink" href="#display-information" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Total Strip Width</strong>: Automatically calculated and displayed</li>
+<li>Shows the sum of all segment widths</li>
+<li>Updates in real-time as you change dimensions</li>
+<li>Helps you plan for paper size requirements</li>
+<li>Maximum total width: 500.0mm</li>
+</ul>
+<h3 id="segment-table">Segment Table<a class="headerlink" href="#segment-table" title="Permanent link">&para;</a></h3>
+<p>The segment table provides a spreadsheet-like interface for editing individual segments:</p>
+<h4 id="table-columns">Table Columns<a class="headerlink" href="#table-columns" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Segment</strong>: Read-only identifier</li>
+<li>Content segments numbered 1, 2, 3, etc.</li>
+<li>End segment labeled "L_END" (when present)</li>
+<li>
+<p>Cannot be edited directly</p>
+</li>
+<li>
+<p><strong>Text</strong>: The text to display on each segment</p>
+</li>
+<li>Click to edit directly</li>
+<li>Supports Unicode characters</li>
+<li>No length limit, but consider readability</li>
+<li>
+<p>Empty text is allowed</p>
+</li>
+<li>
+<p><strong>Text Format</strong>: Formatting options for the text</p>
+</li>
+<li><strong>Normal</strong>: Standard text (default)</li>
+<li><strong>Bold</strong>: Bold text for emphasis</li>
+<li><strong>Italic</strong>: Italic text for style</li>
+<li>
+<p>Choose from dropdown menu</p>
+</li>
+<li>
+<p><strong>Text Color</strong>: Color of the text</p>
+</li>
+<li>Click the color button to open color picker</li>
+<li>Standard colors: Black, White, Red, Green, Blue, Yellow, Orange, Purple</li>
+<li>Custom colors available through color dialog</li>
+<li>
+<p>Default: Black (#000000)</p>
+</li>
+<li>
+<p><strong>Background Color</strong>: Background color of the segment</p>
+</li>
+<li>Click the color button to open color picker</li>
+<li>Same color options as text color</li>
+<li>Consider contrast with text color for readability</li>
+<li>Default: White (#FFFFFF)</li>
+</ol>
+<h4 id="table-operations">Table Operations<a class="headerlink" href="#table-operations" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Add Row</strong>: Click "Add Row" button to add new content segments</li>
+<li><strong>Remove Row</strong>: Select a row and click "Remove Row" to delete it</li>
+<li><strong>Direct Editing</strong>: Click any cell to edit its value</li>
+<li><strong>Tab Navigation</strong>: Use Tab key to move between cells</li>
+<li><strong>Enter Confirmation</strong>: Press Enter to confirm changes</li>
+<li><strong>Color Picker</strong>: Click color buttons to open color selection dialog</li>
+</ul>
+<h4 id="table-behavior">Table Behavior<a class="headerlink" href="#table-behavior" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Real-time Updates</strong>: Changes are applied immediately</li>
+<li><strong>Validation</strong>: Invalid inputs are highlighted and prevented</li>
+<li><strong>Auto-Resize</strong>: Table adjusts to content automatically</li>
+<li><strong>Selection</strong>: Single row selection for operations</li>
+</ul>
+<h3 id="action-buttons">Action Buttons<a class="headerlink" href="#action-buttons" title="Permanent link">&para;</a></h3>
+<p>Located at the bottom of the Designer tab:</p>
+<ul>
+<li><strong>Add Row</strong>: Adds a new content segment to the table</li>
+<li>Uses default colors from settings</li>
+<li>Increments segment numbering automatically</li>
+<li>
+<p>Updates total width calculation</p>
+</li>
+<li>
+<p><strong>Remove Row</strong>: Removes the selected segment from the table</p>
+</li>
+<li>Requires a row to be selected</li>
+<li>Cannot remove if no segments exist</li>
+<li>
+<p>Updates segment numbering automatically</p>
+</li>
+<li>
+<p><strong>Generate PDF</strong>: Creates a PDF file of your label strip</p>
+</li>
+<li>Uses current settings for paper size and rotation</li>
+<li>Opens file dialog for save location</li>
+<li>
+<p>Shows progress and confirmation messages</p>
+</li>
+<li>
+<p><strong>Save</strong>: Saves your current project</p>
+</li>
+<li>Uses existing filename or prompts for new one</li>
+<li>Saves in .jlp format with all settings</li>
+<li>
+<p>Updates window title and project state</p>
+</li>
+<li>
+<p><strong>Load</strong>: Loads a previously saved project</p>
+</li>
+<li>Opens file dialog for .jlp files</li>
+<li>Validates file format before loading</li>
+<li>Prompts to save current project if modified</li>
+</ul>
+<h2 id="preview-tab">Preview Tab<a class="headerlink" href="#preview-tab" title="Permanent link">&para;</a></h2>
+<p>The Preview tab provides real-time visualization of your label strip design.</p>
+<h3 id="strip-information-panel">Strip Information Panel<a class="headerlink" href="#strip-information-panel" title="Permanent link">&para;</a></h3>
+<p>Located at the top of the Preview tab, this panel shows:</p>
+<ul>
+<li><strong>Dimensions</strong>: Current strip width × height in millimeters</li>
+<li>Format: "XXX.X × XX.X mm"</li>
+<li>Updates automatically when strip changes</li>
+<li>
+<p>Helps verify dimensions before printing</p>
+</li>
+<li>
+<p><strong>Segments</strong>: Total number of segments in your strip</p>
+</li>
+<li>Includes content segments and end segment (if present)</li>
+<li>Does not include start segment (not currently used)</li>
+<li>
+<p>Format: "X segments"</p>
+</li>
+<li>
+<p><strong>End Text</strong>: Text of the end label (if present)</p>
+</li>
+<li>Shows actual text content</li>
+<li>Only displayed when end segment exists</li>
+<li>Format: "End: 'TEXT'"</li>
+</ul>
+<h3 id="visual-preview">Visual Preview<a class="headerlink" href="#visual-preview" title="Permanent link">&para;</a></h3>
+<p>The main preview area shows a scaled representation of your label:</p>
+<h4 id="preview-features">Preview Features<a class="headerlink" href="#preview-features" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Auto-scaling</strong>: Automatically scales to fit the available space</li>
+<li><strong>Real-time Updates</strong>: Changes immediately when you modify the design</li>
+<li><strong>Scrollable</strong>: Use scroll bars for very large labels</li>
+<li><strong>Responsive</strong>: Adapts to window resizing</li>
+<li><strong>High Quality</strong>: Anti-aliased rendering for smooth appearance</li>
+</ul>
+<h4 id="preview-rendering">Preview Rendering<a class="headerlink" href="#preview-rendering" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Scale Calculation</strong>: Automatically determines best fit</li>
+<li><strong>Aspect Ratio</strong>: Maintains correct proportions</li>
+<li><strong>Color Accuracy</strong>: Shows actual colors as they will appear</li>
+<li><strong>Text Rendering</strong>: Shows actual fonts and formatting</li>
+</ul>
+<h4 id="preview-controls">Preview Controls<a class="headerlink" href="#preview-controls" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Zoom</strong>: The preview automatically calculates the best zoom level</li>
+<li><strong>Scroll</strong>: Use scroll bars to navigate large labels that exceed window size</li>
+<li><strong>Resize</strong>: Resize the window to see different scale factors</li>
+<li><strong>Refresh</strong>: Preview updates automatically, no manual refresh needed</li>
+</ul>
+<h3 id="export-controls">Export Controls<a class="headerlink" href="#export-controls" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Export PNG</strong>: Creates a high-resolution PNG file</li>
+<li>Fixed at 300 DPI for professional quality</li>
+<li>No rotation applied - exact strip dimensions</li>
+<li>Suitable for digital documentation</li>
+<li>Opens file dialog for save location</li>
+</ul>
+<h4 id="png-export-features">PNG Export Features<a class="headerlink" href="#png-export-features" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>High Resolution</strong>: 300 DPI for print quality</li>
+<li><strong>Exact Dimensions</strong>: No scaling or rotation applied</li>
+<li><strong>Transparency</strong>: White background for easy integration</li>
+<li><strong>Color Accuracy</strong>: Maintains exact colors from design</li>
+</ul>
+<h2 id="settings-tab">Settings Tab<a class="headerlink" href="#settings-tab" title="Permanent link">&para;</a></h2>
+<p>The Settings tab configures global options that affect all label generation.</p>
+<h3 id="paper-settings">Paper Settings<a class="headerlink" href="#paper-settings" title="Permanent link">&para;</a></h3>
+<h4 id="paper-size">Paper Size<a class="headerlink" href="#paper-size" title="Permanent link">&para;</a></h4>
+<p>Choose from standard paper sizes:</p>
+<ul>
+<li><strong>A0</strong>: 841 × 1189 mm (largest)</li>
+<li><strong>A1</strong>: 594 × 841 mm</li>
+<li><strong>A2</strong>: 420 × 594 mm</li>
+<li><strong>A3</strong>: 297 × 420 mm (default)</li>
+<li><strong>A4</strong>: 210 × 297 mm</li>
+<li><strong>Letter</strong>: 216 × 279 mm</li>
+<li><strong>Legal</strong>: 216 × 356 mm</li>
+<li><strong>Tabloid</strong>: 279 × 432 mm</li>
+</ul>
+<p><strong>Selection Guidelines:</strong></p>
+<ul>
+<li><strong>A3</strong>: Best for most jackfield labels (default)</li>
+<li><strong>A4</strong>: For smaller labels or when A3 not available</li>
+<li><strong>Larger sizes</strong>: For very long strips or multiple strips per page</li>
+</ul>
+<h4 id="page-margins">Page Margins<a class="headerlink" href="#page-margins" title="Permanent link">&para;</a></h4>
+<p>Set margins for PDF output:</p>
+<ul>
+<li><strong>Top</strong>: Space from top edge of paper</li>
+<li><strong>Right</strong>: Space from right edge of paper</li>
+<li><strong>Bottom</strong>: Space from bottom edge of paper</li>
+<li><strong>Left</strong>: Space from left edge of paper</li>
+<li><strong>Default</strong>: 10mm on all sides</li>
+<li><strong>Range</strong>: 0-50mm per margin</li>
+<li><strong>Units</strong>: Millimeters</li>
+</ul>
+<p><strong>Margin Guidelines:</strong></p>
+<ul>
+<li><strong>10mm</strong>: Standard for most printers</li>
+<li><strong>5mm</strong>: Minimum for most printers</li>
+<li><strong>15-20mm</strong>: Conservative for older printers</li>
+<li><strong>0mm</strong>: Only if printer supports borderless printing</li>
+</ul>
+<h3 id="rotation-settings">Rotation Settings<a class="headerlink" href="#rotation-settings" title="Permanent link">&para;</a></h3>
+<h4 id="rotation-angle">Rotation Angle<a class="headerlink" href="#rotation-angle" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Custom Angle</strong>: Set any angle from -360° to +360°</li>
+<li><strong>Default</strong>: 60° (optimized for long strips on A3 paper)</li>
+<li><strong>Precision</strong>: Supports decimal degrees</li>
+<li><strong>Input</strong>: Spin box or direct text entry</li>
+</ul>
+<p><strong>Rotation Guidelines:</strong></p>
+<ul>
+<li><strong>0°</strong>: Horizontal orientation (no rotation)</li>
+<li><strong>60°</strong>: Optimal for long strips on A3 paper</li>
+<li><strong>90°</strong>: Vertical orientation</li>
+<li><strong>45°</strong>: Diagonal for maximum length</li>
+</ul>
+<h4 id="preset-buttons">Preset Buttons<a class="headerlink" href="#preset-buttons" title="Permanent link">&para;</a></h4>
+<p>Quick access to common rotations:</p>
+<ul>
+<li><strong>0°</strong>: No rotation (horizontal)</li>
+<li><strong>90°</strong>: Quarter turn (vertical)</li>
+<li><strong>180°</strong>: Half turn (upside down)</li>
+<li><strong>270°</strong>: Three-quarter turn</li>
+</ul>
+<p><strong>When to Use Presets:</strong></p>
+<ul>
+<li><strong>0°</strong>: Short strips that fit horizontally</li>
+<li><strong>90°</strong>: When you want vertical orientation</li>
+<li><strong>180°</strong>: Special cases or testing</li>
+<li><strong>270°</strong>: Alternative vertical orientation</li>
+</ul>
+<h3 id="font-settings">Font Settings<a class="headerlink" href="#font-settings" title="Permanent link">&para;</a></h3>
+<h4 id="default-font">Default Font<a class="headerlink" href="#default-font" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Font Family</strong>: Choose from system fonts</li>
+<li><strong>Font Size</strong>: Default size in points (typical: 8-12pt)</li>
+<li><strong>Preview</strong>: Shows sample text with selected font</li>
+<li><strong>System Fonts</strong>: Uses fonts installed on your system</li>
+</ul>
+<p><strong>Font Selection:</strong></p>
+<ul>
+<li><strong>Arial</strong>: Good general-purpose font (default)</li>
+<li><strong>Helvetica</strong>: Clean, professional appearance</li>
+<li><strong>Times</strong>: Traditional serif font</li>
+<li><strong>Courier</strong>: Monospace for technical labels</li>
+</ul>
+<h4 id="font-configuration">Font Configuration<a class="headerlink" href="#font-configuration" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Click "Select Font" to open font dialog</li>
+<li>Preview shows how text will appear</li>
+<li>Changes apply to new segments only</li>
+<li>Existing segments retain their current formatting</li>
+</ul>
+<h3 id="default-colors">Default Colors<a class="headerlink" href="#default-colors" title="Permanent link">&para;</a></h3>
+<h4 id="default-text-color">Default Text Color<a class="headerlink" href="#default-text-color" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Sets the text color for new segments</li>
+<li>Existing segments are not changed</li>
+<li>Choose from standard palette or custom colors</li>
+<li>Default: Black (#000000)</li>
+</ul>
+<p><strong>Text Color Guidelines:</strong></p>
+<ul>
+<li><strong>Black</strong>: Maximum readability on light backgrounds</li>
+<li><strong>White</strong>: For dark backgrounds</li>
+<li><strong>Dark colors</strong>: Generally better for readability</li>
+<li><strong>Bright colors</strong>: Use sparingly for emphasis</li>
+</ul>
+<h4 id="default-background-color">Default Background Color<a class="headerlink" href="#default-background-color" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Sets the background color for new segments</li>
+<li>Existing segments are not changed</li>
+<li>Consider contrast with text color</li>
+<li>Default: White (#FFFFFF)</li>
+</ul>
+<p><strong>Background Color Guidelines:</strong></p>
+<ul>
+<li><strong>White</strong>: Clean, professional appearance</li>
+<li><strong>Light colors</strong>: Good for color coding</li>
+<li><strong>Dark colors</strong>: Use with white or light text</li>
+<li><strong>High contrast</strong>: Essential for readability</li>
+</ul>
+<h3 id="settings-application">Settings Application<a class="headerlink" href="#settings-application" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Immediate Effect</strong>: Most settings apply immediately</li>
+<li><strong>New Segments</strong>: Color and font defaults affect new segments only</li>
+<li><strong>Global Settings</strong>: Paper size, margins, and rotation affect all output</li>
+<li><strong>Persistence</strong>: Settings are saved with your project</li>
+</ul>
+<h2 id="file-operations">File Operations<a class="headerlink" href="#file-operations" title="Permanent link">&para;</a></h2>
+<h3 id="project-management">Project Management<a class="headerlink" href="#project-management" title="Permanent link">&para;</a></h3>
+<h4 id="new-project">New Project<a class="headerlink" href="#new-project" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Menu</strong>: File → New</li>
+<li><strong>Shortcut</strong>: Ctrl+N</li>
+<li><strong>Action</strong>: Creates a fresh label strip with default settings</li>
+<li><strong>Warning</strong>: Prompts to save unsaved changes</li>
+<li><strong>Result</strong>: Empty strip ready for design</li>
+</ul>
+<h4 id="open-project">Open Project<a class="headerlink" href="#open-project" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Menu</strong>: File → Open</li>
+<li><strong>Shortcut</strong>: Ctrl+O</li>
+<li><strong>File Type</strong>: <code>.jlp</code> (Jackfield Labeler Project) files</li>
+<li><strong>Action</strong>: Loads a previously saved project</li>
+<li><strong>Warning</strong>: Prompts to save unsaved changes</li>
+<li><strong>Validation</strong>: Checks file format before loading</li>
+</ul>
+<h4 id="save-project">Save Project<a class="headerlink" href="#save-project" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Menu</strong>: File → Save</li>
+<li><strong>Shortcut</strong>: Ctrl+S</li>
+<li><strong>Action</strong>: Saves to current file or prompts for new file</li>
+<li><strong>Format</strong>: JSON-based <code>.jlp</code> format</li>
+<li><strong>Content</strong>: Complete project including settings</li>
+</ul>
+<h4 id="save-project-as">Save Project As<a class="headerlink" href="#save-project-as" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Menu</strong>: File → Save As</li>
+<li><strong>Shortcut</strong>: Ctrl+Shift+S</li>
+<li><strong>Action</strong>: Always prompts for new file location</li>
+<li><strong>Use Case</strong>: Creating copies or renaming projects</li>
+<li><strong>Result</strong>: New file created, becomes current project</li>
+</ul>
+<h3 id="project-file-format">Project File Format<a class="headerlink" href="#project-file-format" title="Permanent link">&para;</a></h3>
+<p>Jackfield Labeler uses <code>.jlp</code> files with the following features:</p>
+<h4 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h4>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;application&quot;: &quot;Jackfield Labeler&quot;,
+  &quot;label_strip&quot;: {
+    &quot;height&quot;: 6.0,
+    &quot;content_cell_width&quot;: 12.0,
+    &quot;segments&quot;: [
+      {
+        &quot;type&quot;: &quot;content&quot;,
+        &quot;id&quot;: &quot;1&quot;,
+        &quot;width&quot;: 12.0,
+        &quot;text&quot;: &quot;CH1&quot;,
+        &quot;text_color&quot;: &quot;#000000&quot;,
+        &quot;background_color&quot;: &quot;#FFFF00&quot;,
+        &quot;text_format&quot;: &quot;NORMAL&quot;
+      }
+    ],
+    &quot;settings&quot;: {
+      &quot;paper_size&quot;: &quot;A3&quot;,
+      &quot;rotation_angle&quot;: 60.0,
+      &quot;default_font_name&quot;: &quot;Arial&quot;,
+      &quot;default_font_size&quot;: 8.0
+    }
+  },
+  &quot;metadata&quot;: {
+    &quot;created_by&quot;: &quot;Jackfield Labeler&quot;,
+    &quot;file_format_version&quot;: &quot;1.0&quot;
+  }
+}
+</code></pre>
+<h4 id="benefits">Benefits<a class="headerlink" href="#benefits" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Human-readable</strong>: JSON format for easy inspection</li>
+<li><strong>Version control</strong>: Works well with Git and other VCS</li>
+<li><strong>Portable</strong>: Share projects between users and systems</li>
+<li><strong>Future-proof</strong>: Versioned format for compatibility</li>
+<li><strong>Editable</strong>: Can be modified with text editors if needed</li>
+</ul>
+<h3 id="project-state-tracking_1">Project State Tracking<a class="headerlink" href="#project-state-tracking_1" title="Permanent link">&para;</a></h3>
+<p>The application tracks your project state:</p>
+<h4 id="window-title">Window Title<a class="headerlink" href="#window-title" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Shows current project name</li>
+<li>Displays "*" for unsaved changes</li>
+<li>Updates automatically</li>
+<li>Format: "Jackfield Labeler - [project.jlp]*"</li>
+</ul>
+<h4 id="status-messages">Status Messages<a class="headerlink" href="#status-messages" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Confirmation when files are saved</li>
+<li>Error messages for file problems</li>
+<li>Progress updates for long operations</li>
+<li>User feedback for all operations</li>
+</ul>
+<h4 id="file-validation">File Validation<a class="headerlink" href="#file-validation" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Checks file format before loading</li>
+<li>Validates JSON structure</li>
+<li>Verifies required fields</li>
+<li>Provides helpful error messages</li>
+</ul>
+<h2 id="export-options">Export Options<a class="headerlink" href="#export-options" title="Permanent link">&para;</a></h2>
+<h3 id="pdf-generation">PDF Generation<a class="headerlink" href="#pdf-generation" title="Permanent link">&para;</a></h3>
+<h4 id="access-methods">Access Methods<a class="headerlink" href="#access-methods" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Menu</strong>: File → Generate PDF</li>
+<li><strong>Button</strong>: "Generate PDF" in Designer tab</li>
+<li><strong>Shortcut</strong>: F5</li>
+</ul>
+<h4 id="pdf-features">PDF Features<a class="headerlink" href="#pdf-features" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>High Quality</strong>: Vector-based output for crisp printing</li>
+<li><strong>Exact Dimensions</strong>: No scaling - preserves precise measurements</li>
+<li><strong>Smart Rotation</strong>: Uses rotation angle from settings</li>
+<li><strong>Professional Output</strong>: Ready for commercial printing</li>
+<li><strong>Center Positioning</strong>: Optimal placement on paper</li>
+</ul>
+<h4 id="pdf-process">PDF Process<a class="headerlink" href="#pdf-process" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Click Generate PDF</li>
+<li>Choose file location and name</li>
+<li>PDF is created with current settings</li>
+<li>Confirmation message shows success</li>
+<li>File is ready for printing</li>
+</ol>
+<h4 id="pdf-technical-details">PDF Technical Details<a class="headerlink" href="#pdf-technical-details" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Format</strong>: Standard PDF 1.4</li>
+<li><strong>Resolution</strong>: Vector-based (infinite resolution)</li>
+<li><strong>Colors</strong>: RGB color space</li>
+<li><strong>Fonts</strong>: Embedded for consistency</li>
+<li><strong>Size</strong>: Typically 1-5KB for most labels</li>
+</ul>
+<h3 id="png-export">PNG Export<a class="headerlink" href="#png-export" title="Permanent link">&para;</a></h3>
+<h4 id="access-methods_1">Access Methods<a class="headerlink" href="#access-methods_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Menu</strong>: File → Export PNG</li>
+<li><strong>Button</strong>: "Export PNG" in Preview tab</li>
+<li><strong>Shortcut</strong>: F6</li>
+</ul>
+<h4 id="png-features">PNG Features<a class="headerlink" href="#png-features" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>High Resolution</strong>: 300 DPI for professional quality</li>
+<li><strong>No Rotation</strong>: Exact strip dimensions</li>
+<li><strong>Digital Use</strong>: Perfect for documentation and digital sharing</li>
+<li><strong>Transparency</strong>: White background for easy integration</li>
+<li><strong>Color Accuracy</strong>: Maintains exact colors from design</li>
+</ul>
+<h4 id="png-process">PNG Process<a class="headerlink" href="#png-process" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Click Export PNG</li>
+<li>Choose file location and name</li>
+<li>PNG is created at 300 DPI</li>
+<li>Confirmation message shows success</li>
+<li>File is ready for digital use</li>
+</ol>
+<h4 id="png-technical-details">PNG Technical Details<a class="headerlink" href="#png-technical-details" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Resolution</strong>: 300 DPI (dots per inch)</li>
+<li><strong>Color Depth</strong>: 24-bit RGB</li>
+<li><strong>Compression</strong>: PNG lossless compression</li>
+<li><strong>Background</strong>: Solid white</li>
+<li><strong>Size</strong>: Varies with dimensions (typically 50-500KB)</li>
+</ul>
+<h3 id="output-considerations">Output Considerations<a class="headerlink" href="#output-considerations" title="Permanent link">&para;</a></h3>
+<h4 id="choosing-pdf-vs-png">Choosing PDF vs PNG<a class="headerlink" href="#choosing-pdf-vs-png" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>PDF</strong>: For printing, exact dimensions, rotation needed</li>
+<li><strong>PNG</strong>: For digital use, documentation, no rotation</li>
+<li><strong>Both</strong>: Create both for complete documentation</li>
+</ul>
+<h4 id="quality-settings">Quality Settings<a class="headerlink" href="#quality-settings" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>PDF</strong>: Vector-based, scales to any size</li>
+<li><strong>PNG</strong>: 300 DPI raster, fixed resolution</li>
+<li><strong>Print Quality</strong>: Both suitable for professional printing</li>
+</ul>
+<h4 id="file-sizes">File Sizes<a class="headerlink" href="#file-sizes" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>PDF</strong>: Small file size, typically 1-5KB</li>
+<li><strong>PNG</strong>: Larger file size, depends on dimensions and DPI</li>
+<li><strong>Storage</strong>: PDF more efficient for archival</li>
+</ul>
+<h2 id="tips-and-best-practices">Tips and Best Practices<a class="headerlink" href="#tips-and-best-practices" title="Permanent link">&para;</a></h2>
+<h3 id="design-guidelines">Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permanent link">&para;</a></h3>
+<h4 id="text-readability">Text Readability<a class="headerlink" href="#text-readability" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Use high contrast between text and background colors</li>
+<li>Choose appropriate font sizes (8-12pt typical)</li>
+<li>Avoid very long text in narrow segments</li>
+<li>Test readability at actual print size</li>
+<li>Consider viewing distance when choosing font size</li>
+</ul>
+<h4 id="color-selection">Color Selection<a class="headerlink" href="#color-selection" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Black on White</strong>: Maximum readability</li>
+<li><strong>White on Dark</strong>: Good for emphasis</li>
+<li><strong>Color Coding</strong>: Use consistent colors for similar functions</li>
+<li><strong>Print Considerations</strong>: Some colors may not print as expected</li>
+<li><strong>Accessibility</strong>: Consider color-blind users</li>
+</ul>
+<h4 id="dimensions">Dimensions<a class="headerlink" href="#dimensions" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Standard Heights</strong>: 5-12mm for most jackfield applications</li>
+<li><strong>Content Width</strong>: 8-15mm depending on text length</li>
+<li><strong>Total Width</strong>: Consider your paper size and rotation</li>
+<li><strong>Precision</strong>: Use decimal places for exact measurements</li>
+<li><strong>Practical Limits</strong>: Very small text may be unreadable</li>
+</ul>
+<h3 id="workflow-optimization">Workflow Optimization<a class="headerlink" href="#workflow-optimization" title="Permanent link">&para;</a></h3>
+<h4 id="project-organization">Project Organization<a class="headerlink" href="#project-organization" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Save projects with descriptive names</li>
+<li>Use folders to organize related projects</li>
+<li>Include version numbers for iterative designs</li>
+<li>Document your color coding schemes</li>
+<li>Create templates for common layouts</li>
+</ul>
+<h4 id="efficient-design-process">Efficient Design Process<a class="headerlink" href="#efficient-design-process" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Start with dimensions and basic layout</li>
+<li>Add all text content first</li>
+<li>Apply formatting and colors</li>
+<li>Preview frequently during design</li>
+<li>Test print on draft paper before final output</li>
+</ol>
+<h4 id="template-creation">Template Creation<a class="headerlink" href="#template-creation" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Create base projects for common layouts</li>
+<li>Save with standard dimensions and colors</li>
+<li>Use as starting points for new projects</li>
+<li>Share templates with team members</li>
+<li>Document template usage guidelines</li>
+</ul>
+<h3 id="printing-tips">Printing Tips<a class="headerlink" href="#printing-tips" title="Permanent link">&para;</a></h3>
+<h4 id="paper-selection">Paper Selection<a class="headerlink" href="#paper-selection" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Use high-quality paper for professional results</li>
+<li>Consider adhesive-backed paper for labels</li>
+<li>Test print settings with your specific printer</li>
+<li>Verify colors match your design intent</li>
+<li>Choose appropriate paper weight</li>
+</ul>
+<h4 id="print-settings">Print Settings<a class="headerlink" href="#print-settings" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Use highest quality print settings</li>
+<li>Ensure "Fit to Page" is disabled</li>
+<li>Check that rotation is handled correctly</li>
+<li>Verify margins don't clip your design</li>
+<li>Test with draft prints first</li>
+</ul>
+<h4 id="cutting-and-application">Cutting and Application<a class="headerlink" href="#cutting-and-application" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Use a sharp blade for clean cuts</li>
+<li>Consider adding cut marks for guidance</li>
+<li>Test adhesion on your target surface</li>
+<li>Allow for slight misalignment in application</li>
+<li>Plan for environmental conditions</li>
+</ul>
+<h3 id="color-management">Color Management<a class="headerlink" href="#color-management" title="Permanent link">&para;</a></h3>
+<h4 id="color-consistency">Color Consistency<a class="headerlink" href="#color-consistency" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Use standard colors when possible</li>
+<li>Test print colors before final production</li>
+<li>Consider printer color profiles</li>
+<li>Document color choices for consistency</li>
+<li>Use color swatches for reference</li>
+</ul>
+<h4 id="accessibility">Accessibility<a class="headerlink" href="#accessibility" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Ensure sufficient contrast ratios</li>
+<li>Test with color-blind simulation tools</li>
+<li>Provide alternative identification methods</li>
+<li>Consider monochrome printing compatibility</li>
+<li>Follow accessibility guidelines</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="common-issues">Common Issues<a class="headerlink" href="#common-issues" title="Permanent link">&para;</a></h3>
+<h4 id="application-wont-start">Application Won't Start<a class="headerlink" href="#application-wont-start" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: Application fails to launch</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Verify Python 3.12+ is installed</li>
+<li>Check that PyQt6 is properly installed</li>
+<li>Run <code>uv run -m jackfield_labeler</code> from command line</li>
+<li>Check for error messages in terminal</li>
+<li>Verify UV is installed and working</li>
+</ul>
+<p><strong>Diagnostic Steps</strong>:</p>
+<pre><code class="language-bash"># Check Python version
+python --version
+
+# Check UV installation
+uv --version
+
+# Try running directly
+uv run -m jackfield_labeler
+
+# Check dependencies
+uv pip list
+</code></pre>
+<h4 id="pdf-generation-fails">PDF Generation Fails<a class="headerlink" href="#pdf-generation-fails" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: PDF export produces errors</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Verify all text fields are valid</li>
+<li>Check that strip dimensions are reasonable</li>
+<li>Ensure output directory is writable</li>
+<li>Try a different file name/location</li>
+<li>Check available disk space</li>
+</ul>
+<p><strong>Common Causes</strong>:</p>
+<ul>
+<li>Invalid characters in filename</li>
+<li>Insufficient permissions</li>
+<li>Very large strip dimensions</li>
+<li>Corrupted project data</li>
+</ul>
+<h4 id="preview-not-updating">Preview Not Updating<a class="headerlink" href="#preview-not-updating" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: Preview tab doesn't show changes</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Switch to another tab and back</li>
+<li>Check that segments have valid dimensions</li>
+<li>Verify text and colors are properly set</li>
+<li>Restart the application if needed</li>
+<li>Check for error messages</li>
+</ul>
+<p><strong>Diagnostic Steps</strong>:</p>
+<ol>
+<li>Verify strip has content</li>
+<li>Check total width calculation</li>
+<li>Look for validation errors</li>
+<li>Try creating new project</li>
+</ol>
+<h4 id="colors-look-wrong">Colors Look Wrong<a class="headerlink" href="#colors-look-wrong" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: Colors in output don't match preview</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Check your printer's color settings</li>
+<li>Verify monitor calibration</li>
+<li>Test with different paper types</li>
+<li>Use standard colors for consistency</li>
+<li>Compare with color references</li>
+</ul>
+<p><strong>Color Troubleshooting</strong>:</p>
+<ul>
+<li>Print color test page</li>
+<li>Check printer driver settings</li>
+<li>Verify paper type selection</li>
+<li>Consider color management profiles</li>
+</ul>
+<h4 id="file-wont-open">File Won't Open<a class="headerlink" href="#file-wont-open" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: Project file fails to load</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Verify file is a valid <code>.jlp</code> file</li>
+<li>Check file permissions</li>
+<li>Try opening in a text editor to verify JSON format</li>
+<li>Create a new project and recreate the design</li>
+<li>Check file size and corruption</li>
+</ul>
+<p><strong>File Validation</strong>:</p>
+<pre><code class="language-bash"># Check file format
+file project.jlp
+
+# Validate JSON
+python -m json.tool project.jlp
+</code></pre>
+<h3 id="performance-issues">Performance Issues<a class="headerlink" href="#performance-issues" title="Permanent link">&para;</a></h3>
+<h4 id="slow-preview-updates">Slow Preview Updates<a class="headerlink" href="#slow-preview-updates" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: Preview takes time to update</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Reduce the number of segments</li>
+<li>Use shorter text strings</li>
+<li>Close other applications to free memory</li>
+<li>Restart the application</li>
+<li>Check system resources</li>
+</ul>
+<p><strong>Performance Tips</strong>:</p>
+<ul>
+<li>Keep segment count reasonable (&lt;50)</li>
+<li>Avoid very long text strings</li>
+<li>Close unused applications</li>
+<li>Ensure adequate RAM</li>
+</ul>
+<h4 id="large-file-sizes">Large File Sizes<a class="headerlink" href="#large-file-sizes" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: Project files are unexpectedly large</p>
+<p><strong>Solutions</strong>:</p>
+<ul>
+<li>Check for very long text strings</li>
+<li>Verify reasonable number of segments</li>
+<li>Save and reload the project</li>
+<li>Contact support if issue persists</li>
+</ul>
+<p><strong>File Size Guidelines</strong>:</p>
+<ul>
+<li>Normal projects: &lt;10KB</li>
+<li>Large projects: &lt;100KB</li>
+<li>Excessive size: &gt;1MB (investigate)</li>
+</ul>
+<h3 id="advanced-troubleshooting">Advanced Troubleshooting<a class="headerlink" href="#advanced-troubleshooting" title="Permanent link">&para;</a></h3>
+<h4 id="command-line-debugging">Command Line Debugging<a class="headerlink" href="#command-line-debugging" title="Permanent link">&para;</a></h4>
+<p>Run the application from command line to see detailed error messages:</p>
+<pre><code class="language-bash"># Run with debug output
+uv run -m jackfield_labeler
+
+# Check for Python errors
+python -c &quot;import jackfield_labeler; print('Import OK')&quot;
+
+# Verify PyQt6
+python -c &quot;from PyQt6.QtWidgets import QApplication; print('PyQt6 OK')&quot;
+</code></pre>
+<h4 id="log-files">Log Files<a class="headerlink" href="#log-files" title="Permanent link">&para;</a></h4>
+<p>Check for log files in your system's temporary directory:</p>
+<ul>
+<li><strong>Windows</strong>: <code>%TEMP%\jackfield_labeler\</code></li>
+<li><strong>macOS</strong>: <code>/tmp/jackfield_labeler/</code></li>
+<li><strong>Linux</strong>: <code>/tmp/jackfield_labeler/</code></li>
+</ul>
+<h4 id="reset-settings">Reset Settings<a class="headerlink" href="#reset-settings" title="Permanent link">&para;</a></h4>
+<p>If settings become corrupted:</p>
+<ol>
+<li>Close the application</li>
+<li>Delete settings files (location varies by OS)</li>
+<li>Restart the application</li>
+<li>Reconfigure your preferences</li>
+</ol>
+<h4 id="reinstallation">Reinstallation<a class="headerlink" href="#reinstallation" title="Permanent link">&para;</a></h4>
+<p>If problems persist:</p>
+<ol>
+<li>Uninstall the application</li>
+<li>Remove any remaining files</li>
+<li>Reinstall using the latest version</li>
+<li>Test with a simple project first</li>
+</ol>
+<h3 id="getting-help">Getting Help<a class="headerlink" href="#getting-help" title="Permanent link">&para;</a></h3>
+<h4 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Read this user guide thoroughly</li>
+<li>Check the README.md for installation help</li>
+<li>Review the architecture documentation for technical details</li>
+<li>Consult the API reference for development</li>
+</ul>
+<h4 id="community-support">Community Support<a class="headerlink" href="#community-support" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Check GitHub issues for known problems</li>
+<li>Search for similar issues before reporting new ones</li>
+<li>Provide detailed information when reporting bugs</li>
+<li>Include sample project files when relevant</li>
+</ul>
+<h4 id="reporting-issues">Reporting Issues<a class="headerlink" href="#reporting-issues" title="Permanent link">&para;</a></h4>
+<p>When reporting problems, include:</p>
+<ul>
+<li>Operating system and version</li>
+<li>Python version</li>
+<li>Application version</li>
+<li>Steps to reproduce the issue</li>
+<li>Error messages (if any)</li>
+<li>Sample project file (if relevant)</li>
+<li>Screenshots of the problem</li>
+</ul>
+<p><strong>Issue Template</strong>:</p>
+<pre><code>**Environment:**
+- OS: [Windows 10/macOS 12/Ubuntu 20.04]
+- Python: [3.12.0]
+- Application: [0.0.1]
+
+**Problem:**
+[Describe the issue]
+
+**Steps to Reproduce:**
+1. [First step]
+2. [Second step]
+3. [Third step]
+
+**Expected Behavior:**
+[What should happen]
+
+**Actual Behavior:**
+[What actually happens]
+
+**Additional Information:**
+[Any other relevant details]
+</code></pre>
+<p>This comprehensive user guide should help you make the most of the Jackfield Labeler application. For additional support or feature requests, please visit the project's GitHub repository.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Maintained by <a href="https://capp3.com">capp3</a>.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/capp3/jackfield-labeler" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://pypi.org/project/jackfield-labeler" target="_blank" rel="noopener" title="pypi.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
