@@ -12,11 +12,7 @@ on:
           - patch
           - minor
           - major
-      create_release:
-        description: 'Create release after bumping version'
-        required: false
-        type: boolean
-        default: false
+
 
 jobs:
   bump-version:
@@ -59,27 +55,6 @@ jobs:
           git tag v${{ steps.bump_version.outputs.new_version }}
           git push origin main
           git push origin v${{ steps.bump_version.outputs.new_version }}
-
-      - name: Create Release
-        if: inputs.create_release == true
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.bump_version.outputs.new_version }}
-          release_name: Release v${{ steps.bump_version.outputs.new_version }}
-          body: |
-            ## Version ${{ steps.bump_version.outputs.new_version }}
-
-            This is a ${{ inputs.bump_type }} version bump from ${{ steps.current_version.outputs.current_version }}.
-
-            ### Changes
-            - Version bump: ${{ steps.current_version.outputs.current_version }} → ${{ steps.bump_version.outputs.new_version }}
-
-            ### Next Steps
-            The release workflow will automatically build executables for all platforms.
-          draft: false
-          prerelease: false
 
       - name: Comment on PR
         if: github.event_name == 'pull_request'
