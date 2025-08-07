@@ -1,0 +1,127 @@
+name: Auto Version Bump
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  determine-version-bump:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true || github.ref == 'refs/heads/main'
+    outputs:
+      bump-type: ${{ steps.determine-bump.outputs.bump-type }}
+      should-bump: ${{ steps.determine-bump.outputs.should-bump }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version bump type
+        id: determine-bump
+        run: |
+          # Get commit messages since last tag
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # For PR, check commits in the PR
+            commits=$(git log --oneline ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          else
+            # For direct push to main, check commits since last tag
+            last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+            if [ -z "$last_tag" ]; then
+              commits=$(git log --oneline)
+            else
+              commits=$(git log --oneline $last_tag..HEAD)
+            fi
+          fi
+
+          echo "Checking commits:"
+          echo "$commits"
+
+          # Determine bump type based on conventional commits
+          bump_type="none"
+          if echo "$commits" | grep -q "BREAKING CHANGE\|!:"; then
+            bump_type="major"
+          elif echo "$commits" | grep -q "^feat:"; then
+            bump_type="minor"
+          elif echo "$commits" | grep -q "^fix:\|^docs:\|^style:\|^refactor:\|^test:\|^chore:"; then
+            bump_type="patch"
+          fi
+
+          should_bump="false"
+          if [ "$bump_type" != "none" ]; then
+            should_bump="true"
+          fi
+
+          echo "bump-type=$bump_type" >> $GITHUB_OUTPUT
+          echo "should-bump=$should_bump" >> $GITHUB_OUTPUT
+          echo "Bump type: $bump_type"
+          echo "Should bump: $should_bump"
+
+  bump-version:
+    needs: determine-version-bump
+    runs-on: ubuntu-latest
+    if: needs.determine-version-bump.outputs.should-bump == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install bump2version
+        run: pip install bump2version
+
+      - name: Get current version
+        id: current_version
+        run: |
+          current_version=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          echo "Current version: $current_version"
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          bump2version --new-version ${{ needs.determine-version-bump.outputs.bump-type }} pyproject.toml
+          new_version=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+          echo "New version: $new_version"
+
+      - name: Create git tag and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pyproject.toml
+          git commit -m "Auto-bump version to ${{ steps.bump_version.outputs.new_version }} [skip ci]"
+          git tag v${{ steps.bump_version.outputs.new_version }}
+          git push origin main
+          git push origin v${{ steps.bump_version.outputs.new_version }}
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.bump_version.outputs.new_version }}
+          release_name: Release v${{ steps.bump_version.outputs.new_version }}
+          body: |
+            ## Version ${{ steps.bump_version.outputs.new_version }}
+
+            This is an automated ${{ needs.determine-version-bump.outputs.bump-type }} version bump from ${{ steps.current_version.outputs.current_version }}.
+
+            ### Changes
+            - Version bump: ${{ steps.current_version.outputs.current_version }} → ${{ steps.bump_version.outputs.new_version }}
+            - Bump type: ${{ needs.determine-version-bump.outputs.bump-type }}
+
+            ### Next Steps
+            The release workflow will automatically build executables for all platforms.
+          draft: false
+          prerelease: false

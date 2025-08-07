@@ -4,8 +4,35 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v0.1.0)'
+        required: true
+        type: string
+      create_tag:
+        description: 'Create and push a new tag'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
+  create-tag:
+    if: github.event_name == 'workflow_dispatch' && inputs.create_tag == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and push tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag ${{ inputs.version }}
+          git push origin ${{ inputs.version }}
+
   build:
     name: Build for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -36,3 +63,51 @@ jobs:
         with:
           name: jackfield-labeler-${{ matrix.os }}
           path: dist/jackfield_labeler*
+
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get commits since last tag
+          last_tag=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -z "$last_tag" ]; then
+            changelog=$(git log --oneline --pretty=format:"- %s" HEAD)
+          else
+            changelog=$(git log --oneline --pretty=format:"- %s" $last_tag..HEAD)
+          fi
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$changelog" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
+          body: |
+            ## What's Changed
+
+            This release includes the latest improvements and bug fixes.
+
+            ### Recent Changes
+            ${{ steps.changelog.outputs.changelog }}
+
+            ### Downloads
+            - Windows: [jackfield-labeler-windows-latest.zip](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            - macOS: [jackfield-labeler-macos-latest.zip](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            - Linux: [jackfield-labeler-ubuntu-latest.zip](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          draft: false
+          prerelease: false

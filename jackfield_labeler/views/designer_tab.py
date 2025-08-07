@@ -253,7 +253,9 @@ class SegmentTable(QTableWidget):
         self.verticalHeader().setDefaultSectionSize(40)
 
         # Additional styling for table cell widgets
-        self.setStyleSheet(self.styleSheet() + """
+        self.setStyleSheet(
+            self.styleSheet()
+            + """
             QTableWidget QComboBox {
                 border: 1px solid #555555;
                 border-radius: 3px;
@@ -292,7 +294,8 @@ class SegmentTable(QTableWidget):
             QTableWidget QDoubleSpinBox:focus {
                 border-color: #ff6b35;
             }
-        """)
+        """
+        )
 
     def _on_cell_changed(self, item):
         """Handle cell content changes."""
