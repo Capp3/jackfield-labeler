@@ -119,15 +119,15 @@ class StripControlPanel(QGroupBox):
         total_width_layout.setSpacing(8)
         total_width_label = QLabel("Total Strip Width (mm):")
         total_width_label.setMinimumWidth(180)
-        total_width_label.setStyleSheet("font-weight: 600; color: #495057;")
+        total_width_label.setStyleSheet("font-weight: 600; color: #e6e6e6;")
         total_width_layout.addWidget(total_width_label)
         self.total_width_label = QLabel("0.0")
         self.total_width_label.setStyleSheet("""
             QLabel {
                 font-weight: 600;
-                color: #007bff;
-                background-color: #e7f3ff;
-                border: 1px solid #b3d9ff;
+                color: #ffffff;
+                background-color: #ff6b35;
+                border: 1px solid #e55a2b;
                 border-radius: 4px;
                 padding: 4px 8px;
                 min-width: 60px;
@@ -213,37 +213,39 @@ class SegmentTable(QTableWidget):
         # Apply custom styling
         self.setStyleSheet("""
             QTableWidget {
-                gridline-color: #dee2e6;
-                background-color: #ffffff;
-                alternate-background-color: #f8f9fa;
-                selection-background-color: #007bff;
+                gridline-color: #404040;
+                background-color: #2b2b2b;
+                alternate-background-color: #3c3c3c;
+                selection-background-color: #ff6b35;
                 selection-color: #ffffff;
-                border: 1px solid #dee2e6;
-                border-radius: 6px;
+                border: 1px solid #404040;
+                border-radius: 4px;
+                color: #e6e6e6;
             }
 
             QTableWidget::item {
                 padding: 8px 12px;
                 border: none;
+                color: #e6e6e6;
             }
 
             QTableWidget::item:selected {
-                background-color: #007bff;
+                background-color: #ff6b35;
                 color: #ffffff;
             }
 
             QHeaderView::section {
-                background-color: #f8f9fa;
+                background-color: #3c3c3c;
                 border: none;
-                border-bottom: 2px solid #dee2e6;
+                border-bottom: 2px solid #404040;
                 padding: 12px 8px;
                 font-weight: 600;
-                color: #495057;
+                color: #ff6b35;
                 font-size: 11px;
             }
 
             QHeaderView::section:hover {
-                background-color: #e9ecef;
+                background-color: #404040;
             }
         """)
 

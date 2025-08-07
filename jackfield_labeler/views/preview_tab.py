@@ -33,8 +33,8 @@ class StripPreviewWidget(QGraphicsView):
         self.setMinimumSize(500, 400)
         self.setStyleSheet("""
             QGraphicsView {
-                background-color: #f8f9fa;
-                border: 2px solid #dee2e6;
+                background-color: #3c3c3c;
+                border: 2px solid #404040;
                 border-radius: 8px;
             }
         """)
@@ -91,8 +91,8 @@ class StripInfoPanel(QFrame):
         self.setMaximumHeight(140)
         self.setStyleSheet("""
             QFrame {
-                background-color: #f8f9fa;
-                border: 1px solid #dee2e6;
+                background-color: #3c3c3c;
+                border: 1px solid #404040;
                 border-radius: 6px;
                 padding: 8px;
             }
@@ -108,7 +108,7 @@ class StripInfoPanel(QFrame):
             QLabel {
                 font-weight: 600;
                 font-size: 14px;
-                color: #495057;
+                color: #ff6b35;
                 padding: 4px 0;
             }
         """)
@@ -118,7 +118,7 @@ class StripInfoPanel(QFrame):
         self.dimensions_label = QLabel("Dimensions: -")
         self.dimensions_label.setStyleSheet("""
             QLabel {
-                color: #495057;
+                color: #e6e6e6;
                 padding: 2px 0;
             }
         """)
@@ -126,7 +126,7 @@ class StripInfoPanel(QFrame):
         self.segments_label = QLabel("Segments: -")
         self.segments_label.setStyleSheet("""
             QLabel {
-                color: #495057;
+                color: #e6e6e6;
                 padding: 2px 0;
             }
         """)
@@ -134,7 +134,7 @@ class StripInfoPanel(QFrame):
         self.end_text_label = QLabel("End Text: -")
         self.end_text_label.setStyleSheet("""
             QLabel {
-                color: #495057;
+                color: #e6e6e6;
                 padding: 2px 0;
             }
         """)
@@ -200,7 +200,7 @@ class PreviewTab(QWidget):
         self.export_png_button.clicked.connect(self.export_png)
         self.export_png_button.setStyleSheet("""
             QPushButton {
-                background-color: #28a745;
+                background-color: #ff6b35;
                 color: #ffffff;
                 border: none;
                 border-radius: 6px;
@@ -210,16 +210,16 @@ class PreviewTab(QWidget):
             }
 
             QPushButton:hover {
-                background-color: #218838;
+                background-color: #ff8c5a;
             }
 
             QPushButton:pressed {
-                background-color: #1e7e34;
+                background-color: #e55a2b;
             }
 
             QPushButton:disabled {
-                background-color: #6c757d;
-                color: #adb5bd;
+                background-color: #555555;
+                color: #888888;
             }
         """)
         button_layout.addWidget(self.export_png_button)
