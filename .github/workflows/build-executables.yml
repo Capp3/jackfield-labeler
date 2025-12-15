@@ -32,7 +32,7 @@ jobs:
         run: uv run pyinstaller jackfield_labeler.spec --noconfirm
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: jackfield-labeler-${{ matrix.os }}
           path: dist/jackfield_labeler*
