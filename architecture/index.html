@@ -694,6 +694,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#logger-loggerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logger (logger.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1718,6 +1729,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#logger-loggerpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logger (logger.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2511,6 +2533,45 @@ calculate_dimensions → create_pixmap → setup_painter → render_segments →
 <li>Version compatibility checking</li>
 <li>Data integrity verification</li>
 <li>Graceful error handling and recovery</li>
+</ul>
+<h4 id="logger-loggerpy">Logger (<code>logger.py</code>)<a class="headerlink" href="#logger-loggerpy" title="Permanent link">&para;</a></h4>
+<p>Centralized logging configuration and management for the entire application.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Module-level logger factory</li>
+<li>Configurable log levels (DEBUG, INFO, WARNING, ERROR)</li>
+<li>Dual output: console (always) + optional file</li>
+<li>Rotating file handler (10MB, 3 backups)</li>
+<li>Cross-platform log file management</li>
+<li>Integration with QSettings for persistence</li>
+</ul>
+<p><strong>API:</strong></p>
+<pre><code class="language-python">from jackfield_labeler.utils.logger import get_logger, configure_logging
+
+# Get module-level logger
+logger = get_logger(__name__)
+
+# Configure logging system
+configure_logging(
+    level=&quot;INFO&quot;,                # Log level
+    log_to_file=True,            # Enable file output
+    log_file_path=&quot;/path/to/log&quot; # File path
+)
+
+# Use logger
+logger.info(&quot;Application started&quot;)
+logger.warning(&quot;Validation failed&quot;)
+logger.error(&quot;Error occurred&quot;, exc_info=True)
+</code></pre>
+<p><strong>Log Format:</strong></p>
+<pre><code>YYYY-MM-DD HH:MM:SS - module.name - LEVEL - Message
+</code></pre>
+<p><strong>Integration Points:</strong></p>
+<ul>
+<li>Application startup (<code>app.py</code>): Initializes logging from QSettings</li>
+<li>Settings tab: UI controls for log configuration</li>
+<li>All error handlers: Consistent error logging with context</li>
+<li>File operations: Operation tracking and error reporting</li>
 </ul>
 <h2 id="data-flow-architecture">Data Flow Architecture<a class="headerlink" href="#data-flow-architecture" title="Permanent link">&para;</a></h2>
 <h3 id="1-user-interaction-flow">1. User Interaction Flow<a class="headerlink" href="#1-user-interaction-flow" title="Permanent link">&para;</a></h3>
