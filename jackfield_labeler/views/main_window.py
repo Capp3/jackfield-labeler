@@ -33,9 +33,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"Jackfield Labeler v{__version__}")
         self.setMinimumSize(1000, 700)
 
-        # Apply modern styling
-        self._apply_styling()
-
         # Create central widget and layout
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
@@ -65,19 +62,10 @@ class MainWindow(QMainWindow):
         self.tab_widget.addTab(self.preview_tab, "👁️ Preview")
         self.tab_widget.addTab(self.settings_tab, "⚙️ Settings")
 
-        # Create status bar with improved styling
+        # Create status bar
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage("Ready")
-        self.status_bar.setStyleSheet("""
-            QStatusBar {
-                background-color: #3c3c3c;
-                border-top: 1px solid #404040;
-                padding: 4px;
-                font-size: 11px;
-                color: #e6e6e6;
-            }
-        """)
 
         # Create menu bar
         self.create_menus()
@@ -93,299 +81,6 @@ class MainWindow(QMainWindow):
 
         # Update window title
         self._update_window_title()
-
-    def _apply_styling(self):
-        """Apply professional technical styling inspired by Wireshark and VLC applications."""
-        # Set application-wide font
-        app_font = QFont("Segoe UI", 9)  # Windows
-        if os.name == "posix":  # Linux/macOS
-            app_font = QFont("Helvetica", 9)  # macOS - use system font
-            if not app_font.exactMatch():
-                app_font = QFont("Arial", 9)  # Fallback
-        self.setFont(app_font)
-
-        # Apply professional technical styling
-        self.setStyleSheet("""
-            QMainWindow {
-                background-color: #2b2b2b;
-                color: #e6e6e6;
-            }
-
-            QTabWidget::pane {
-                border: 1px solid #404040;
-                border-radius: 4px;
-                background-color: #2b2b2b;
-                margin-top: -1px;
-            }
-
-            QTabWidget::tab-bar {
-                alignment: left;
-            }
-
-            QTabBar::tab {
-                background-color: #3c3c3c;
-                border: 1px solid #404040;
-                border-bottom: none;
-                border-top-left-radius: 4px;
-                border-top-right-radius: 4px;
-                padding: 8px 16px;
-                margin-right: 2px;
-                font-weight: 500;
-                color: #b0b0b0;
-                min-width: 80px;
-            }
-
-            QTabBar::tab:selected {
-                background-color: #2b2b2b;
-                color: #ffffff;
-                border-bottom: 2px solid #ff6b35;
-            }
-
-            QTabBar::tab:hover:!selected {
-                background-color: #404040;
-                color: #ffffff;
-            }
-
-            QMenuBar {
-                background-color: #3c3c3c;
-                border-bottom: 1px solid #404040;
-                padding: 4px;
-                color: #e6e6e6;
-            }
-
-            QMenuBar::item {
-                background-color: transparent;
-                padding: 6px 12px;
-                border-radius: 3px;
-                color: #e6e6e6;
-            }
-
-            QMenuBar::item:selected {
-                background-color: #404040;
-                color: #ffffff;
-            }
-
-            QMenu {
-                background-color: #3c3c3c;
-                border: 1px solid #404040;
-                border-radius: 4px;
-                padding: 4px;
-                color: #e6e6e6;
-            }
-
-            QMenu::item {
-                padding: 8px 16px;
-                border-radius: 3px;
-                color: #e6e6e6;
-            }
-
-            QMenu::item:selected {
-                background-color: #ff6b35;
-                color: #ffffff;
-            }
-
-            QGroupBox {
-                font-weight: 600;
-                border: 1px solid #404040;
-                border-radius: 4px;
-                margin-top: 12px;
-                padding-top: 8px;
-                background-color: #3c3c3c;
-                color: #e6e6e6;
-            }
-
-            QGroupBox::title {
-                subcontrol-origin: margin;
-                left: 12px;
-                padding: 0 8px 0 8px;
-                color: #ff6b35;
-                font-weight: 600;
-            }
-
-            QPushButton {
-                background-color: #ff6b35;
-                color: #ffffff;
-                border: none;
-                border-radius: 4px;
-                padding: 8px 16px;
-                font-weight: 500;
-                min-height: 20px;
-            }
-
-            QPushButton:hover {
-                background-color: #ff8c5a;
-            }
-
-            QPushButton:pressed {
-                background-color: #e55a2b;
-            }
-
-            QPushButton:disabled {
-                background-color: #555555;
-                color: #888888;
-            }
-
-            QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
-                border: 1px solid #555555;
-                border-radius: 3px;
-                padding: 8px 12px;
-                background-color: #3c3c3c;
-                color: #e6e6e6;
-                selection-background-color: #ff6b35;
-                min-height: 24px;
-            }
-
-            QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
-                border-color: #ff6b35;
-                outline: none;
-            }
-
-            QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover, QComboBox:hover {
-                border-color: #666666;
-            }
-
-            /* Simplified spinbox styling */
-            QSpinBox, QDoubleSpinBox {
-                padding-right: 20px;
-            }
-
-            QSpinBox::up-button, QDoubleSpinBox::up-button {
-                background-color: #4c4c4c;
-                border: 1px solid #555555;
-                border-radius: 2px;
-                width: 16px;
-                height: 12px;
-            }
-
-            QSpinBox::down-button, QDoubleSpinBox::down-button {
-                background-color: #4c4c4c;
-                border: 1px solid #555555;
-                border-radius: 2px;
-                width: 16px;
-                height: 12px;
-            }
-
-            QSpinBox::up-arrow, QDoubleSpinBox::up-arrow {
-                border-left: 4px solid transparent;
-                border-right: 4px solid transparent;
-                border-bottom: 4px solid #e6e6e6;
-            }
-
-            QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {
-                border-left: 4px solid transparent;
-                border-right: 4px solid transparent;
-                border-top: 4px solid #e6e6e6;
-            }
-
-            QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover {
-                background-color: #5c5c5c;
-            }
-
-            QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {
-                background-color: #5c5c5c;
-            }
-
-            QComboBox::drop-down {
-                border: none;
-                width: 20px;
-            }
-
-            QComboBox::down-arrow {
-                image: none;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-top: 5px solid #e6e6e6;
-                margin-right: 5px;
-            }
-
-            QComboBox QAbstractItemView {
-                background-color: #3c3c3c;
-                border: 1px solid #404040;
-                selection-background-color: #ff6b35;
-                color: #e6e6e6;
-            }
-
-            QTableWidget {
-                gridline-color: #404040;
-                background-color: #2b2b2b;
-                alternate-background-color: #3c3c3c;
-                selection-background-color: #ff6b35;
-                selection-color: #ffffff;
-                border: 1px solid #404040;
-                border-radius: 4px;
-                color: #e6e6e6;
-            }
-
-            QTableWidget::item {
-                padding: 4px 8px;
-                border: none;
-                color: #e6e6e6;
-            }
-
-            QTableWidget::item:selected {
-                background-color: #ff6b35;
-                color: #ffffff;
-            }
-
-            QHeaderView::section {
-                background-color: #3c3c3c;
-                border: none;
-                border-bottom: 1px solid #404040;
-                padding: 8px;
-                font-weight: 600;
-                color: #ff6b35;
-            }
-
-            QScrollBar:vertical {
-                background-color: #3c3c3c;
-                width: 12px;
-                border-radius: 6px;
-            }
-
-            QScrollBar::handle:vertical {
-                background-color: #555555;
-                border-radius: 6px;
-                min-height: 20px;
-            }
-
-            QScrollBar::handle:vertical:hover {
-                background-color: #666666;
-            }
-
-            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
-                height: 0px;
-            }
-
-            QLabel {
-                color: #e6e6e6;
-            }
-
-            QTextBrowser {
-                background-color: #2b2b2b;
-                color: #e6e6e6;
-                border: 1px solid #404040;
-                border-radius: 4px;
-            }
-
-            QDialog {
-                background-color: #2b2b2b;
-                color: #e6e6e6;
-            }
-
-            QDialogButtonBox {
-                background-color: #3c3c3c;
-                border-top: 1px solid #404040;
-            }
-
-            QMessageBox {
-                background-color: #2b2b2b;
-                color: #e6e6e6;
-            }
-
-            QMessageBox QPushButton {
-                min-width: 80px;
-            }
-        """)
 
     def _on_settings_changed(self):
         """Handle settings changes from the settings tab."""
@@ -522,7 +217,10 @@ class MainWindow(QMainWindow):
 
         # Get file path to open
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "Open Project", ProjectManager.get_last_directory(), ProjectManager.PROJECT_FILTER
+            self,
+            "Open Project",
+            ProjectManager.get_last_directory(),
+            ProjectManager.PROJECT_FILTER,
         )
 
         if not file_path:
@@ -553,7 +251,11 @@ class MainWindow(QMainWindow):
             self.status_bar.showMessage(f"Project opened: {file_path}", 5000)
 
         except Exception as e:
-            QMessageBox.critical(self, "Load Error", f"An unexpected error occurred while loading the project:\n{e!s}")
+            QMessageBox.critical(
+                self,
+                "Load Error",
+                f"An unexpected error occurred while loading the project:\n{e!s}",
+            )
 
     def save_project(self) -> bool:
         """Save the current label strip project."""
@@ -596,7 +298,9 @@ class MainWindow(QMainWindow):
         # Check if there are any segments to generate
         if label_strip.get_total_width() == 0:
             QMessageBox.warning(
-                self, "No Content", "Please add some segments to the label strip before generating a PDF."
+                self,
+                "No Content",
+                "Please add some segments to the label strip before generating a PDF.",
             )
             return
 
@@ -642,7 +346,9 @@ class MainWindow(QMainWindow):
         # Check if there are any segments to export
         if label_strip.get_total_width() == 0:
             QMessageBox.warning(
-                self, "No Content", "Please add some segments to the label strip before exporting a PNG."
+                self,
+                "No Content",
+                "Please add some segments to the label strip before exporting a PNG.",
             )
             return
 
@@ -718,7 +424,9 @@ class MainWindow(QMainWindow):
             # Check if file exists
             if not os.path.exists(file_path):
                 QMessageBox.warning(
-                    self, "Documentation Not Found", f"The documentation file '{md_file_path}' could not be found."
+                    self,
+                    "Documentation Not Found",
+                    f"The documentation file '{md_file_path}' could not be found.",
                 )
                 return
 
@@ -740,7 +448,9 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             QMessageBox.critical(
-                self, "Documentation Error", f"An error occurred while loading the documentation:\n{e!s}"
+                self,
+                "Documentation Error",
+                f"An error occurred while loading the documentation:\n{e!s}",
             )
 
     def _show_html_documentation(self, title: str, html_content: str):
@@ -849,5 +559,9 @@ class MainWindow(QMainWindow):
                 return False
 
         except Exception as e:
-            QMessageBox.critical(self, "Save Error", f"An unexpected error occurred while saving the project:\n{e!s}")
+            QMessageBox.critical(
+                self,
+                "Save Error",
+                f"An unexpected error occurred while saving the project:\n{e!s}",
+            )
             return False

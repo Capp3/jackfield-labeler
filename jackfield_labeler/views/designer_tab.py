@@ -3,6 +3,7 @@ Designer tab for creating and editing label strips.
 """
 
 import os
+
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QComboBox,
@@ -20,12 +21,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from jackfield_labeler.models import (
-    Color,
-    LabelStrip,
-    StandardColor,
-    TextFormat,
-)
+from jackfield_labeler.models import Color, LabelStrip, StandardColor, TextFormat
 
 
 class StripControlPanel(QGroupBox):
@@ -120,20 +116,8 @@ class StripControlPanel(QGroupBox):
         total_width_layout.setSpacing(8)
         total_width_label = QLabel("Total Strip Width (mm):")
         total_width_label.setMinimumWidth(180)
-        total_width_label.setStyleSheet("font-weight: 600; color: #e6e6e6;")
         total_width_layout.addWidget(total_width_label)
         self.total_width_label = QLabel("0.0")
-        self.total_width_label.setStyleSheet("""
-            QLabel {
-                font-weight: 600;
-                color: #ffffff;
-                background-color: #ff6b35;
-                border: 1px solid #e55a2b;
-                border-radius: 4px;
-                padding: 4px 8px;
-                min-width: 60px;
-            }
-        """)
         total_width_layout.addWidget(self.total_width_label)
         total_width_layout.addStretch()
         self.layout().addLayout(total_width_layout)
@@ -211,92 +195,8 @@ class SegmentTable(QTableWidget):
         # Connect signals
         self.itemChanged.connect(self._on_cell_changed)
 
-        # Apply custom styling
-        self.setStyleSheet("""
-            QTableWidget {
-                gridline-color: #404040;
-                background-color: #2b2b2b;
-                alternate-background-color: #3c3c3c;
-                selection-background-color: #ff6b35;
-                selection-color: #ffffff;
-                border: 1px solid #404040;
-                border-radius: 4px;
-                color: #e6e6e6;
-            }
-
-            QTableWidget::item {
-                padding: 8px 12px;
-                border: none;
-                color: #e6e6e6;
-            }
-
-            QTableWidget::item:selected {
-                background-color: #ff6b35;
-                color: #ffffff;
-            }
-
-            QHeaderView::section {
-                background-color: #3c3c3c;
-                border: none;
-                border-bottom: 2px solid #404040;
-                padding: 12px 8px;
-                font-weight: 600;
-                color: #ff6b35;
-                font-size: 11px;
-            }
-
-            QHeaderView::section:hover {
-                background-color: #404040;
-            }
-        """)
-
-        # Set row height to accommodate larger dropdowns
+        # Set row height
         self.verticalHeader().setDefaultSectionSize(40)
-
-        # Additional styling for table cell widgets
-        self.setStyleSheet(
-            self.styleSheet()
-            + """
-            QTableWidget QComboBox {
-                border: 1px solid #555555;
-                border-radius: 3px;
-                padding: 4px 8px;
-                background-color: #3c3c3c;
-                color: #e6e6e6;
-                min-height: 20px;
-            }
-
-            QTableWidget QComboBox:focus {
-                border-color: #ff6b35;
-            }
-
-            QTableWidget QComboBox::drop-down {
-                border: none;
-                width: 16px;
-            }
-
-            QTableWidget QComboBox::down-arrow {
-                image: none;
-                border-left: 4px solid transparent;
-                border-right: 4px solid transparent;
-                border-top: 4px solid #e6e6e6;
-                margin-right: 4px;
-            }
-
-            QTableWidget QDoubleSpinBox {
-                border: 1px solid #555555;
-                border-radius: 3px;
-                padding: 4px 8px;
-                background-color: #3c3c3c;
-                color: #e6e6e6;
-                min-height: 20px;
-            }
-
-            QTableWidget QDoubleSpinBox:focus {
-                border-color: #ff6b35;
-            }
-        """
-        )
 
     def _on_cell_changed(self, item):
         """Handle cell content changes."""
@@ -434,7 +334,7 @@ class DesignerTab(QWidget):
     def __init__(self, parent=None):
         """Initialize the designer tab."""
         super().__init__(parent)
-        
+
         # Track current project path for export filenames
         self._current_project_path = None
 
@@ -499,14 +399,6 @@ class DesignerTab(QWidget):
 
         # Add table header
         table_header = QLabel("📋 Segment Properties")
-        table_header.setStyleSheet("""
-            QLabel {
-                font-weight: 600;
-                font-size: 14px;
-                color: #495057;
-                padding: 8px 0;
-            }
-        """)
         right_panel.addWidget(table_header)
 
         # Add segment table
@@ -753,7 +645,11 @@ class DesignerTab(QWidget):
                 QMessageBox.critical(self, "Save Error", f"Failed to save project to:\n{file_path}")
 
         except Exception as e:
-            QMessageBox.critical(self, "Save Error", f"An unexpected error occurred while saving the project:\n{e!s}")
+            QMessageBox.critical(
+                self,
+                "Save Error",
+                f"An unexpected error occurred while saving the project:\n{e!s}",
+            )
 
     def load_project(self):
         """Load a project from file."""
@@ -784,7 +680,11 @@ class DesignerTab(QWidget):
             QMessageBox.information(self, "Project Loaded", f"Project has been loaded from:\n{file_path}")
 
         except Exception as e:
-            QMessageBox.critical(self, "Load Error", f"An unexpected error occurred while loading the project:\n{e!s}")
+            QMessageBox.critical(
+                self,
+                "Load Error",
+                f"An unexpected error occurred while loading the project:\n{e!s}",
+            )
 
     def generate_pdf(self):
         """Generate a PDF of the current label strip."""
@@ -795,7 +695,9 @@ class DesignerTab(QWidget):
         # Check if there are any segments to generate
         if self.strip.get_total_width() == 0:
             QMessageBox.warning(
-                self, "No Content", "Please add some segments to the label strip before generating a PDF."
+                self,
+                "No Content",
+                "Please add some segments to the label strip before generating a PDF.",
             )
             return
 
@@ -836,7 +738,9 @@ class DesignerTab(QWidget):
         # Check if there are any segments to generate
         if self.strip.get_total_width() == 0:
             QMessageBox.warning(
-                self, "No Content", "Please add some segments to the label strip before exporting a PNG."
+                self,
+                "No Content",
+                "Please add some segments to the label strip before exporting a PNG.",
             )
             return
 

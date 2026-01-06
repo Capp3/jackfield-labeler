@@ -12,12 +12,7 @@ from jackfield_labeler.models.exceptions import (
     StartSegmentWidthError,
 )
 from jackfield_labeler.models.segment import Segment
-from jackfield_labeler.models.segment_types import (
-    ContentSegment,
-    EndSegment,
-    StartSegment,
-    create_segment_from_dict,
-)
+from jackfield_labeler.models.segment_types import ContentSegment, EndSegment, StartSegment, create_segment_from_dict
 from jackfield_labeler.models.strip_settings import StripSettings
 
 

@@ -302,6 +302,53 @@ Project file management with `.jlp` format support.
 - Data integrity verification
 - Graceful error handling and recovery
 
+#### Logger (`logger.py`)
+
+Centralized logging configuration and management for the entire application.
+
+**Key Features:**
+
+- Module-level logger factory
+- Configurable log levels (DEBUG, INFO, WARNING, ERROR)
+- Dual output: console (always) + optional file
+- Rotating file handler (10MB, 3 backups)
+- Cross-platform log file management
+- Integration with QSettings for persistence
+
+**API:**
+
+```python
+from jackfield_labeler.utils.logger import get_logger, configure_logging
+
+# Get module-level logger
+logger = get_logger(__name__)
+
+# Configure logging system
+configure_logging(
+    level="INFO",                # Log level
+    log_to_file=True,            # Enable file output
+    log_file_path="/path/to/log" # File path
+)
+
+# Use logger
+logger.info("Application started")
+logger.warning("Validation failed")
+logger.error("Error occurred", exc_info=True)
+```
+
+**Log Format:**
+
+```
+YYYY-MM-DD HH:MM:SS - module.name - LEVEL - Message
+```
+
+**Integration Points:**
+
+- Application startup (`app.py`): Initializes logging from QSettings
+- Settings tab: UI controls for log configuration
+- All error handlers: Consistent error logging with context
+- File operations: Operation tracking and error reporting
+
 ## Data Flow Architecture
 
 ### 1. User Interaction Flow

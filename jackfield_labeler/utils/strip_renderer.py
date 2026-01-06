@@ -8,6 +8,9 @@ from PyQt6.QtWidgets import QWidget
 
 from jackfield_labeler.models.label_strip import LabelStrip
 from jackfield_labeler.models.text_format import TextFormat
+from jackfield_labeler.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class StripRenderer:
@@ -147,7 +150,7 @@ class StripRenderer:
             return pixmap.save(output_path, "PNG")
 
         except Exception as e:
-            print(f"Error saving PNG: {e}")
+            logger.error(f"Error saving PNG: {e}", exc_info=True)
             return False
 
     def _draw_strip(self, painter: QPainter, x: int, y: int, width: int, height: int) -> None:
@@ -180,7 +183,15 @@ class StripRenderer:
         # Draw start segment if present (but we removed start segments, so this should be empty)
         if self.label_strip.start_segment and self.label_strip.start_segment.width > 0:
             segment_width_px = int(self.label_strip.start_segment.width * scale)
-            self._draw_segment(painter, current_x, y, segment_width_px, height, self.label_strip.start_segment, scale)
+            self._draw_segment(
+                painter,
+                current_x,
+                y,
+                segment_width_px,
+                height,
+                self.label_strip.start_segment,
+                scale,
+            )
             current_x += segment_width_px
 
         # Draw content segments
@@ -192,9 +203,26 @@ class StripRenderer:
         # Draw end segment if present
         if self.label_strip.end_segment and self.label_strip.end_segment.width > 0:
             segment_width_px = int(self.label_strip.end_segment.width * scale)
-            self._draw_segment(painter, current_x, y, segment_width_px, height, self.label_strip.end_segment, scale)
+            self._draw_segment(
+                painter,
+                current_x,
+                y,
+                segment_width_px,
+                height,
+                self.label_strip.end_segment,
+                scale,
+            )
 
-    def _draw_segment(self, painter: QPainter, x: int, y: int, width: int, height: int, segment, scale: float) -> None:
+    def _draw_segment(
+        self,
+        painter: QPainter,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        segment,
+        scale: float,
+    ) -> None:
         """
         Draw a single segment.
 
@@ -208,7 +236,11 @@ class StripRenderer:
             scale: Scale factor for font sizing
         """
         # Convert colors to Qt format
-        bg_color = QColor(segment.background_color.r, segment.background_color.g, segment.background_color.b)
+        bg_color = QColor(
+            segment.background_color.r,
+            segment.background_color.g,
+            segment.background_color.b,
+        )
         text_color = QColor(segment.text_color.r, segment.text_color.g, segment.text_color.b)
 
         # Draw background
@@ -222,8 +254,12 @@ class StripRenderer:
         if segment.text:
             painter.setPen(text_color)
 
-            # Set font based on text format and scale
-            font = QFont("Arial", int(self.label_strip.settings.default_font_size * scale / 10))
+            # Set font with pixel size for accurate scaling
+            # Convert points to pixels: 1pt = 1/72 inch, 1 inch = 25.4mm
+            # So: pixels = points * scale * (25.4/72)
+            font_size_px = int(self.label_strip.settings.default_font_size * scale * 25.4 / 72)
+            font = QFont("Arial")
+            font.setPixelSize(max(1, font_size_px))  # Ensure minimum size of 1px
 
             # Apply text formatting
             if hasattr(segment, "text_format") and segment.text_format:
@@ -234,14 +270,19 @@ class StripRenderer:
 
             painter.setFont(font)
 
-            # Draw text centered horizontally and vertically in the segment
-            text_rect = painter.fontMetrics().boundingRect(segment.text)
-            text_x = x + (width - text_rect.width()) // 2
+            # Get font metrics for accurate text positioning
+            metrics = painter.fontMetrics()
+            text_width = metrics.horizontalAdvance(segment.text)
+            text_height = metrics.height()
 
-            # Center the text vertically in the cell
-            text_y = y + height // 2 + text_rect.height() // 2
+            # Center horizontally
+            text_x = x + (width - text_width) / 2
 
-            painter.drawText(text_x, text_y, segment.text)
+            # Center vertically (baseline-aware)
+            # Position baseline at vertical center, adjusted for ascent
+            text_y = y + (height + text_height) / 2 - metrics.descent()
+
+            painter.drawText(int(text_x), int(text_y), segment.text)
 
     def get_strip_dimensions_px(self) -> tuple[int, int]:
         """

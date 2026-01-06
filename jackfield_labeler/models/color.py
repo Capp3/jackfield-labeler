@@ -42,7 +42,11 @@ class Color:
             A new Color instance
         """
         hex_color = hex_color.lstrip("#")
-        return cls(r=int(hex_color[0:2], 16), g=int(hex_color[2:4], 16), b=int(hex_color[4:6], 16))
+        return cls(
+            r=int(hex_color[0:2], 16),
+            g=int(hex_color[2:4], 16),
+            b=int(hex_color[4:6], 16),
+        )
 
     @classmethod
     def from_standard(cls, standard_color: StandardColor) -> "Color":

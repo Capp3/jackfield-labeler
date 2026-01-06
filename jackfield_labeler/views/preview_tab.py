@@ -31,13 +31,6 @@ class StripPreviewWidget(QGraphicsView):
         self.scene = QGraphicsScene(self)
         self.setScene(self.scene)
         self.setMinimumSize(500, 400)
-        self.setStyleSheet("""
-            QGraphicsView {
-                background-color: #3c3c3c;
-                border: 2px solid #404040;
-                border-radius: 8px;
-            }
-        """)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
@@ -89,14 +82,6 @@ class StripInfoPanel(QFrame):
         super().__init__(parent)
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
         self.setMaximumHeight(140)
-        self.setStyleSheet("""
-            QFrame {
-                background-color: #3c3c3c;
-                border: 1px solid #404040;
-                border-radius: 6px;
-                padding: 8px;
-            }
-        """)
 
         layout = QVBoxLayout(self)
         layout.setSpacing(8)
@@ -104,40 +89,12 @@ class StripInfoPanel(QFrame):
 
         # Title
         title_label = QLabel("📊 Strip Information")
-        title_label.setStyleSheet("""
-            QLabel {
-                font-weight: 600;
-                font-size: 14px;
-                color: #ff6b35;
-                padding: 4px 0;
-            }
-        """)
         layout.addWidget(title_label)
 
-        # Info labels with improved styling
+        # Info labels
         self.dimensions_label = QLabel("Dimensions: -")
-        self.dimensions_label.setStyleSheet("""
-            QLabel {
-                color: #e6e6e6;
-                padding: 2px 0;
-            }
-        """)
-
         self.segments_label = QLabel("Segments: -")
-        self.segments_label.setStyleSheet("""
-            QLabel {
-                color: #e6e6e6;
-                padding: 2px 0;
-            }
-        """)
-
         self.end_text_label = QLabel("End Text: -")
-        self.end_text_label.setStyleSheet("""
-            QLabel {
-                color: #e6e6e6;
-                padding: 2px 0;
-            }
-        """)
 
         layout.addWidget(self.dimensions_label)
         layout.addWidget(self.segments_label)
@@ -198,30 +155,6 @@ class PreviewTab(QWidget):
 
         self.export_png_button = QPushButton("🖼️ Export PNG")
         self.export_png_button.clicked.connect(self.export_png)
-        self.export_png_button.setStyleSheet("""
-            QPushButton {
-                background-color: #ff6b35;
-                color: #ffffff;
-                border: none;
-                border-radius: 6px;
-                padding: 10px 20px;
-                font-weight: 500;
-                min-height: 24px;
-            }
-
-            QPushButton:hover {
-                background-color: #ff8c5a;
-            }
-
-            QPushButton:pressed {
-                background-color: #e55a2b;
-            }
-
-            QPushButton:disabled {
-                background-color: #555555;
-                color: #888888;
-            }
-        """)
         button_layout.addWidget(self.export_png_button)
 
         button_layout.addStretch()

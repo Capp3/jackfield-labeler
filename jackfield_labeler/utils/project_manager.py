@@ -9,6 +9,9 @@ from typing import Any
 from PyQt6.QtCore import QSettings
 
 from jackfield_labeler.models.label_strip import LabelStrip
+from jackfield_labeler.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class ProjectManager:
@@ -51,7 +54,10 @@ class ProjectManager:
                 "version": "1.0",
                 "application": "Jackfield Labeler",
                 "label_strip": label_strip.to_dict(),
-                "metadata": {"created_by": "Jackfield Labeler", "file_format_version": "1.0"},
+                "metadata": {
+                    "created_by": "Jackfield Labeler",
+                    "file_format_version": "1.0",
+                },
             }
 
             # Create directory if it doesn't exist
@@ -65,7 +71,7 @@ class ProjectManager:
             ProjectManager.set_last_directory(file_path)
 
         except Exception as e:
-            print(f"Error saving project: {e}")
+            logger.error(f"Error saving project: {e}", exc_info=True)
             return False
         else:
             return True
@@ -83,7 +89,7 @@ class ProjectManager:
         """
         try:
             if not os.path.exists(file_path):
-                print(f"Project file not found: {file_path}")
+                logger.warning(f"Project file not found: {file_path}")
                 return None
 
             with open(file_path, encoding="utf-8") as f:
@@ -91,7 +97,7 @@ class ProjectManager:
 
             # Validate project file format
             if not ProjectManager._validate_project_data(project_data):
-                print("Invalid project file format")
+                logger.warning("Invalid project file format")
                 return None
 
             # Extract the label strip data
@@ -108,10 +114,10 @@ class ProjectManager:
                 return None
 
         except json.JSONDecodeError as e:
-            print(f"Error parsing project file: {e}")
+            logger.error(f"Error parsing project file: {e}", exc_info=True)
             return None
         except Exception as e:
-            print(f"Error loading project: {e}")
+            logger.error(f"Error loading project: {e}", exc_info=True)
             return None
 
     @staticmethod
@@ -129,18 +135,18 @@ class ProjectManager:
 
         for field in required_fields:
             if field not in data:
-                print(f"Missing required field: {field}")
+                logger.warning(f"Missing required field: {field}")
                 return False
 
         # Check if it's a Jackfield Labeler project
         if data.get("application") != "Jackfield Labeler":
-            print(f"Not a Jackfield Labeler project: {data.get('application')}")
+            logger.warning(f"Not a Jackfield Labeler project: {data.get('application')}")
             return False
 
         # Check version compatibility (for future use)
         version = data.get("version", "")
         if not version.startswith("1."):
-            print(f"Unsupported project version: {version}")
+            logger.warning(f"Unsupported project version: {version}")
             return False
 
         return True
@@ -180,7 +186,7 @@ class ProjectManager:
                     "segment_count": len(label_strip_data.get("segments", [])),
                 })
         except Exception as e:
-            print(f"Error reading project info: {e}")
+            logger.error(f"Error reading project info: {e}", exc_info=True)
             return None
         else:
             return info

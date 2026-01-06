@@ -45,6 +45,7 @@ A professional desktop application for creating custom label strips for 19" equi
 - **Margin Control**: Customizable page margins for optimal printing
 - **Font Settings**: Configurable default font and size settings
 - **Default Colors**: Set default text and background colors for new segments
+- **Logging System**: Configurable logging with multiple levels and optional file output
 
 ## 🚀 Quick Start
 
@@ -237,7 +238,8 @@ jackfield-labeler/
 │   ├── utils/                  # Utility modules
 │   │   ├── pdf_generator.py    # PDF generation engine
 │   │   ├── strip_renderer.py   # PNG rendering engine
-│   │   └── project_manager.py  # Project save/load
+│   │   ├── project_manager.py  # Project save/load
+│   │   └── logger.py           # Logging configuration
 │   └── app.py                  # Application entry point
 ├── docs/                       # Documentation
 ├── examples/                   # Sample projects
@@ -358,6 +360,47 @@ Create a comprehensive patch panel label:
 3. Add end label: "OUTPUT" (15mm width, black background, white text, bold)
 4. Use color coding: Yellow for line inputs, Red for mic inputs
 5. Export as both PDF and PNG for documentation
+
+## ⚙️ Configuration
+
+### Logging System
+
+The application includes a comprehensive logging system to help with troubleshooting and monitoring:
+
+**Configure Logging in Settings Tab:**
+
+1. Open the **Settings** tab
+2. Scroll to the **Logging** section
+3. Choose your log level:
+   - **DEBUG**: Detailed diagnostic information (verbose)
+   - **INFO**: General informational messages (default)
+   - **WARNING**: Warning messages for potential issues
+   - **ERROR**: Error messages for failures
+4. Enable **"Save logs to file"** to persist logs to disk
+5. Click **"Open Log Folder"** to access log files
+
+**Log File Location:**
+
+Logs are stored in your system's application data directory:
+- **macOS**: `~/Library/Application Support/logs/jackfield_labeler.log`
+- **Windows**: `%APPDATA%\logs\jackfield_labeler.log`
+- **Linux**: `~/.local/share/logs/jackfield_labeler.log`
+
+**Log Features:**
+
+- **Rotating Logs**: Log files automatically rotate at 10MB (keeps 3 backups)
+- **Console Output**: Always enabled for immediate feedback
+- **Structured Format**: Timestamp, module name, log level, and message
+- **Cross-Platform**: "Open Log Folder" button works on all platforms
+
+**What Gets Logged:**
+
+- Application startup and shutdown
+- File operations (save/load projects)
+- PDF and PNG generation
+- Error conditions with full context
+- Warning messages for validation issues
+- Debug information for troubleshooting
 
 ## 🤝 Contributing
 

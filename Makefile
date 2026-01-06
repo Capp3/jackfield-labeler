@@ -1,7 +1,7 @@
 # Jackfield Labeler - Lean Makefile
 # Single source of truth for development commands
 
-.PHONY: help install check test run build clean docs release
+.PHONY: help install check test run build clean docs release lint fix
 
 # Default target
 .DEFAULT_GOAL := help
@@ -28,6 +28,16 @@ check: ## Run all quality checks (linting, formatting, type checking)
 	@uv lock --locked
 	@uv run pre-commit run -a
 
+lint: ## Run linting checks (ruff check)
+	@echo "🔍 Running linting checks..."
+	@uv run ruff check
+
+fix: ## Auto-fix linting issues and format code
+	@echo "🔧 Auto-fixing linting issues..."
+	@uv run ruff check --fix
+	@echo "✨ Formatting code..."
+	@uv run ruff format
+
 test: ## Run tests with coverage
 	@echo "🧪 Running tests..."
 	@QT_QPA_PLATFORM=offscreen xvfb-run -a uv run python -m pytest --cov --cov-config=pyproject.toml --cov-report=xml -v
@@ -48,19 +58,15 @@ build-exe: ## Build executable (requires PyInstaller)
 	@echo "🔨 Building executable..."
 	@uv run pyinstaller jackfield_labeler.spec --noconfirm
 
-clean: ## Clean build artifacts
+clean: ## Clean build artifacts and virtual environment
 	@echo "🧹 Cleaning build artifacts..."
-	@rm -rf $(DIST_DIR) build *.egg-info .pytest_cache .coverage
+	@rm -rf $(DIST_DIR) build *.egg-info .pytest_cache .coverage .venv .ruff_cache .mypy_cache
 	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
 
 docs-build: ## Build documentation
 	@echo "📚 Building documentation..."
 	@uv run mkdocs build
-
-docs-serve: ## Serve documentation locally
-	@echo "🌐 Serving documentation at http://127.0.0.1:8000"
-	@uv run mkdocs serve
 
 docs-check: ## Check documentation build
 	@echo "✅ Checking documentation..."

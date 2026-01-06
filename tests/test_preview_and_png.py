@@ -99,7 +99,7 @@ def test_empty_strip(temp_output_dir):
     renderer = StripRenderer(empty_strip)
 
     # Test dimensions
-    width_px, height_px = renderer.get_strip_dimensions_px()
+    _width_px, _height_px = renderer.get_strip_dimensions_px()
     width_mm, height_mm = renderer.get_strip_dimensions_mm()
     assert width_mm >= 0
     assert height_mm > 0

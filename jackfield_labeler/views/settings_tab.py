@@ -2,9 +2,14 @@
 Settings tab for configuring label strip output preferences.
 """
 
-from PyQt6.QtCore import Qt, pyqtSignal
+import subprocess
+import sys
+from pathlib import Path
+
+from PyQt6.QtCore import QSettings, QStandardPaths, Qt, pyqtSignal
 from PyQt6.QtGui import QColor, QFont
 from PyQt6.QtWidgets import (
+    QCheckBox,
     QColorDialog,
     QComboBox,
     QDoubleSpinBox,
@@ -19,11 +24,8 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from jackfield_labeler.models import (
-    Color,
-    PaperSize,
-    StripSettings,
-)
+from jackfield_labeler.models import Color, PaperSize, StripSettings
+from jackfield_labeler.utils.logger import configure_logging, get_logger
 
 
 class ColorButton(QPushButton):
@@ -253,6 +255,80 @@ class RotationGroup(QGroupBox):
         self.rotation_spinbox.setValue(int(angle))
 
 
+class LoggingGroup(QGroupBox):
+    """Group box for configuring application logging."""
+
+    logging_changed = pyqtSignal()
+
+    def __init__(self, parent=None):
+        """Initialize the logging group."""
+        super().__init__("Logging", parent)
+        self.setLayout(QVBoxLayout())
+
+        # Log level selection
+        level_layout = QHBoxLayout()
+        level_layout.addWidget(QLabel("Log Level:"))
+        self.level_combo = QComboBox()
+        self.level_combo.addItems(["DEBUG", "INFO", "WARNING", "ERROR"])
+        self.level_combo.setCurrentText("INFO")
+        self.level_combo.currentTextChanged.connect(self._emit_changed)
+        level_layout.addWidget(self.level_combo)
+        self.layout().addLayout(level_layout)
+
+        # File logging checkbox
+        file_layout = QHBoxLayout()
+        self.file_checkbox = QCheckBox("Save logs to file")
+        self.file_checkbox.setChecked(False)
+        self.file_checkbox.stateChanged.connect(self._emit_changed)
+        file_layout.addWidget(self.file_checkbox)
+        self.layout().addLayout(file_layout)
+
+        # Open log folder button
+        button_layout = QHBoxLayout()
+        self.open_logs_button = QPushButton("Open Log Folder")
+        self.open_logs_button.clicked.connect(self._open_log_folder)
+        button_layout.addWidget(self.open_logs_button)
+        button_layout.addStretch()
+        self.layout().addLayout(button_layout)
+
+    def _emit_changed(self):
+        """Emit the logging_changed signal."""
+        self.logging_changed.emit()
+
+    def _open_log_folder(self):
+        """Open the log folder in the system file manager."""
+        app_data_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)
+        log_dir = Path(app_data_dir) / "logs"
+
+        # Create directory if it doesn't exist
+        log_dir.mkdir(parents=True, exist_ok=True)
+
+        # Open in file manager (cross-platform)
+        if sys.platform == "darwin":  # macOS
+            subprocess.run(["open", str(log_dir)], check=False)  # noqa: S603, S607
+        elif sys.platform == "win32":  # Windows
+            subprocess.run(["explorer", str(log_dir)], check=False)  # noqa: S603, S607
+        else:  # Linux
+            subprocess.run(["xdg-open", str(log_dir)], check=False)  # noqa: S603, S607
+
+    def get_logging_config(self):
+        """Get the logging configuration as a dictionary."""
+        return {
+            "level": self.level_combo.currentText(),
+            "file_enabled": self.file_checkbox.isChecked(),
+        }
+
+    def set_logging_config(self, config):
+        """Set the logging configuration from a dictionary."""
+        # Set log level
+        index = self.level_combo.findText(config.get("level", "INFO"))
+        if index >= 0:
+            self.level_combo.setCurrentIndex(index)
+
+        # Set file logging checkbox
+        self.file_checkbox.setChecked(config.get("file_enabled", False))
+
+
 class SettingsTab(QWidget):
     """Tab for configuring output settings."""
 
@@ -314,6 +390,10 @@ class SettingsTab(QWidget):
         self.rotation_group = RotationGroup()
         scroll_layout.addWidget(self.rotation_group)
 
+        # Logging group
+        self.logging_group = LoggingGroup()
+        scroll_layout.addWidget(self.logging_group)
+
         # Add stretch to push all groups to top
         scroll_layout.addStretch()
 
@@ -328,6 +408,7 @@ class SettingsTab(QWidget):
         self.margins_group.margins_changed.connect(self._on_settings_changed)
         self.formatting_group.formatting_changed.connect(self._on_settings_changed)
         self.rotation_group.rotation_changed.connect(self._on_settings_changed)
+        self.logging_group.logging_changed.connect(self._on_logging_changed)
 
         # Initialize UI
         self.reset_ui()
@@ -365,6 +446,34 @@ class SettingsTab(QWidget):
         """Handle settings changes."""
         # Apply settings automatically
         self._apply_settings()
+
+    def _on_logging_changed(self):
+        """Handle logging settings changes."""
+        logger = get_logger(__name__)
+
+        # Get current logging config
+        config = self.logging_group.get_logging_config()
+
+        # Save to QSettings
+        settings = QSettings()
+        settings.setValue("logging/level", config["level"])
+        settings.setValue("logging/file_enabled", config["file_enabled"])
+
+        # Determine log file path
+        if config["file_enabled"]:
+            app_data_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppDataLocation)
+            log_file_path = str(Path(app_data_dir) / "logs" / "jackfield_labeler.log")
+        else:
+            log_file_path = None
+
+        # Reconfigure logging
+        configure_logging(
+            level=config["level"],
+            log_to_file=config["file_enabled"],
+            log_file_path=log_file_path,
+        )
+
+        logger.info(f"Logging configuration updated: level={config['level']}, file={config['file_enabled']}")
 
     def _apply_settings(self):
         """Apply the current settings to the model."""

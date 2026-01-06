@@ -11,6 +11,9 @@ from reportlab.pdfgen import canvas
 
 from jackfield_labeler.models.label_strip import LabelStrip, Segment
 from jackfield_labeler.models.strip_settings import PaperSize
+from jackfield_labeler.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class PDFGenerator:
@@ -98,10 +101,7 @@ class PDFGenerator:
             # Save the PDF
             c.save()
         except Exception as e:
-            print(f"Error generating PDF: {e}")
-            import traceback
-
-            traceback.print_exc()
+            logger.error(f"Error generating PDF: {e}", exc_info=True)
             return False
         else:
             return True
@@ -153,7 +153,14 @@ class PDFGenerator:
         # Draw start segment if present
         if self.label_strip.start_segment:
             segment_width = self.label_strip.start_segment.width * mm
-            self._draw_segment(canvas_obj, current_x, y, segment_width, height, self.label_strip.start_segment)
+            self._draw_segment(
+                canvas_obj,
+                current_x,
+                y,
+                segment_width,
+                height,
+                self.label_strip.start_segment,
+            )
             current_x += segment_width
 
         # Draw content segments
@@ -165,10 +172,23 @@ class PDFGenerator:
         # Draw end segment if present
         if self.label_strip.end_segment:
             segment_width = self.label_strip.end_segment.width * mm
-            self._draw_segment(canvas_obj, current_x, y, segment_width, height, self.label_strip.end_segment)
+            self._draw_segment(
+                canvas_obj,
+                current_x,
+                y,
+                segment_width,
+                height,
+                self.label_strip.end_segment,
+            )
 
     def _draw_segment(
-        self, canvas_obj: canvas.Canvas, x: float, y: float, width: float, height: float, segment: Segment
+        self,
+        canvas_obj: canvas.Canvas,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
+        segment: Segment,
     ) -> None:
         """
         Draw a single segment.
@@ -189,7 +209,9 @@ class PDFGenerator:
         )
 
         text_color = colors.Color(
-            segment.text_color.r / 255.0, segment.text_color.g / 255.0, segment.text_color.b / 255.0
+            segment.text_color.r / 255.0,
+            segment.text_color.g / 255.0,
+            segment.text_color.b / 255.0,
         )
 
         # Draw background
@@ -218,11 +240,18 @@ class PDFGenerator:
 
             canvas_obj.setFont(font_name, font_size)
 
-            # Calculate text position (centered horizontally and vertically)
+            # Calculate text position - center both horizontally and vertically
             text_width = canvas_obj.stringWidth(segment.text, font_name, font_size)
+
+            # Center horizontally
             text_x = x + (width - text_width) / 2
-            # Center the text vertically in the cell
-            text_y = y + height / 2 - font_size / 2
+
+            # Center vertically (baseline-aware)
+            # In ReportLab, drawString positions by baseline
+            # Font baseline is approximately 30% of font_size from bottom
+            # So to center: position baseline at (height/2 - font_size * 0.2)
+            # This accounts for descenders and centers the visual mass
+            text_y = y + height / 2 - font_size * 0.2
 
             canvas_obj.drawString(text_x, text_y, segment.text)
 
