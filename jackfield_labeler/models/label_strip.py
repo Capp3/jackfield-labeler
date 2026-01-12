@@ -113,7 +113,7 @@ class LabelStrip:
         """Set the strip settings."""
         self._settings = value
 
-    def set_start_segment(self, width: float = 0.0, text: str = "") -> StartSegment:
+    def set_start_segment(self, width: float = 0.0, text: str = "") -> StartSegment | None:
         """
         Configure the start segment of the strip.
 
@@ -147,7 +147,7 @@ class LabelStrip:
 
         return self._start_segment
 
-    def set_end_segment(self, width: float = 0.0, text: str = "") -> EndSegment:
+    def set_end_segment(self, width: float = 0.0, text: str = "") -> EndSegment | None:
         """
         Configure the end segment of the strip.
 
@@ -221,7 +221,7 @@ class LabelStrip:
         Returns:
             List of segments (start, content, end)
         """
-        result = []
+        result: list[Segment] = []
 
         if self._start_segment is not None:
             result.append(self._start_segment)
@@ -363,17 +363,23 @@ class LabelStrip:
 
         # Load segments
         segments_data = data.get("segments", [])
-        content_segments = []
+        content_segments: list[ContentSegment] = []
 
         for segment_data in segments_data:
             segment = create_segment_from_dict(segment_data)
             segment_type = segment_data.get("type", "").lower()
 
             if segment_type == "start":
+                if not isinstance(segment, StartSegment):
+                    raise TypeError(f"Expected StartSegment, got {type(segment).__name__}")
                 strip._start_segment = segment
             elif segment_type == "end":
+                if not isinstance(segment, EndSegment):
+                    raise TypeError(f"Expected EndSegment, got {type(segment).__name__}")
                 strip._end_segment = segment
             elif segment_type == "content":
+                if not isinstance(segment, ContentSegment):
+                    raise TypeError(f"Expected ContentSegment, got {type(segment).__name__}")
                 content_segments.append(segment)
 
         strip._content_segments = content_segments

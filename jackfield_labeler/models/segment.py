@@ -104,7 +104,6 @@ class Segment(ABC):
     @abstractmethod
     def get_type(self) -> str:
         """Return the type of segment as a string."""
-        pass
 
     def to_dict(self) -> dict[str, Any]:
         """

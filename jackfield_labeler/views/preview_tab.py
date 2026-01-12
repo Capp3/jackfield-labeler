@@ -2,15 +2,19 @@
 Preview tab for viewing label strips.
 """
 
+from typing import TYPE_CHECKING
+
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPainter
+from PyQt6.QtGui import QPainter, QResizeEvent
 from PyQt6.QtWidgets import (
+    QFileDialog,
     QFrame,
     QGraphicsPixmapItem,
     QGraphicsScene,
     QGraphicsView,
     QHBoxLayout,
     QLabel,
+    QMessageBox,
     QPushButton,
     QSizePolicy,
     QVBoxLayout,
@@ -21,11 +25,18 @@ from jackfield_labeler.models import LabelStrip
 from jackfield_labeler.utils.pdf_generator import PDFGenerator
 from jackfield_labeler.utils.strip_renderer import StripRenderer
 
+if TYPE_CHECKING:
+    from PyQt6.QtWidgets import QWidget as QWidgetType
+else:
+    QWidgetType = QWidget  # Runtime alias for type annotations
+
 
 class StripPreviewWidget(QGraphicsView):
     """Widget that displays a visual preview of the label strip on a page."""
 
-    def __init__(self, parent=None):
+    scene: QGraphicsScene  # type: ignore[assignment]  # Override method with attribute
+
+    def __init__(self, parent: QWidgetType | None = None) -> None:
         """Initialize the preview widget."""
         super().__init__(parent)
         self.scene = QGraphicsScene(self)
@@ -35,10 +46,10 @@ class StripPreviewWidget(QGraphicsView):
         self.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.FullViewportUpdate)
 
-        self.strip = None
-        self.pixmap_item = None
+        self.strip: LabelStrip | None = None
+        self.pixmap_item: QGraphicsPixmapItem | None = None
 
-    def update_preview(self, strip: LabelStrip):
+    def update_preview(self, strip: LabelStrip) -> None:
         """Update the preview with a new label strip."""
         self.strip = strip
         self.scene.clear()
@@ -49,6 +60,8 @@ class StripPreviewWidget(QGraphicsView):
 
         # Get paper dimensions in points
         paper_size_pts = PDFGenerator.PAPER_SIZES.get(strip.settings.paper_size)
+        if paper_size_pts is None:
+            return
         page_width_pts, page_height_pts = paper_size_pts
 
         # Determine the scale to fit the view
@@ -67,8 +80,9 @@ class StripPreviewWidget(QGraphicsView):
         self.scene.addItem(self.pixmap_item)
         self.fitInView(self.scene.itemsBoundingRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event: QResizeEvent) -> None:  # pylint: disable=invalid-name
         """Handle resize events to update the preview scale."""
+        # Qt override method - must match Qt naming convention
         super().resizeEvent(event)
         if self.strip:
             self.update_preview(self.strip)
@@ -77,7 +91,7 @@ class StripPreviewWidget(QGraphicsView):
 class StripInfoPanel(QFrame):
     """Panel showing information about the strip."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidgetType | None = None) -> None:
         """Initialize the info panel."""
         super().__init__(parent)
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
@@ -102,7 +116,7 @@ class StripInfoPanel(QFrame):
 
         layout.addStretch()
 
-    def update_info(self, strip: LabelStrip):
+    def update_info(self, strip: LabelStrip) -> None:
         """Update the information display."""
         if not strip or strip.get_total_width() == 0:
             self.dimensions_label.setText("Dimensions: -")
@@ -132,7 +146,7 @@ class StripInfoPanel(QFrame):
 class PreviewTab(QWidget):
     """Tab for previewing label strips."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidgetType | None = None) -> None:
         """Initialize the preview tab."""
         super().__init__(parent)
 
@@ -154,7 +168,7 @@ class PreviewTab(QWidget):
         button_layout.setSpacing(8)
 
         self.export_png_button = QPushButton("🖼️ Export PNG")
-        self.export_png_button.clicked.connect(self.export_png)
+        self.export_png_button.clicked.connect(self.export_png)  # type: ignore[attr-defined]
         button_layout.addWidget(self.export_png_button)
 
         button_layout.addStretch()
@@ -162,24 +176,22 @@ class PreviewTab(QWidget):
         main_layout.addLayout(button_layout)
 
         # Initialize state
-        self.current_strip = None
+        self.current_strip: LabelStrip | None = None
 
-    def update_preview(self, strip: LabelStrip):
+    def update_preview(self, strip: LabelStrip) -> None:
         """Update the preview with a new label strip."""
         self.current_strip = strip
         self.preview_widget.update_preview(strip)
         self.info_panel.update_info(strip)
 
         # Enable/disable export button
-        has_content = strip and strip.get_total_width() > 0
+        has_content = strip is not None and strip.get_total_width() > 0
         self.export_png_button.setEnabled(has_content)
 
-    def export_png(self):
+    def export_png(self) -> None:
         """Export the current strip as a PNG file."""
-        if not self.current_strip or self.current_strip.get_total_width() == 0:
+        if self.current_strip is None or self.current_strip.get_total_width() == 0:
             return
-
-        from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
         # Get output file path
         file_path, _ = QFileDialog.getSaveFileName(
@@ -205,5 +217,6 @@ class PreviewTab(QWidget):
                     "An error occurred while exporting the PNG. Please check your label strip configuration.",
                 )
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # GUI error handler - catch all exceptions to show user-friendly error
             QMessageBox.critical(self, "PNG Export Error", f"An unexpected error occurred:\n{e!s}")

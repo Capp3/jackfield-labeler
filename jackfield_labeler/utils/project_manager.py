@@ -24,7 +24,10 @@ class ProjectManager:
     def get_last_directory() -> str:
         """Get the last used directory from settings."""
         settings = QSettings("capp3", "Jackfield Labeler")
-        return settings.value("last_directory", os.path.expanduser("~"), type=str)
+        result = settings.value("last_directory", os.path.expanduser("~"), type=str)
+        if not isinstance(result, str):
+            raise TypeError(f"Expected str from QSettings, got {type(result).__name__}")
+        return result
 
     @staticmethod
     def set_last_directory(path: str) -> None:
@@ -70,11 +73,11 @@ class ProjectManager:
             # Save the directory
             ProjectManager.set_last_directory(file_path)
 
-        except Exception as e:
-            logger.error(f"Error saving project: {e}", exc_info=True)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Catch all exceptions to ensure project save failures are logged
+            logger.error("Error saving project: %s", e, exc_info=True)
             return False
-        else:
-            return True
+        return True
 
     @staticmethod
     def load_project(file_path: str) -> LabelStrip | None:
@@ -89,7 +92,7 @@ class ProjectManager:
         """
         try:
             if not os.path.exists(file_path):
-                logger.warning(f"Project file not found: {file_path}")
+                logger.warning("Project file not found: %s", file_path)
                 return None
 
             with open(file_path, encoding="utf-8") as f:
@@ -114,10 +117,11 @@ class ProjectManager:
                 return None
 
         except json.JSONDecodeError as e:
-            logger.error(f"Error parsing project file: {e}", exc_info=True)
+            logger.error("Error parsing project file: %s", e, exc_info=True)
             return None
-        except Exception as e:
-            logger.error(f"Error loading project: {e}", exc_info=True)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Catch all exceptions to ensure project load failures are logged
+            logger.error("Error loading project: %s", e, exc_info=True)
             return None
 
     @staticmethod
@@ -135,18 +139,18 @@ class ProjectManager:
 
         for field in required_fields:
             if field not in data:
-                logger.warning(f"Missing required field: {field}")
+                logger.warning("Missing required field: %s", field)
                 return False
 
         # Check if it's a Jackfield Labeler project
         if data.get("application") != "Jackfield Labeler":
-            logger.warning(f"Not a Jackfield Labeler project: {data.get('application')}")
+            logger.warning("Not a Jackfield Labeler project: %s", data.get("application"))
             return False
 
         # Check version compatibility (for future use)
         version = data.get("version", "")
         if not version.startswith("1."):
-            logger.warning(f"Unsupported project version: {version}")
+            logger.warning("Unsupported project version: %s", version)
             return False
 
         return True
@@ -185,11 +189,11 @@ class ProjectManager:
                     "content_cell_width": label_strip_data.get("content_cell_width", 0),
                     "segment_count": len(label_strip_data.get("segments", [])),
                 })
-        except Exception as e:
-            logger.error(f"Error reading project info: {e}", exc_info=True)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Catch all exceptions to ensure project info read failures are logged
+            logger.error("Error reading project info: %s", e, exc_info=True)
             return None
-        else:
-            return info
+        return info
 
     @staticmethod
     def is_valid_project_file(file_path: str) -> bool:
@@ -209,5 +213,6 @@ class ProjectManager:
             info = ProjectManager.get_project_info(file_path)
             return info is not None and info.get("application") == "Jackfield Labeler"
 
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
+            # Catch all exceptions during validation to return False safely
             return False

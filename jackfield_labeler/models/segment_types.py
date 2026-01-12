@@ -217,9 +217,8 @@ def create_segment_from_dict(data: dict[str, Any]) -> Segment:
 
     if segment_type == "start":
         return StartSegment.from_dict(data)
-    elif segment_type == "content":
+    if segment_type == "content":
         return ContentSegment.from_dict(data)
-    elif segment_type == "end":
+    if segment_type == "end":
         return EndSegment.from_dict(data)
-    else:
-        raise UnknownSegmentTypeError(segment_type)
+    raise UnknownSegmentTypeError(segment_type)

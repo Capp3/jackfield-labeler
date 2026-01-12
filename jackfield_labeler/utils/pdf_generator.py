@@ -100,11 +100,11 @@ class PDFGenerator:
 
             # Save the PDF
             c.save()
-        except Exception as e:
-            logger.error(f"Error generating PDF: {e}", exc_info=True)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Catch all exceptions to ensure PDF generation failures are logged
+            logger.error("Error generating PDF: %s", e, exc_info=True)
             return False
-        else:
-            return True
+        return True
 
     def _should_rotate(
         self,
@@ -137,7 +137,14 @@ class PDFGenerator:
 
         return not fits_normal and fits_rotated
 
-    def _draw_label_strip(self, canvas_obj: canvas.Canvas, x: float, y: float, width: float, height: float) -> None:
+    def _draw_label_strip(
+        self,
+        canvas_obj: canvas.Canvas,
+        x: float,
+        y: float,
+        _width: float,
+        height: float,
+    ) -> None:
         """
         Draw the label strip on the canvas.
 

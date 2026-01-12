@@ -48,7 +48,7 @@ def main(args: list[str] | None = None) -> int:
     # Get logger for this module
     logger = get_logger(__name__)
     logger.info("Jackfield Labeler application starting")
-    logger.debug(f"Log level: {log_level}, File logging: {log_to_file}")
+    logger.debug("Log level: %s, File logging: %s", log_level, log_to_file)
 
     # Create and show main window
     window = MainWindow()

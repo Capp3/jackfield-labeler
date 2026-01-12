@@ -7,6 +7,7 @@ from PyQt6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 from PyQt6.QtWidgets import QWidget
 
 from jackfield_labeler.models.label_strip import LabelStrip
+from jackfield_labeler.models.segment import Segment
 from jackfield_labeler.models.text_format import TextFormat
 from jackfield_labeler.utils.logger import get_logger
 
@@ -149,8 +150,9 @@ class StripRenderer:
             # Save to PNG
             return pixmap.save(output_path, "PNG")
 
-        except Exception as e:
-            logger.error(f"Error saving PNG: {e}", exc_info=True)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # Catch all exceptions to ensure PNG export failures are logged
+            logger.error("Error saving PNG: %s", e, exc_info=True)
             return False
 
     def _draw_strip(self, painter: QPainter, x: int, y: int, width: int, height: int) -> None:
@@ -166,7 +168,7 @@ class StripRenderer:
         """
         self._draw_strip_scaled(painter, x, y, width, height, self.scale_factor)
 
-    def _draw_strip_scaled(self, painter: QPainter, x: int, y: int, width: int, height: int, scale: float) -> None:
+    def _draw_strip_scaled(self, painter: QPainter, x: int, y: int, _width: int, height: int, scale: float) -> None:
         """
         Draw the strip with a specific scale factor.
 
@@ -220,7 +222,7 @@ class StripRenderer:
         y: int,
         width: int,
         height: int,
-        segment,
+        segment: Segment,
         scale: float,
     ) -> None:
         """

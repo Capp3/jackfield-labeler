@@ -14,9 +14,20 @@ classifiers = [
 ]
 dependencies = [
     "pyqt6==6.2.0",
-    "pyqt6-qt6<6.10.0",  # Constrain to macOS 12-compatible Qt version
+    "pyqt6-qt6<6.10.0", # Constrain to macOS 12-compatible Qt version
     "reportlab>=4.4.1",
     "markdown>=3.5.2",
+    "flake8>=7.3.0",
+    "black>=25.12.0",
+    "isort>=7.0.0",
+    "pylint>=4.0.4",
+    "pyright>=1.1.407",
+    "mypy>=1.19.1",
+    "pytest>=9.0.2",
+    "coverage>=7.10.6",
+    "radon>=6.0.1",
+    "snakeviz>=2.2.2",
+    "bandit>=1.9.2",
 ]
 
 [project.urls]
@@ -36,6 +47,9 @@ dev = [
     "mkdocs-material>=9.6.14",
     "mkdocstrings[python]>=0.29.1",
     "pyinstaller>=6.13.0",
+    "types-reportlab>=0.1.0",
+    "types-Markdown>=0.1.0",
+    "PyQt6-stubs>=6.2.0",
 ]
 
 [build-system]
@@ -101,6 +115,10 @@ ignore = [
     "E501",
     # DoNotAssignLambda
     "E731",
+    # Long exception messages (informative type errors are helpful)
+    "TRY003",
+    # Complexity (pre-existing, would require refactoring)
+    "C901",
 ]
 
 [tool.ruff.lint.per-file-ignores]

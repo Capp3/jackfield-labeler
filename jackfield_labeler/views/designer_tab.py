@@ -3,16 +3,19 @@ Designer tab for creating and editing label strips.
 """
 
 import os
+from typing import TYPE_CHECKING
 
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QComboBox,
     QDoubleSpinBox,
+    QFileDialog,
     QGroupBox,
     QHBoxLayout,
     QHeaderView,
     QLabel,
     QLineEdit,
+    QMessageBox,
     QPushButton,
     QSpinBox,
     QTableWidget,
@@ -21,7 +24,13 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
+if TYPE_CHECKING:
+    from PyQt6.QtWidgets import QWidget as QWidgetType
+else:
+    QWidgetType = QWidget  # Runtime alias for type annotations
+
 from jackfield_labeler.models import Color, LabelStrip, StandardColor, TextFormat
+from jackfield_labeler.utils import PDFGenerator, ProjectManager, StripRenderer
 
 
 class StripControlPanel(QGroupBox):
@@ -29,7 +38,7 @@ class StripControlPanel(QGroupBox):
 
     strip_changed = pyqtSignal()
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidgetType | None = None) -> None:
         """Initialize the strip control panel."""
         super().__init__("🎛️ Strip Controls", parent)
         self.setLayout(QVBoxLayout())
@@ -46,7 +55,7 @@ class StripControlPanel(QGroupBox):
         self.content_cells_spinbox.setRange(0, 100)
         self.content_cells_spinbox.setValue(0)
         self.content_cells_spinbox.setMinimumWidth(100)
-        self.content_cells_spinbox.valueChanged.connect(self._emit_changed)
+        self.content_cells_spinbox.valueChanged.connect(self._emit_changed)  # type: ignore[attr-defined]
         cells_layout.addWidget(self.content_cells_spinbox)
         cells_layout.addStretch()
         self.layout().addLayout(cells_layout)
@@ -62,7 +71,7 @@ class StripControlPanel(QGroupBox):
         self.cell_width_spinbox.setDecimals(3)
         self.cell_width_spinbox.setValue(10.0)
         self.cell_width_spinbox.setMinimumWidth(100)
-        self.cell_width_spinbox.valueChanged.connect(self._emit_changed)
+        self.cell_width_spinbox.valueChanged.connect(self._emit_changed)  # type: ignore[attr-defined]
         cell_width_layout.addWidget(self.cell_width_spinbox)
         cell_width_layout.addStretch()
         self.layout().addLayout(cell_width_layout)
@@ -78,7 +87,7 @@ class StripControlPanel(QGroupBox):
         self.end_width_spinbox.setDecimals(3)
         self.end_width_spinbox.setValue(0.0)
         self.end_width_spinbox.setMinimumWidth(100)
-        self.end_width_spinbox.valueChanged.connect(self._emit_changed)
+        self.end_width_spinbox.valueChanged.connect(self._emit_changed)  # type: ignore[attr-defined]
         end_width_layout.addWidget(self.end_width_spinbox)
         end_width_layout.addStretch()
         self.layout().addLayout(end_width_layout)
@@ -91,7 +100,7 @@ class StripControlPanel(QGroupBox):
         end_text_layout.addWidget(end_text_label)
         self.end_text_input = QLineEdit()
         self.end_text_input.setPlaceholderText("Enter text for both end labels")
-        self.end_text_input.textChanged.connect(self._emit_changed)
+        self.end_text_input.textChanged.connect(self._emit_changed)  # type: ignore[attr-defined]
         end_text_layout.addWidget(self.end_text_input)
         self.layout().addLayout(end_text_layout)
 
@@ -106,7 +115,7 @@ class StripControlPanel(QGroupBox):
         self.height_spinbox.setDecimals(1)
         self.height_spinbox.setValue(5.0)
         self.height_spinbox.setMinimumWidth(100)
-        self.height_spinbox.valueChanged.connect(self._emit_changed)
+        self.height_spinbox.valueChanged.connect(self._emit_changed)  # type: ignore[attr-defined]
         height_layout.addWidget(self.height_spinbox)
         height_layout.addStretch()
         self.layout().addLayout(height_layout)
@@ -122,11 +131,11 @@ class StripControlPanel(QGroupBox):
         total_width_layout.addStretch()
         self.layout().addLayout(total_width_layout)
 
-    def _emit_changed(self):
+    def _emit_changed(self) -> None:
         """Emit the strip_changed signal."""
         self.strip_changed.emit()
 
-    def get_values(self):
+    def get_values(self) -> dict[str, int | float | str]:
         """Get the control values as a dictionary."""
         return {
             "content_cells": self.content_cells_spinbox.value(),
@@ -136,15 +145,30 @@ class StripControlPanel(QGroupBox):
             "height": self.height_spinbox.value(),
         }
 
-    def set_values(self, values):
+    def set_values(self, values: dict[str, int | float | str]) -> None:
         """Set the control values from a dictionary."""
-        self.content_cells_spinbox.setValue(values.get("content_cells", 0))
-        self.cell_width_spinbox.setValue(values.get("cell_width", 10.0))
-        self.end_width_spinbox.setValue(values.get("end_width", 0.0))
-        self.end_text_input.setText(values.get("end_text", ""))
-        self.height_spinbox.setValue(values.get("height", 5.0))
+        content_cells = values.get("content_cells", 0)
+        if not isinstance(content_cells, int):
+            raise TypeError(f"Expected int for content_cells, got {type(content_cells).__name__}")
+        self.content_cells_spinbox.setValue(content_cells)
+        cell_width = values.get("cell_width", 10.0)
+        if not isinstance(cell_width, int | float):
+            raise TypeError(f"Expected int or float for cell_width, got {type(cell_width).__name__}")
+        self.cell_width_spinbox.setValue(float(cell_width))
+        end_width = values.get("end_width", 0.0)
+        if not isinstance(end_width, int | float):
+            raise TypeError(f"Expected int or float for end_width, got {type(end_width).__name__}")
+        self.end_width_spinbox.setValue(float(end_width))
+        end_text = values.get("end_text", "")
+        if not isinstance(end_text, str):
+            raise TypeError(f"Expected str for end_text, got {type(end_text).__name__}")
+        self.end_text_input.setText(end_text)
+        height = values.get("height", 5.0)
+        if not isinstance(height, int | float):
+            raise TypeError(f"Expected int or float for height, got {type(height).__name__}")
+        self.height_spinbox.setValue(float(height))
 
-    def update_total_width(self, width):
+    def update_total_width(self, width: float) -> None:
         """Update the total width display."""
         self.total_width_label.setText(f"{width:.1f}")
 
@@ -162,7 +186,7 @@ class SegmentTable(QTableWidget):
     BG_COLOR_COL = 4
     WIDTH_COL = 5
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidgetType | None = None) -> None:
         """Initialize the segment table."""
         super().__init__(parent)
 
@@ -193,21 +217,21 @@ class SegmentTable(QTableWidget):
         self.setColumnWidth(self.WIDTH_COL, 100)
 
         # Connect signals
-        self.itemChanged.connect(self._on_cell_changed)
+        self.itemChanged.connect(self._on_cell_changed)  # type: ignore[attr-defined]
 
         # Set row height
         self.verticalHeader().setDefaultSectionSize(40)
 
-    def _on_cell_changed(self, item):
+    def _on_cell_changed(self, item: QTableWidgetItem) -> None:
         """Handle cell content changes."""
         if item.column() == self.TEXT_COL:
             self.segment_changed.emit()
 
-    def clear_segments(self):
+    def clear_segments(self) -> None:
         """Clear all segments from the table."""
         self.setRowCount(0)
 
-    def add_segment(self, segment_id, text=""):
+    def add_segment(self, segment_id: str, text: str = "") -> None:
         """Add a new segment to the table."""
         row = self.rowCount()
         self.insertRow(row)
@@ -225,21 +249,23 @@ class SegmentTable(QTableWidget):
         format_combo = QComboBox()
         for fmt in TextFormat:
             format_combo.addItem(str(fmt), fmt)
-        format_combo.currentIndexChanged.connect(lambda: self.segment_changed.emit())
+        format_combo.currentIndexChanged.connect(lambda: self.segment_changed.emit())  # type: ignore[attr-defined]
         self.setCellWidget(row, self.FORMAT_COL, format_combo)
 
         # Create text color combobox
         text_color_combo = QComboBox()
         for color in StandardColor:
             text_color_combo.addItem(color.name.title(), color)
-        text_color_combo.currentIndexChanged.connect(lambda: self.segment_changed.emit())
+        text_color_combo.currentIndexChanged.connect(  # type: ignore[attr-defined]
+            lambda: self.segment_changed.emit()
+        )
         self.setCellWidget(row, self.TEXT_COLOR_COL, text_color_combo)
 
         # Create background color combobox
         bg_color_combo = QComboBox()
         for color in StandardColor:
             bg_color_combo.addItem(color.name.title(), color)
-        bg_color_combo.currentIndexChanged.connect(lambda: self.segment_changed.emit())
+        bg_color_combo.currentIndexChanged.connect(lambda: self.segment_changed.emit())  # type: ignore[attr-defined]
         self.setCellWidget(row, self.BG_COLOR_COL, bg_color_combo)
 
         # Create width spinbox
@@ -247,7 +273,7 @@ class SegmentTable(QTableWidget):
         width_spinbox.setRange(0.001, 100.0)
         width_spinbox.setDecimals(3)
         width_spinbox.setValue(10.0)
-        width_spinbox.valueChanged.connect(lambda: self.segment_changed.emit())
+        width_spinbox.valueChanged.connect(lambda: self.segment_changed.emit())  # type: ignore[attr-defined]
         self.setCellWidget(row, self.WIDTH_COL, width_spinbox)
 
         # Set default colors based on settings
@@ -256,32 +282,28 @@ class SegmentTable(QTableWidget):
         # Set default background color to white
         bg_color_combo.setCurrentText("White")
 
-    def get_segment_data(self, row):
+    def get_segment_data(self, row: int) -> dict[str, str | TextFormat | StandardColor | float] | None:
         """Get the data for a segment row."""
         # Get widgets and values
         text_item = self.item(row, self.TEXT_COL)
-        if text_item is None:
-            return None
-        text = text_item.text()
-
         format_combo = self.cellWidget(row, self.FORMAT_COL)
-        if format_combo is None:
-            return None
-        text_format = format_combo.currentData()
-
         text_color_combo = self.cellWidget(row, self.TEXT_COLOR_COL)
-        if text_color_combo is None:
-            return None
-        text_color = text_color_combo.currentData()
-
         bg_color_combo = self.cellWidget(row, self.BG_COLOR_COL)
-        if bg_color_combo is None:
-            return None
-        bg_color = bg_color_combo.currentData()
-
         width_spinbox = self.cellWidget(row, self.WIDTH_COL)
-        if width_spinbox is None:
+
+        if (
+            text_item is None
+            or format_combo is None
+            or text_color_combo is None
+            or bg_color_combo is None
+            or width_spinbox is None
+        ):
             return None
+
+        text = text_item.text()
+        text_format = format_combo.currentData()
+        text_color = text_color_combo.currentData()
+        bg_color = bg_color_combo.currentData()
         width = width_spinbox.value()
 
         return {
@@ -292,10 +314,13 @@ class SegmentTable(QTableWidget):
             "width": width,
         }
 
-    def set_segment_data(self, row, data):
+    def set_segment_data(self, row: int, data: dict[str, str | TextFormat | StandardColor | float]) -> None:
         """Set the data for a segment row."""
         # Set text
-        text_item = QTableWidgetItem(data.get("text", ""))
+        text = data.get("text", "")
+        if not isinstance(text, str):
+            raise TypeError(f"Expected str for text, got {type(text).__name__}")
+        text_item = QTableWidgetItem(text)
         self.setItem(row, self.TEXT_COL, text_item)
 
         # Set format
@@ -331,12 +356,12 @@ class SegmentTable(QTableWidget):
 class DesignerTab(QWidget):
     """Tab for designing label strips."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QWidgetType | None = None) -> None:
         """Initialize the designer tab."""
         super().__init__(parent)
 
         # Track current project path for export filenames
-        self._current_project_path = None
+        self._current_project_path: str | None = None
 
         # Create main layout with improved spacing
         main_layout = QVBoxLayout(self)
@@ -366,11 +391,11 @@ class DesignerTab(QWidget):
         button_layout.setSpacing(8)
 
         self.add_row_button = QPushButton("+ Add Row")
-        self.add_row_button.clicked.connect(self._add_row)
+        self.add_row_button.clicked.connect(self._add_row)  # type: ignore[attr-defined]
         button_layout.addWidget(self.add_row_button)
 
         self.remove_row_button = QPushButton("- Remove Row")
-        self.remove_row_button.clicked.connect(self._remove_row)
+        self.remove_row_button.clicked.connect(self._remove_row)  # type: ignore[attr-defined]
         button_layout.addWidget(self.remove_row_button)
 
         action_group.layout().addLayout(button_layout)
@@ -380,11 +405,11 @@ class DesignerTab(QWidget):
         export_layout.setSpacing(8)
 
         self.generate_pdf_button = QPushButton("📄 Generate PDF")
-        self.generate_pdf_button.clicked.connect(self.generate_pdf)
+        self.generate_pdf_button.clicked.connect(self.generate_pdf)  # type: ignore[attr-defined]
         export_layout.addWidget(self.generate_pdf_button)
 
         self.export_png_button = QPushButton("🖼️ Export PNG")
-        self.export_png_button.clicked.connect(self.export_png)
+        self.export_png_button.clicked.connect(self.export_png)  # type: ignore[attr-defined]
         export_layout.addWidget(self.export_png_button)
 
         action_group.layout().addLayout(export_layout)
@@ -422,7 +447,7 @@ class DesignerTab(QWidget):
         # Initialize UI
         self.reset_ui()
 
-    def reset_ui(self):
+    def reset_ui(self) -> None:
         """Reset the UI to match the current strip model."""
         # Create a new empty strip
         self.strip = LabelStrip()
@@ -442,7 +467,7 @@ class DesignerTab(QWidget):
         # Update total width display
         self.control_panel.update_total_width(self.strip.get_total_width())
 
-    def set_project_path(self, project_path: str | None):
+    def set_project_path(self, project_path: str | None) -> None:
         """Set the current project path for export filename generation."""
         self._current_project_path = project_path
 
@@ -452,11 +477,10 @@ class DesignerTab(QWidget):
             # Extract project name without extension
             project_name = os.path.splitext(os.path.basename(self._current_project_path))[0]
             return f"{project_name}.{extension}"
-        else:
-            # Fallback for unsaved projects
-            return f"label_strip.{extension}"
+        # Fallback for unsaved projects
+        return f"label_strip.{extension}"
 
-    def load_label_strip(self, label_strip: LabelStrip):
+    def load_label_strip(self, label_strip: LabelStrip) -> None:
         """Load a label strip into the UI."""
         self.strip = label_strip
 
@@ -480,51 +504,84 @@ class DesignerTab(QWidget):
         # Update total width display
         self.control_panel.update_total_width(self.strip.get_total_width())
 
-    def update_strip_from_controls(self):
+    def update_strip_from_controls(self) -> None:
         """Update the strip model from control panel values."""
         values = self.control_panel.get_values()
 
         # Update strip properties
-        self.strip.height = values["height"]
-        self.strip.content_cell_width = values["cell_width"]
+        height = values["height"]
+        if not isinstance(height, int | float):
+            raise TypeError(f"Expected int or float for height, got {type(height).__name__}")
+        self.strip.height = float(height)
+        cell_width = values["cell_width"]
+        if not isinstance(cell_width, int | float):
+            raise TypeError(f"Expected int or float for cell_width, got {type(cell_width).__name__}")
+        self.strip.content_cell_width = float(cell_width)
 
         # Update end segment
-        if values["end_width"] > 0:
+        end_width = values["end_width"]
+        if not isinstance(end_width, int | float):
+            raise TypeError(f"Expected int or float for end_width, got {type(end_width).__name__}")
+        if float(end_width) > 0:
             # Set both end and start segments with the same properties
-            self.strip.set_end_segment(width=values["end_width"])
-            self.strip.set_start_segment(width=values["end_width"])
+            self.strip.set_end_segment(width=float(end_width))
+            self.strip.set_start_segment(width=float(end_width))
 
             # Set the end segment text from the control panel
             if self.strip.end_segment:
-                self.strip.end_segment.text = values["end_text"]
+                end_text = values["end_text"]
+                if not isinstance(end_text, str):
+                    raise TypeError(f"Expected str for end_text, got {type(end_text).__name__}")
+                self.strip.end_segment.text = end_text
 
             # Set the start segment text to be the same as the end segment
             if self.strip.start_segment:
-                self.strip.start_segment.text = values["end_text"]
+                end_text = values["end_text"]
+                if not isinstance(end_text, str):
+                    raise TypeError(f"Expected str for end_text, got {type(end_text).__name__}")
+                self.strip.start_segment.text = end_text
         else:
             # If no end segment, remove both start and end segments
             self.strip.set_end_segment(width=0)
             self.strip.set_start_segment(width=0)
 
         # Update content segments
-        self.strip.set_content_segment_count(values["content_cells"])
+        content_cells = values["content_cells"]
+        if not isinstance(content_cells, int):
+            raise TypeError(f"Expected int for content_cells, got {type(content_cells).__name__}")
+        self.strip.set_content_segment_count(content_cells)
 
         # Update UI
         self.update_table_from_strip()
         self.control_panel.update_total_width(self.strip.get_total_width())
 
-    def update_strip_from_table(self):
+    def update_strip_from_table(self) -> None:
         """Update the strip model from segment table values."""
         # Start segment
         if self.strip.start_segment is not None:
             row = 0
             data = self.segment_table.get_segment_data(row)
             if data is not None:
-                self.strip.start_segment.text = data["text"]
-                self.strip.start_segment.text_format = data["text_format"]
-                self.strip.start_segment.text_color = Color.from_standard(data["text_color"])
-                self.strip.start_segment.background_color = Color.from_standard(data["bg_color"])
-                self.strip.start_segment.width = data["width"]
+                text = data["text"]
+                if not isinstance(text, str):
+                    raise TypeError(f"Expected str for text, got {type(text).__name__}")
+                self.strip.start_segment.text = text
+                text_format = data["text_format"]
+                if not isinstance(text_format, TextFormat):
+                    raise TypeError(f"Expected TextFormat for text_format, got {type(text_format).__name__}")
+                self.strip.start_segment.text_format = text_format
+                text_color = data["text_color"]
+                if not isinstance(text_color, StandardColor):
+                    raise TypeError(f"Expected StandardColor for text_color, got {type(text_color).__name__}")
+                self.strip.start_segment.text_color = Color.from_standard(text_color)
+                bg_color = data["bg_color"]
+                if not isinstance(bg_color, StandardColor):
+                    raise TypeError(f"Expected StandardColor for bg_color, got {type(bg_color).__name__}")
+                self.strip.start_segment.background_color = Color.from_standard(bg_color)
+                width = data["width"]
+                if not isinstance(width, int | float):
+                    raise TypeError(f"Expected int or float for width, got {type(width).__name__}")
+                self.strip.start_segment.width = float(width)
 
             start_row_offset = 1
         else:
@@ -535,22 +592,52 @@ class DesignerTab(QWidget):
             row = start_row_offset + i
             data = self.segment_table.get_segment_data(row)
             if data is not None:
-                segment.text = data["text"]
-                segment.text_format = data["text_format"]
-                segment.text_color = Color.from_standard(data["text_color"])
-                segment.background_color = Color.from_standard(data["bg_color"])
-                segment.width = data["width"]
+                text = data["text"]
+                if not isinstance(text, str):
+                    raise TypeError(f"Expected str for text, got {type(text).__name__}")
+                segment.text = text
+                text_format = data["text_format"]
+                if not isinstance(text_format, TextFormat):
+                    raise TypeError(f"Expected TextFormat for text_format, got {type(text_format).__name__}")
+                segment.text_format = text_format
+                text_color = data["text_color"]
+                if not isinstance(text_color, StandardColor):
+                    raise TypeError(f"Expected StandardColor for text_color, got {type(text_color).__name__}")
+                segment.text_color = Color.from_standard(text_color)
+                bg_color = data["bg_color"]
+                if not isinstance(bg_color, StandardColor):
+                    raise TypeError(f"Expected StandardColor for bg_color, got {type(bg_color).__name__}")
+                segment.background_color = Color.from_standard(bg_color)
+                width = data["width"]
+                if not isinstance(width, int | float):
+                    raise TypeError(f"Expected int or float for width, got {type(width).__name__}")
+                segment.width = float(width)
 
         # End segment
         if self.strip.end_segment is not None:
             row = start_row_offset + len(self.strip.content_segments)
             data = self.segment_table.get_segment_data(row)
             if data is not None:
-                self.strip.end_segment.text = data["text"]
-                self.strip.end_segment.text_format = data["text_format"]
-                self.strip.end_segment.text_color = Color.from_standard(data["text_color"])
-                self.strip.end_segment.background_color = Color.from_standard(data["bg_color"])
-                self.strip.end_segment.width = data["width"]
+                text = data["text"]
+                if not isinstance(text, str):
+                    raise TypeError(f"Expected str for text, got {type(text).__name__}")
+                self.strip.end_segment.text = text
+                text_format = data["text_format"]
+                if not isinstance(text_format, TextFormat):
+                    raise TypeError(f"Expected TextFormat for text_format, got {type(text_format).__name__}")
+                self.strip.end_segment.text_format = text_format
+                text_color = data["text_color"]
+                if not isinstance(text_color, StandardColor):
+                    raise TypeError(f"Expected StandardColor for text_color, got {type(text_color).__name__}")
+                self.strip.end_segment.text_color = Color.from_standard(text_color)
+                bg_color = data["bg_color"]
+                if not isinstance(bg_color, StandardColor):
+                    raise TypeError(f"Expected StandardColor for bg_color, got {type(bg_color).__name__}")
+                self.strip.end_segment.background_color = Color.from_standard(bg_color)
+                width = data["width"]
+                if not isinstance(width, int | float):
+                    raise TypeError(f"Expected int or float for width, got {type(width).__name__}")
+                self.strip.end_segment.width = float(width)
 
                 # Synchronize start segment with end segment if both exist
                 if self.strip.start_segment is not None:
@@ -559,7 +646,7 @@ class DesignerTab(QWidget):
                     self.strip.start_segment.text_color = self.strip.end_segment.text_color
                     self.strip.start_segment.background_color = self.strip.end_segment.background_color
 
-    def update_table_from_strip(self):
+    def update_table_from_strip(self) -> None:
         """Update the segment table to match the strip model."""
         # Temporarily disconnect the signal to prevent premature updates
         self.segment_table.segment_changed.disconnect(self.update_strip_from_table)
@@ -581,7 +668,7 @@ class DesignerTab(QWidget):
             # Reconnect the signal
             self.segment_table.segment_changed.connect(self.update_strip_from_table)
 
-    def _add_row(self):
+    def _add_row(self) -> None:
         """Add a new content segment to the strip."""
         # Get current content cell count
         current_count = len(self.strip.content_segments)
@@ -600,7 +687,7 @@ class DesignerTab(QWidget):
         # Update total width display
         self.control_panel.update_total_width(self.strip.get_total_width())
 
-    def _remove_row(self):
+    def _remove_row(self) -> None:
         """Remove the last content segment from the strip."""
         # Get current content cell count
         current_count = len(self.strip.content_segments)
@@ -623,12 +710,8 @@ class DesignerTab(QWidget):
         # Update total width display
         self.control_panel.update_total_width(self.strip.get_total_width())
 
-    def save_project(self):
+    def save_project(self) -> None:
         """Save the current project."""
-        from PyQt6.QtWidgets import QFileDialog, QMessageBox
-
-        from jackfield_labeler.utils import ProjectManager
-
         # Get file path to save to
         file_path, _ = QFileDialog.getSaveFileName(self, "Save Project", "untitled.jlp", ProjectManager.PROJECT_FILTER)
 
@@ -644,19 +727,16 @@ class DesignerTab(QWidget):
             else:
                 QMessageBox.critical(self, "Save Error", f"Failed to save project to:\n{file_path}")
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # GUI error handler - catch all exceptions to show user-friendly error
             QMessageBox.critical(
                 self,
                 "Save Error",
                 f"An unexpected error occurred while saving the project:\n{e!s}",
             )
 
-    def load_project(self):
+    def load_project(self) -> None:
         """Load a project from file."""
-        from PyQt6.QtWidgets import QFileDialog, QMessageBox
-
-        from jackfield_labeler.utils import ProjectManager
-
         # Get file path to load from
         file_path, _ = QFileDialog.getOpenFileName(self, "Load Project", "", ProjectManager.PROJECT_FILTER)
 
@@ -670,7 +750,8 @@ class DesignerTab(QWidget):
                 QMessageBox.critical(
                     self,
                     "Load Error",
-                    f"Failed to load project from:\n{file_path}\n\nThe file may be corrupted or in an unsupported format.",
+                    f"Failed to load project from:\n{file_path}\n\n"
+                    "The file may be corrupted or in an unsupported format.",
                 )
                 return
 
@@ -679,19 +760,16 @@ class DesignerTab(QWidget):
 
             QMessageBox.information(self, "Project Loaded", f"Project has been loaded from:\n{file_path}")
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # GUI error handler - catch all exceptions to show user-friendly error
             QMessageBox.critical(
                 self,
                 "Load Error",
                 f"An unexpected error occurred while loading the project:\n{e!s}",
             )
 
-    def generate_pdf(self):
+    def generate_pdf(self) -> None:
         """Generate a PDF of the current label strip."""
-        from PyQt6.QtWidgets import QFileDialog, QMessageBox
-
-        from jackfield_labeler.utils import PDFGenerator
-
         # Check if there are any segments to generate
         if self.strip.get_total_width() == 0:
             QMessageBox.warning(
@@ -726,15 +804,12 @@ class DesignerTab(QWidget):
                     "An error occurred while generating the PDF. Please check your label strip configuration.",
                 )
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # GUI error handler - catch all exceptions to show user-friendly error
             QMessageBox.critical(self, "PDF Generation Error", f"An unexpected error occurred:\n{e!s}")
 
-    def export_png(self):
+    def export_png(self) -> None:
         """Export the current strip as a PNG file."""
-        from PyQt6.QtWidgets import QFileDialog, QMessageBox
-
-        from jackfield_labeler.utils import StripRenderer
-
         # Check if there are any segments to generate
         if self.strip.get_total_width() == 0:
             QMessageBox.warning(
@@ -769,5 +844,6 @@ class DesignerTab(QWidget):
                     "An error occurred while exporting the PNG. Please check your label strip configuration.",
                 )
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # GUI error handler - catch all exceptions to show user-friendly error
             QMessageBox.critical(self, "PNG Export Error", f"An unexpected error occurred:\n{e!s}")

@@ -66,9 +66,10 @@ def configure_logging(level: str = "INFO", log_to_file: bool = False, log_file_p
             file_handler.setFormatter(formatter)
             logger.addHandler(file_handler)
 
-            logger.info(f"File logging enabled: {log_file_path}")
+            logger.info("File logging enabled: %s", log_file_path)
 
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
+            # Catch all exceptions during logging setup to prevent startup failure
             logger.exception("Failed to set up file logging")
 
-    logger.info(f"Logging configured: level={level}, file={log_to_file}")
+    logger.info("Logging configured: level=%s, file=%s", level, log_to_file)

@@ -42,5 +42,11 @@
     "default": true,
     "MD013": false,
     "MD033": false
+  },
+  "files.associations": {
+    "Dockerfile*": "dockerfile",
+    "docker-compose*.yml": "dockercompose",
+    "docker-compose*.yaml": "dockercompose",
+    "*.dockerfile": "dockerfile"
   }
 }
