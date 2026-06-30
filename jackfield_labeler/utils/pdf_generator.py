@@ -7,10 +7,13 @@ from typing import ClassVar
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A0, A1, A2, A3, A4, LEGAL, LETTER, TABLOID
 from reportlab.lib.units import mm
+from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfgen import canvas
 
-from jackfield_labeler.models.label_strip import LabelStrip, Segment
+from jackfield_labeler.models.label_strip import LabelStrip
+from jackfield_labeler.models.segment import Segment
 from jackfield_labeler.models.strip_settings import PaperSize
+from jackfield_labeler.models.text_format import TextFormat
 from jackfield_labeler.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -19,7 +22,7 @@ logger = get_logger(__name__)
 class PDFGenerator:
     """Generates PDF documents from label strips."""
 
-    # Paper size mapping
+    # Paper size mapping (ReportLab page sizes are in points)
     PAPER_SIZES: ClassVar[dict] = {
         PaperSize.A4: A4,
         PaperSize.A3: A3,
@@ -31,6 +34,23 @@ class PDFGenerator:
         PaperSize.TABLOID: TABLOID,
     }
 
+    # Map common system font names to built-in ReportLab/PDF Type1 font families.
+    # Each entry maps a font family name to (normal, bold, italic, bold-italic).
+    _FONT_FAMILY_MAP: ClassVar[dict[str, tuple[str, str, str, str]]] = {
+        "Arial": ("Helvetica", "Helvetica-Bold", "Helvetica-Oblique", "Helvetica-BoldOblique"),
+        "Helvetica": ("Helvetica", "Helvetica-Bold", "Helvetica-Oblique", "Helvetica-BoldOblique"),
+        "Times New Roman": ("Times-Roman", "Times-Bold", "Times-Italic", "Times-BoldItalic"),
+        "Times": ("Times-Roman", "Times-Bold", "Times-Italic", "Times-BoldItalic"),
+        "Courier New": ("Courier", "Courier-Bold", "Courier-Oblique", "Courier-BoldOblique"),
+        "Courier": ("Courier", "Courier-Bold", "Courier-Oblique", "Courier-BoldOblique"),
+    }
+    _DEFAULT_FAMILY: ClassVar[tuple[str, str, str, str]] = (
+        "Helvetica",
+        "Helvetica-Bold",
+        "Helvetica-Oblique",
+        "Helvetica-BoldOblique",
+    )
+
     def __init__(self, label_strip: LabelStrip):
         """
         Initialize the PDF generator.
@@ -40,6 +60,10 @@ class PDFGenerator:
         """
         self.label_strip = label_strip
         self.settings = label_strip.settings
+
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
 
     def generate_pdf(self, output_path: str, rotation_angle: float | None = None) -> bool:
         """
@@ -53,89 +77,62 @@ class PDFGenerator:
             True if PDF was generated successfully, False otherwise
         """
         try:
-            # Use rotation from settings if not specified
             if rotation_angle is None:
                 rotation_angle = self.settings.rotation_angle
 
-            # Get paper size
             paper_size = self.PAPER_SIZES.get(self.settings.paper_size, A4)
             page_width, page_height = paper_size
 
-            # Create the PDF canvas
             c = canvas.Canvas(output_path, pagesize=paper_size)
 
-            # Calculate strip dimensions in points
-            strip_width_mm = self.label_strip.get_total_width()
-            strip_height_mm = self.label_strip.height
-            strip_width_pts = strip_width_mm * mm
-            strip_height_pts = strip_height_mm * mm
+            # Strip dimensions in ReportLab points
+            strip_width_pts = self.label_strip.get_total_width() * mm
+            strip_height_pts = self.label_strip.height * mm
 
-            # Calculate page center
-            page_center_x = page_width / 2
-            page_center_y = page_height / 2
+            # Centre within the printable area (margins applied)
+            margin_left = self.settings.page_margins.left * mm
+            margin_right = self.settings.page_margins.right * mm
+            margin_bottom = self.settings.page_margins.bottom * mm
+            margin_top = self.settings.page_margins.top * mm
 
-            # Calculate strip center (relative to strip's origin)
-            strip_center_x = strip_width_pts / 2
-            strip_center_y = strip_height_pts / 2
+            available_width = page_width - margin_left - margin_right
+            available_height = page_height - margin_bottom - margin_top
 
-            # Save the graphics state
+            # Centre of the printable area (ReportLab origin is bottom-left)
+            center_x = margin_left + available_width / 2
+            center_y = margin_bottom + available_height / 2
+
             c.saveState()
-
-            # Move to page center
-            c.translate(page_center_x, page_center_y)
-
-            # Apply rotation around the center
+            c.translate(center_x, center_y)
             c.rotate(rotation_angle)
 
-            # Draw the strip centered at origin (which is now the page center)
-            # No scaling - preserve exact dimensions
-            # The strip's bottom-left corner should be at (-strip_center_x, -strip_center_y)
-            strip_x = -strip_center_x
-            strip_y = -strip_center_y
-
+            # Draw strip centred at the (now-translated) origin
+            strip_x = -strip_width_pts / 2
+            strip_y = -strip_height_pts / 2
             self._draw_label_strip(c, strip_x, strip_y, strip_width_pts, strip_height_pts)
 
-            # Restore the graphics state
             c.restoreState()
-
-            # Save the PDF
             c.save()
+
         except Exception as e:  # pylint: disable=broad-exception-caught
-            # Catch all exceptions to ensure PDF generation failures are logged
             logger.error("Error generating PDF: %s", e, exc_info=True)
             return False
         return True
 
-    def _should_rotate(
-        self,
-        strip_width: float,
-        strip_height: float,
-        available_width: float,
-        available_height: float,
-        rotation_angle: float,
-    ) -> bool:
-        """
-        Determine if rotation should be applied.
+    # ------------------------------------------------------------------
+    # Private helpers
+    # ------------------------------------------------------------------
 
-        Args:
-            strip_width: Strip width in points
-            strip_height: Strip height in points
-            available_width: Available page width in points
-            available_height: Available page height in points
-            rotation_angle: Requested rotation angle
-
-        Returns:
-            True if rotation should be applied
-        """
-        # If rotation angle is specified and not 0, apply it
-        if rotation_angle != 0.0:
-            return True
-
-        # Auto-rotate if strip doesn't fit without rotation but would fit with rotation
-        fits_normal = strip_width <= available_width and strip_height <= available_height
-        fits_rotated = strip_height <= available_width and strip_width <= available_height
-
-        return not fits_normal and fits_rotated
+    def _resolve_font(self, text_format: TextFormat) -> str:
+        """Return the ReportLab font name for the configured font and format."""
+        family = self._FONT_FAMILY_MAP.get(self.settings.default_font_name, self._DEFAULT_FAMILY)
+        if text_format == TextFormat.BOLD:
+            return family[1]
+        if text_format == TextFormat.ITALIC:
+            return family[2]
+        if text_format == TextFormat.BOLD_ITALIC:
+            return family[3]
+        return family[0]
 
     def _draw_label_strip(
         self,
@@ -145,48 +142,22 @@ class PDFGenerator:
         _width: float,
         height: float,
     ) -> None:
-        """
-        Draw the label strip on the canvas.
-
-        Args:
-            canvas_obj: The reportlab canvas
-            x: X position in points
-            y: Y position in points
-            width: Strip width in points
-            height: Strip height in points
-        """
+        """Draw all segments of the label strip on the canvas."""
         current_x = x
 
-        # Draw start segment if present
         if self.label_strip.start_segment:
-            segment_width = self.label_strip.start_segment.width * mm
-            self._draw_segment(
-                canvas_obj,
-                current_x,
-                y,
-                segment_width,
-                height,
-                self.label_strip.start_segment,
-            )
-            current_x += segment_width
+            seg_w = self.label_strip.start_segment.width * mm
+            self._draw_segment(canvas_obj, current_x, y, seg_w, height, self.label_strip.start_segment)
+            current_x += seg_w
 
-        # Draw content segments
         for segment in self.label_strip.content_segments:
-            segment_width = segment.width * mm
-            self._draw_segment(canvas_obj, current_x, y, segment_width, height, segment)
-            current_x += segment_width
+            seg_w = segment.width * mm
+            self._draw_segment(canvas_obj, current_x, y, seg_w, height, segment)
+            current_x += seg_w
 
-        # Draw end segment if present
         if self.label_strip.end_segment:
-            segment_width = self.label_strip.end_segment.width * mm
-            self._draw_segment(
-                canvas_obj,
-                current_x,
-                y,
-                segment_width,
-                height,
-                self.label_strip.end_segment,
-            )
+            seg_w = self.label_strip.end_segment.width * mm
+            self._draw_segment(canvas_obj, current_x, y, seg_w, height, self.label_strip.end_segment)
 
     def _draw_segment(
         self,
@@ -197,107 +168,43 @@ class PDFGenerator:
         height: float,
         segment: Segment,
     ) -> None:
-        """
-        Draw a single segment.
-
-        Args:
-            canvas_obj: The reportlab canvas
-            x: X position in points
-            y: Y position in points
-            width: Segment width in points
-            height: Segment height in points
-            segment: The segment to draw
-        """
-        # Convert colors to reportlab format
+        """Draw a single segment (background, border, and text)."""
         bg_color = colors.Color(
             segment.background_color.r / 255.0,
             segment.background_color.g / 255.0,
             segment.background_color.b / 255.0,
         )
-
         text_color = colors.Color(
             segment.text_color.r / 255.0,
             segment.text_color.g / 255.0,
             segment.text_color.b / 255.0,
         )
 
-        # Draw background
+        # Background fill + thin border
         canvas_obj.setFillColor(bg_color)
-        canvas_obj.rect(x, y, width, height, fill=1, stroke=1)
-
-        # Draw border
         canvas_obj.setStrokeColor(colors.black)
         canvas_obj.setLineWidth(0.5)
-        canvas_obj.rect(x, y, width, height, fill=0, stroke=1)
+        canvas_obj.rect(x, y, width, height, fill=1, stroke=1)
 
-        # Draw text if present
-        if segment.text:
-            canvas_obj.setFillColor(text_color)
+        if not segment.text:
+            return
 
-            # Set font based on text format
-            font_name = "Helvetica"  # Use Helvetica as default since it's always available
-            font_size = self.settings.default_font_size
+        canvas_obj.setFillColor(text_color)
 
-            # Apply text formatting
-            if hasattr(segment, "text_format") and segment.text_format:
-                if segment.text_format.name == "BOLD":
-                    font_name = "Helvetica-Bold"
-                elif segment.text_format.name == "ITALIC":
-                    font_name = "Helvetica-Oblique"
+        text_fmt = getattr(segment, "text_format", TextFormat.NORMAL) or TextFormat.NORMAL
+        font_name = self._resolve_font(text_fmt)
+        font_size = self.settings.default_font_size
 
-            canvas_obj.setFont(font_name, font_size)
+        canvas_obj.setFont(font_name, font_size)
 
-            # Calculate text position - center both horizontally and vertically
-            text_width = canvas_obj.stringWidth(segment.text, font_name, font_size)
+        # Horizontal centre
+        text_width = canvas_obj.stringWidth(segment.text, font_name, font_size)
+        text_x = x + (width - text_width) / 2
 
-            # Center horizontally
-            text_x = x + (width - text_width) / 2
+        # Vertical centre using proper font metrics (ascent/descent in points)
+        ascent, descent = pdfmetrics.getAscentDescent(font_name, font_size)
+        # ascent > 0, descent < 0; cap-height approximation: centre the text block
+        text_block_height = ascent - descent
+        text_y = y + (height - text_block_height) / 2 - descent
 
-            # Center vertically (baseline-aware)
-            # In ReportLab, drawString positions by baseline
-            # Font baseline is approximately 30% of font_size from bottom
-            # So to center: position baseline at (height/2 - font_size * 0.2)
-            # This accounts for descenders and centers the visual mass
-            text_y = y + height / 2 - font_size * 0.2
-
-            canvas_obj.drawString(text_x, text_y, segment.text)
-
-    def calculate_required_rotation(self) -> float | None:
-        """
-        Calculate the optimal rotation angle for the strip to fit on the page.
-
-        Returns:
-            Rotation angle in degrees (0, 90, 180, 270) or None if no rotation needed
-        """
-        # Get paper size
-        paper_size = self.PAPER_SIZES.get(self.settings.paper_size, A4)
-        page_width, page_height = paper_size
-
-        # Calculate available space
-        margin_left = self.settings.page_margins.left * mm
-        margin_top = self.settings.page_margins.top * mm
-        margin_right = self.settings.page_margins.right * mm
-        margin_bottom = self.settings.page_margins.bottom * mm
-
-        available_width = page_width - margin_left - margin_right
-        available_height = page_height - margin_top - margin_bottom
-
-        # Get strip dimensions
-        strip_width_pts = self.label_strip.get_total_width() * mm
-        strip_height_pts = self.label_strip.height * mm
-
-        # Check if it fits without rotation
-        if strip_width_pts <= available_width and strip_height_pts <= available_height:
-            return None
-
-        # Check if it fits with 90-degree rotation
-        if strip_height_pts <= available_width and strip_width_pts <= available_height:
-            return 90.0
-
-        # If it doesn't fit either way, try rotation anyway if the strip is wider than it is tall
-        # This will at least orient it better for viewing
-        if strip_width_pts > strip_height_pts and strip_width_pts > available_width:
-            return 90.0
-
-        # If it doesn't fit either way, return None (will need scaling or different approach)
-        return None
+        canvas_obj.drawString(text_x, text_y, segment.text)

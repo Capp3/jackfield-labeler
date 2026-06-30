@@ -20,14 +20,10 @@ CI_ENV = os.environ.get("CI", "false").lower() == "true"
 pytestmark = pytest.mark.skipif(CI_ENV, reason="Skipping PyQt6 GUI tests in CI environment due to Qt rendering issues")
 
 # Now we can import from the project
-from PyQt6.QtWidgets import QApplication  # noqa: E402
-
 from jackfield_labeler.models import Color, LabelStrip  # noqa: E402
 from jackfield_labeler.utils.strip_renderer import StripRenderer  # noqa: E402
 
-# Create a single QApplication instance for all tests
-if "QApplication" not in globals():
-    app = QApplication.instance() or QApplication(sys.argv)
+# QApplication is managed by tests/conftest.py (session-scoped, autouse fixture)
 
 
 # Set up temporary directory for output files

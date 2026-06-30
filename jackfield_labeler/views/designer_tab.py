@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 else:
     QWidgetType = QWidget  # Runtime alias for type annotations
 
-from jackfield_labeler.models import Color, LabelStrip, StandardColor, TextFormat
+from jackfield_labeler.models import Color, LabelStrip, Segment, StandardColor, TextFormat
 from jackfield_labeler.utils import PDFGenerator, ProjectManager, StripRenderer
 
 
@@ -646,26 +646,41 @@ class DesignerTab(QWidget):
                     self.strip.start_segment.text_color = self.strip.end_segment.text_color
                     self.strip.start_segment.background_color = self.strip.end_segment.background_color
 
+    @staticmethod
+    def _segment_to_table_data(segment: Segment) -> dict[str, str | TextFormat | StandardColor | float]:
+        """Convert a Segment into a dict suitable for SegmentTable.set_segment_data()."""
+        text_sc = segment.text_color.to_standard()
+        bg_sc = segment.background_color.to_standard()
+        return {
+            "text": segment.text,
+            "text_format": segment.text_format,
+            "text_color": text_sc if text_sc is not None else StandardColor.BLACK,
+            "bg_color": bg_sc if bg_sc is not None else StandardColor.WHITE,
+            "width": segment.width,
+        }
+
     def update_table_from_strip(self) -> None:
         """Update the segment table to match the strip model."""
-        # Temporarily disconnect the signal to prevent premature updates
         self.segment_table.segment_changed.disconnect(self.update_strip_from_table)
 
         try:
-            # Clear the table first
             self.segment_table.clear_segments()
 
-            # Add segments to table
+            row = 0
             if self.strip.start_segment is not None:
                 self.segment_table.add_segment("L Start", self.strip.start_segment.text)
+                self.segment_table.set_segment_data(row, self._segment_to_table_data(self.strip.start_segment))
+                row += 1
 
             for segment in self.strip.content_segments:
                 self.segment_table.add_segment(segment.id, segment.text)
+                self.segment_table.set_segment_data(row, self._segment_to_table_data(segment))
+                row += 1
 
             if self.strip.end_segment is not None:
                 self.segment_table.add_segment("L End", self.strip.end_segment.text)
+                self.segment_table.set_segment_data(row, self._segment_to_table_data(self.strip.end_segment))
         finally:
-            # Reconnect the signal
             self.segment_table.segment_changed.connect(self.update_strip_from_table)
 
     def _add_row(self) -> None:

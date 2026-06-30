@@ -58,23 +58,30 @@ class StripPreviewWidget(QGraphicsView):
             self.pixmap_item = None
             return
 
-        # Get paper dimensions in points
+        # Obtain paper dimensions in points, then convert to mm.
+        # ReportLab stores page sizes in points (1 pt = 25.4/72 mm).
         paper_size_pts = PDFGenerator.PAPER_SIZES.get(strip.settings.paper_size)
         if paper_size_pts is None:
             return
-        page_width_pts, page_height_pts = paper_size_pts
+        pts_to_mm = 25.4 / 72.0
+        page_width_mm = paper_size_pts[0] * pts_to_mm
+        page_height_mm = paper_size_pts[1] * pts_to_mm
 
-        # Determine the scale to fit the view
+        # Compute px/mm scale so the page fills ~95% of the viewport.
+        # Working in mm throughout keeps the strip-to-page ratio correct.
         view_rect = self.viewport().rect()
-        scale_x = view_rect.width() / page_width_pts if page_width_pts > 0 else 1
-        scale_y = view_rect.height() / page_height_pts if page_height_pts > 0 else 1
-        scale = min(scale_x, scale_y) * 0.95  # 95% to leave a margin
+        scale_x = view_rect.width() / page_width_mm if page_width_mm > 0 else 1.0
+        scale_y = view_rect.height() / page_height_mm if page_height_mm > 0 else 1.0
+        scale_mm_px = min(scale_x, scale_y) * 0.95  # px per mm
 
-        # Create renderer with the calculated scale
-        renderer = StripRenderer(strip, scale_factor=scale)
+        # Create renderer whose scale_factor is px/mm (matches strip dimensions)
+        renderer = StripRenderer(strip, scale_factor=scale_mm_px)
 
         # Render the strip on a page
-        pixmap = renderer.render_to_pixmap_on_page(int(page_width_pts * scale), int(page_height_pts * scale))
+        pixmap = renderer.render_to_pixmap_on_page(
+            int(page_width_mm * scale_mm_px),
+            int(page_height_mm * scale_mm_px),
+        )
 
         self.pixmap_item = QGraphicsPixmapItem(pixmap)
         self.scene.addItem(self.pixmap_item)

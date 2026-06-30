@@ -47,7 +47,7 @@ class StripSettings:
     # Paper settings
     paper_size: PaperSize = PaperSize.A3
     page_margins: PageMargins = field(default_factory=PageMargins)
-    rotation_angle: float = 60.0  # degrees (0, 90, 180, 270, or any custom angle)
+    rotation_angle: float = 0.0  # degrees (0, 90, 180, 270, or any custom angle)
 
     # Default formatting
     default_font_name: str = "Arial"
@@ -99,7 +99,7 @@ class StripSettings:
         return cls(
             paper_size=PaperSize(data.get("paper_size", "A3")),
             page_margins=margins,
-            rotation_angle=data.get("rotation_angle", 60.0),
+            rotation_angle=data.get("rotation_angle", 0.0),
             default_font_name=data.get("default_font_name", "Arial"),
             default_font_size=data.get("default_font_size", 8.0),
             default_text_color=Color.from_hex(data.get("default_text_color", "#000000")),

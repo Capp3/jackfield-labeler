@@ -70,6 +70,19 @@ class Color:
         """
         return f"#{self.r:02x}{self.g:02x}{self.b:02x}"
 
+    def to_standard(self) -> "StandardColor | None":
+        """
+        Find the StandardColor that exactly matches this Color.
+
+        Returns:
+            The matching StandardColor, or None if no exact match exists.
+        """
+        hex_val = self.to_hex().upper()
+        for sc in StandardColor:
+            if sc.value.upper() == hex_val:
+                return sc
+        return None
+
     def to_rgb_tuple(self) -> tuple[int, int, int]:
         """
         Convert the color to an RGB tuple.
